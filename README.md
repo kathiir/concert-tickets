@@ -1,6 +1,6 @@
 # concert-tickets
 
-[miro.com](https://miro.com/app/board/o9J_lP1PC-o=/) - user-flow сценарии
+[miro.com](https://miro.com/app/board/o9J_lP1PC-o=/) - user-flow сценарии + use-case диаграмма
 
 [trello.com](https://trello.com/b/l7tDDMEY/concerts) - командная доска
 
