@@ -3,3 +3,23 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.remove-glow:focus {
+    box-shadow: none !important;
+}
+
+.remove-glow:active {
+    box-shadow: none !important;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    align-items: center;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}

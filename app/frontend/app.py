@@ -3,7 +3,6 @@ import os
 from flask_babel import Babel
 from flask_bootstrap import Bootstrap
 
-
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
     'en': 'English',
@@ -22,7 +21,21 @@ def get_locale():
 @app.route('/')
 def index_page():
     return render_template(
-        'base.html'
+        'index.html'
+    )
+
+
+@app.route('/login')
+def login_page():
+    return render_template(
+        'login.html'
+    )
+
+
+@app.route('/registration')
+def registration_page():
+    return render_template(
+        'registration.html'
     )
 
 

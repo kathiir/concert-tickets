@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ url_for('index_page') }}">
             <img src="../../static/logo.png" alt="" width="80" height="40">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -10,40 +10,59 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-start">
                 <li class="nav-item">
-
-                    <a class="nav-link" aria-current="page" href="#"><i class="bi bi-geo-alt"></i><u>Location</u></a>
+                    <a class="nav-link" style="color: black !important;" aria-current="page" href="#"><i
+                            class="bi bi-geo-alt"></i><u>Location</u></a>
                 </li>
             </ul>
 
-            <form class="d-flex justify-content-center">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+            <form class="d-flex justify-content-center mb-2 mb-lg-0">
+                <input class="form-control remove-glow  border-end-0 border border-dark rounded-pill rounded-end"
+                       style="min-width: 400px;" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn remove-glow btn-outline-dark border-start-0 rounded-pill rounded-start"
+                        type="submit"><i class="bi bi-search"></i></button>
             </form>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 justify-content-end">
-
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+            {% if false %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 justify-content-end">
+                    <ul class="navbar-nav me-2 mb-2 mb-lg-0 justify-content-start">
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: black !important;" aria-current="page" href="#"><u>My
+                                tickets</u></a>
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
-                </li>
+                    <li class="nav-item me-2 mb-2 mb-lg-0 dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if false %}
+                                <img class="bg-light rounded-circle text-white p-1" width="40" height="40" alt="avatar"
+                                     src="https://github.com/mdo.png">
+                            {% else %}
+                                <img class="bg-light rounded-circle text-white p-1" width="40" height="40" alt="avatar"
+                                     src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                            {% endif %}
 
-            </ul>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Favorites</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Log out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            {% else %}
+                <ul class="navbar-nav nav-pills ms-auto mb-2 mb-lg-0 justify-content-end">
+                    <li class="nav-item me-2 mb-2 mb-lg-0 text-center">
+                        <a class="nav-link" style="color: black !important;" aria-current="page" href="{{ url_for('login_page') }}">Login</a>
+                    </li>
+                    <li class="nav-item me-2 mb-2 mb-lg-0 text-center">
+                        <a class="nav-link active" style="color: white !important;" href="{{ url_for('registration_page') }}">Sign Up</a>
+                    </li>
+                </ul>
+            {% endif %}
+
 
         </div>
     </div>
