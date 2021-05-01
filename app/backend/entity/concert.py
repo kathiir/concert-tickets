@@ -7,10 +7,11 @@ from models import Concert
 
 
 @app.route('/concert', methods=['GET'])
-def agents_find():
+def concert_find():
     concert_name_to_find = request.args.get("concert_name")
     concert_info_to_find = request.args.get("concert_info")
     concert_photo_to_find = request.args.get("concert_photo")
+    concert_date_to_find = request.args.get("concert_date")
 
     if concert_name_to_find is None:
         concert_name_to_find = ""
@@ -18,15 +19,19 @@ def agents_find():
         concert_info_to_find = ""
     if concert_photo_to_find is None:
         concert_photo_to_find = ""
+    if concert_date_to_find is None:
+        concert_photo_to_find = ""
 
     concert_name_search = "%{}%".format(concert_name_to_find)
     concert_info_search = "%{}%".format(concert_info_to_find)
     concert_photo_search = "%{}%".format(concert_photo_to_find)
+    concert_date_search = "%{}%".format(concert_date_to_find)
 
     all_rows = Concert.query \
         .filter(Concert.concert_name.ilike(concert_name_search)) \
         .filter(Concert.concert_info.ilike(concert_info_search)) \
-        .filter(Concert.concert_photo.ilike(concert_photo_search))
+        .filter(Concert.concert_photo.ilike(concert_photo_search)) \
+        .filter(Concert.concert_date.ilike(concert_date_search))
     return render_template("agents.html", agents=all_rows.all())  # ?
 
 
@@ -42,10 +47,12 @@ def add_concert():
         concert_name = request.form.get('newConcertName')
         concert_info = request.form.get('newConcertInfo')
         concert_photo = request.form.get('newConcertPhoto')
+        concert_date = request.form.get('newConcertDate')
         new_concert = Concert(
             concert_name=concert_name,
             concert_info=concert_info,
-            concert_photo=concert_photo
+            concert_photo=concert_photo,
+            concert_date = concert_date
         )
         db.session.add(new_concert)
         db.session.commit()
@@ -77,6 +84,7 @@ def edit_concert():
                 'concert_name': request.form.get('concert_name'),
                 'concert_info': request.form.get('concert_info'),
                 'concert_photo': request.form.get('concert_photo'),
+                'concert_date': request.form.get('concert_date'),
             })
         db.session.commit()
     except Exception:
