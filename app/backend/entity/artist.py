@@ -3,7 +3,7 @@ import traceback
 from flask import render_template, request, redirect, url_for, flash
 
 from back import db, app
-from models import Concert, Artist
+from models import Artist
 
 
 @app.route('/artist', methods=['GET'])

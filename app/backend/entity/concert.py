@@ -52,7 +52,7 @@ def add_concert():
             concert_name=concert_name,
             concert_info=concert_info,
             concert_photo=concert_photo,
-            concert_date = concert_date
+            concert_date=concert_date
         )
         db.session.add(new_concert)
         db.session.commit()
