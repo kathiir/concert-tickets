@@ -8,25 +8,25 @@ from models import Concert
 
 @app.route('/concert', methods=['GET'])
 def agents_find():
-    artist_name_to_find = request.args.get("artist_name")
-    artist_info_to_find = request.args.get("artist_info")
-    artist_photo_to_find = request.args.get("artist_photo")
+    concert_name_to_find = request.args.get("concert_name")
+    concert_info_to_find = request.args.get("concert_info")
+    concert_photo_to_find = request.args.get("concert_photo")
 
-    if artist_name_to_find is None:
-        artist_name_to_find = ""
-    if artist_info_to_find is None:
-        artist_info_to_find = ""
-    if artist_photo_to_find is None:
-        artist_photo_to_find = ""
+    if concert_name_to_find is None:
+        concert_name_to_find = ""
+    if concert_info_to_find is None:
+        concert_info_to_find = ""
+    if concert_photo_to_find is None:
+        concert_photo_to_find = ""
 
-    artist_name_search = "%{}%".format(artist_name_to_find)
-    artist_info_search = "%{}%".format(artist_info_to_find)
-    artist_photo_search = "%{}%".format(artist_photo_to_find)
+    concert_name_search = "%{}%".format(concert_name_to_find)
+    concert_info_search = "%{}%".format(concert_info_to_find)
+    concert_photo_search = "%{}%".format(concert_photo_to_find)
 
     all_rows = Concert.query \
-        .filter(Concert.artist_name.ilike(artist_name_search)) \
-        .filter(Concert.artist_info.ilike(artist_info_search)) \
-        .filter(Concert.artist_photo.ilike(artist_photo_search))
+        .filter(Concert.concert_name.ilike(concert_name_search)) \
+        .filter(Concert.concert_info.ilike(concert_info_search)) \
+        .filter(Concert.concert_photo.ilike(concert_photo_search))
     return render_template("agents.html", agents=all_rows.all())  # ?
 
 
@@ -39,9 +39,9 @@ def concert():
 @app.route('/concert', methods=['POST'])
 def add_concert():
     try:
-        concert_name = request.form.get('newConcertArtistName')
-        concert_info = request.form.get('newConcertArtistInfo')
-        concert_photo = request.form.get('newConcertArtistPhoto')
+        concert_name = request.form.get('newConcertName')
+        concert_info = request.form.get('newConcertInfo')
+        concert_photo = request.form.get('newConcertPhoto')
         new_concert = Concert(
             concert_name=concert_name,
             concert_info=concert_info,
