@@ -39,6 +39,14 @@ class User(db.Model):
     favcon = db.relationship('FavoriteConcerts', backref='user', lazy=True)
 
 
+class Hall(db.Model):
+    __tablename__ = 'user'
+    hall_id = db.Column(db.Integer, primary_key=True, index=True)
+    hall_name = db.Column(db.String(100), unique=True, nullable=False)
+    hall_address = db.Column(db.String(100), unique=True, nullable=False)
+    ticket = db.relationship('Ticket', backref='hall', lazy=True)
+
+
 class Performance(db.Model):
     __tablename__ = 'performance'
     performance_id = db.Column(db.Integer, primary_key=True, index=True)
