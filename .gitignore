@@ -133,3 +133,4 @@ dmypy.json
 credentials.*
 token.*
 cid_secr.*
+/spotify_beta.txt
