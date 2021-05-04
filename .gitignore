@@ -134,3 +134,5 @@ credentials.*
 token.*
 cid_secr.*
 /spotify_beta.txt
+/app/backend/.cache-n4k48jxrs6lu7wbmfb1dshbgm
+/app/backend/genius_key.py
