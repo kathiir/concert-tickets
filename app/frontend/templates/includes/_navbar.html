@@ -15,9 +15,9 @@
                 </li>
             </ul>
 
-            <form class="d-flex justify-content-center mb-2 mb-lg-0">
+            <form class="d-flex justify-content-center mb-2 mb-lg-0" action="{{ url_for('search_page') }}">
                 <input class="form-control remove-glow  border-end-0 border border-dark rounded-pill rounded-end"
-                       style="min-width: 400px;" type="search" placeholder="Search" aria-label="Search">
+                       style="min-width: 400px;" name="search" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn remove-glow btn-outline-dark border-start-0 rounded-pill rounded-start"
                         type="submit"><i class="bi bi-search"></i></button>
             </form>

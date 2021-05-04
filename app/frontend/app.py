@@ -13,6 +13,12 @@ bootstrap = Bootstrap(app)
 babel = Babel(app)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+
 @babel.localeselector
 def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
@@ -36,6 +42,35 @@ def login_page():
 def registration_page():
     return render_template(
         'registration.html'
+    )
+
+
+@app.route('/about')
+def about_page():
+    return render_template(
+        'about.html'
+    )
+
+
+@app.route('/contacts')
+def contacts_page():
+    return render_template(
+        'contacts.html'
+    )
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search_page():
+    return render_template(
+        'search.html'
+    )
+
+
+@app.route('/concert/<int:id>')
+def concert_page(id):
+    return render_template(
+        'concert.html',
+        concert_id=id
     )
 
 

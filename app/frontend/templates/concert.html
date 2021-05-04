@@ -1,10 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Concert Name {{ concert_id }}{% endblock %}
 
-</body>
-</html>
+{% block styles %}
+    <link href="../static/star/star-rating.min.css" rel="stylesheet">
+    <link href="../static/star/theme.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="container col-xxl-8 px-4 py-2 bg-white">
+            <div class="row flex-lg-row align-items-center g-0 py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto">
+                    <svg class="bd-placeholder-img d-block img-fluid" width="300" height="300"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="700%" height="100%" fill="#777"/>
+                    </svg>
+                </div>
+                <div class="col-lg-8">
+                    <h1 class="display-5 lh-1 mb-3">Concert Name {{ concert_id }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row g-0">
+            <div class="col-md-2 mt-2 mx-2 d-flex flex-column">
+                <div class="py-4 px-4 bg-white">
+                    <h5 class="">Place</h5>
+                    <p class="">Place</p>
+                    <h5 class="">Date</h5>
+                    <p class="">date</p>
+                    <p><a class="btn btn-lg btn-primary text-light" style="width: 100% !important;" href="#">Buy
+                        tickets</a></p>
+                </div>
+            </div>
+            <div class="col-md-3 order-md-2 mt-2 mx-2 d-flex flex-column">
+                <div class="py-4 px-4 bg-white">
+                    <h1 class="display-5">
+                        Artists
+                    </h1>
+                    {% for n in range(2) %}
+                        <div class="d-flex my-2">
+                            <img class="bg-light rounded-circle text-white p-1" width="50" height="50" alt="avatar"
+                                 src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                            <a class="text-dark my-auto ms-3" href="#">Artist</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md mt-2 mx-2 d-flex flex-column">
+                <div class="py-4 px-4 mb-2 bg-white">
+
+                    <h1 class="display-5">
+                        Info
+                    </h1>
+                    <div>
+                        <p>
+                            {% for n in range(1000) %}
+                                a
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                <div class="py-4 px-4 bg-white text-break">
+
+                    <h1 class="display-5">
+                        Reviews
+                    </h1>
+                    <div>
+{#                        <input type="text" class="kv-fa rating-loading" value="4" data-size="sm" title="">#}
+                        <p>
+
+
+                            {% for n in range(100) %}a{% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
