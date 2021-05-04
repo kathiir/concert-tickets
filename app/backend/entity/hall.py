@@ -68,9 +68,7 @@ def edit_hall():
         Hall.query.filter(Hall.hall_id == curr_id).update(
             {
                 'hall_name': request.form.get('hall_name'),
-                'hall_info': request.form.get('hall_info'),
-                'hall_photo': request.form.get('hall_photo'),
-                'hall_date': request.form.get('hall_date'),
+                'hall_address': request.form.get('hall_address'),
             })
         db.session.commit()
     except Exception:

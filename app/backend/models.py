@@ -22,6 +22,7 @@ class Concert(db.Model):
     performances = db.relationship('Performance', backref='concert', lazy=True)
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
+    ticket = db.relationship('Ticket', backref='concert', lazy=True)
 
 
 class User(db.Model):
@@ -37,15 +38,23 @@ class User(db.Model):
     areviews = db.relationship('ArtistReview', backref='user', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='user', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='user', lazy=True)
+    ticket = db.relationship('Ticket', backref='user', lazy=True)
 
 
 class Hall(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'hall'
     hall_id = db.Column(db.Integer, primary_key=True, index=True)
     hall_name = db.Column(db.String(100), unique=True, nullable=False)
     hall_address = db.Column(db.String(100), unique=True, nullable=False)
     ticket = db.relationship('Ticket', backref='hall', lazy=True)
 
+class Ticket(db.Model):
+    __tablename__ = 'ticket'
+    ticket_id = db.Column(db.Integer, primary_key=True, index=True)
+    placement = db.Column(db.Integer, unique=False, nullable=False)
+    concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
 
 class Performance(db.Model):
     __tablename__ = 'performance'
