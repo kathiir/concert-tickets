@@ -45,6 +45,27 @@ def registration_page():
     )
 
 
+@app.route('/tickets')
+def tickets_page():
+    return render_template(
+        'tickets.html'
+    )
+
+
+@app.route('/favorites')
+def favorites_page():
+    return render_template(
+        'favorites.html'
+    )
+
+
+@app.route('/settings')
+def settings_page():
+    return render_template(
+        'settings.html'
+    )
+
+
 @app.route('/about')
 def about_page():
     return render_template(
@@ -70,6 +91,14 @@ def search_page():
 def concert_page(id):
     return render_template(
         'concert.html',
+        concert_id=id
+    )
+
+
+@app.route('/artists/<int:id>')
+def artists_page(id):
+    return render_template(
+        'artist.html',
         concert_id=id
     )
 

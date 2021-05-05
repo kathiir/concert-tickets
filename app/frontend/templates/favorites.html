@@ -1,29 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}My Tickets{% endblock %}
 
 {% block content %}
-
-    <div class="container mt-5">
-
-        <div class="d-flex align-items-start">
-            <div class="mt-5 nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
-                 aria-orientation="vertical">
-                <button class="nav-link active btn-lg" id="v-pills-concerts-tab" data-bs-toggle="pill"
-                        data-bs-target="#v-pills-concerts" type="button" role="tab" aria-controls="v-pills-concerts"
-                        aria-selected="true">Concerts
-                </button>
-                <button class="nav-link btn-lg" id="v-pills-artists-tab" data-bs-toggle="pill"
-                        data-bs-target="#v-pills-artists" type="button" role="tab" aria-controls="v-pills-artists"
-                        aria-selected="false">Artists
-                </button>
-            </div>
-            <div class="d-flex flex-column flex-grow-1 ms-5">
-                <div class="mb-3">
-                    <h1 class="display-5">Search for "{{ request.args.get('search') }}"</h1>
+    <div>
+        <div class="container col-xxl-8 px-2 py-2 bg-white">
+            <div class="row flex-lg-row align-items-center g-0 py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
+                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
+                         height="300"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="700%" height="100%" fill="#777"/>
+                    </svg>
                 </div>
-                <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="v-pills-concerts" role="tabpanel"
-                         aria-labelledby="v-pills-concerts-tab">
+                <div class="col-lg-8">
+                    <h1 class="display-5 lh-1 mb-3 ms-3">Username</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="d-flex align-items-start">
+                    <div class="mt-2 nav ps-2 flex-column nav-pills me-3"
+                         aria-orientation="vertical">
+                        <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('tickets_page') }}"
+                           aria-selected="false">Tickets
+                        </a>
+                        <a class="nav-link btn btn-lg active remove-glow" href="{{ url_for('favorites_page') }}"
+                           aria-selected="true">Favorites
+                        </a>
+                        <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('settings_page') }}"
+                           aria-selected="false">Settings
+                        </a>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 ms-5">
+                        <div class="mb-3">
+                            <h1 class="display-5">Concerts</h1>
+                        </div>
+
                         {% for n in range(5) %}
                             <div class="card mb-3">
                                 <div class="row g-0">
@@ -54,14 +67,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ url_for('concert_page', id=n) }}" class="stretched-link text-decoration-none"></a>
+                                        <a href="{{ url_for('concert_page', id=n) }}"
+                                           class="stretched-link text-decoration-none"></a>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>
-                    <div class="tab-pane fade" id="v-pills-artists" role="tabpanel"
-                         aria-labelledby="v-pills-artists-tab">
+
+                        <div class="mb-3">
+                            <h1 class="display-5">Artists</h1>
+                        </div>
+
                         {% for n in range(5) %}
                             <div class="card mb-3">
                                 <div class="row g-0">
@@ -76,9 +92,10 @@
                                     </div>
                                     <div class="col align-self-center">
                                         <div class="card-body ">
-                                            <h5 class="card-title display-5 text-truncate">Artist name  {{ n }}</h5>
+                                            <h5 class="card-title display-5 text-truncate">Artist name {{ n }}</h5>
                                         </div>
-                                        <a href="{{ url_for('artists_page', id=n) }}" class="stretched-link text-decoration-none"></a>
+                                        <a href="{{ url_for('artists_page', id=n) }}"
+                                           class="stretched-link text-decoration-none"></a>
                                     </div>
 
                                 </div>
@@ -86,9 +103,12 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
 
+
+            </div>
         </div>
     </div>
+
+
 
 {% endblock %}

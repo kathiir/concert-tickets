@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}My Tickets{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="container col-xxl-8 px-2 py-2 bg-white">
+            <div class="row flex-lg-row align-items-center g-0 py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
+                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
+                         height="300"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="700%" height="100%" fill="#777"/>
+                    </svg>
+                </div>
+                <div class="col-lg-8">
+                    <h1 class="display-5 lh-1 mb-3 ms-3">Username</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid pb-3">
+                <div class="d-flex align-items-start">
+                    <div class="mt-2 nav ps-2 flex-column nav-pills me-3"
+                         aria-orientation="vertical">
+                        <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('tickets_page') }}"
+                           aria-selected="false">Tickets
+                        </a>
+                        <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('favorites_page') }}"
+                           aria-selected="false">Favorites
+                        </a>
+                        <a class="nav-link btn btn-lg active remove-glow" href="{{ url_for('settings_page') }}"
+                           aria-selected="true">Settings
+                        </a>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 ms-5">
+                        <div class="mb-3">
+                            <h1 class="display-5">Spotify</h1>
+                            <div>
+                                <a class="btn btn-lg btn-primary text-light rounded-pill">
+                                    Connect to Spotify
+                                    <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
+                                         alt="spotify"
+                                         height="37" width="37">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h1 class="display-5">Google Calendar</h1>
+                            <div>
+                                <a class="btn btn-lg btn-primary text-light rounded-pill">
+                                    Connect to Google Calendar
+                                    <i class="bi bi-google"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h1 class="display-5">Change Avatar</h1>
+                            <div>
+                                <label for="formFile" class="form-label">Upload avatar</label>
+                                <input class="form-control remove-glow" type="file" id="formFile">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+
+                            <h1 class="display-5">Security</h1>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="InputOldPassword" class="form-label">Old password</label>
+                                    <input type="password" class="form-control remove-glow" id="InputOldPassword">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="InputNewPassword" class="form-label">New password</label>
+                                    <input type="password" class="form-control remove-glow" id="InputNewPassword">
+                                </div>
+                                <button type="submit" class="btn btn-primary text-light remove-glow">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

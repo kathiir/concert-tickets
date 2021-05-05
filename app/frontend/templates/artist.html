@@ -1,10 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Artist Name {{ concert_id }}{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    <div>
+        <div class="container col-xxl-8 px-2 py-2 bg-white">
+            <div class="row flex-lg-row align-items-center g-0 py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
+                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
+                         height="300"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="700%" height="100%" fill="#777"/>
+                    </svg>
+                </div>
+                <div class="col-lg-8">
+                    <h1 class="display-5 lh-1 mb-3 ms-3">Artist Name {{ concert_id }}</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="d-flex align-items-start">
+                    <div class="mt-2 nav ps-2 flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                         aria-orientation="vertical">
+                        <button class="nav-link active btn-lg" id="v-pills-concerts-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-concerts" type="button" role="tab"
+                                aria-controls="v-pills-concerts"
+                                aria-selected="true">Concerts
+                        </button>
+                        <button class="nav-link btn-lg" id="v-pills-reviews-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-reviews" type="button" role="tab"
+                                aria-controls="v-pills-reviews"
+                                aria-selected="false">Reviews
+                        </button>
+                        <button class="nav-link btn-lg" id="v-pills-info-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-info" type="button" role="tab"
+                                aria-controls="v-pills-info"
+                                aria-selected="false">Info
+                        </button>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 ms-5">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-concerts" role="tabpanel"
+                                 aria-labelledby="v-pills-concerts-tab">
+                                <div class="mb-3">
+                                    <h1 class="display-5">Concerts</h1>
+                                </div>
+                                {% for n in range(5) %}
+                                    <div class="card mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-md-3">
+                                                <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
+                                                     xmlns="http://www.w3.org/2000/svg" role="img"
+                                                     aria-label="Placeholder: Thumbnail"
+                                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                                    Placeholder</title>
+                                                    <rect width="100%" height="100%" fill="#55595c"/>
+                                                </svg>
+                                            </div>
+                                            <div class="col">
+                                                <div class="card-body row">
+                                                    <h5 class="card-title display-5">Concert name {{ n }}</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Place</h5>
+                                                            <p class="card-text text-truncate">Place</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Date</h5>
+                                                            <p class="card-text">date</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="{{ url_for('concert_page', id=n) }}"
+                                                   class="stretched-link text-decoration-none"></a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-reviews" role="tabpanel"
+                                 aria-labelledby="v-pills-reviews-tab">
+
+                                <div class="pb-4 text-break">
+                                    <h1 class="display-5">
+                                        Reviews
+                                    </h1>
+                                    <div>
+                                        {% if true %}
+                                            <div>
+                                                <form class="d-flex flex-column g-0 mb-3">
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex mb-2">
+                                                            {#                                        <label for="formControlTextarea1" class="form-label">Leave review</label>#}
+                                                            <button type="submit"
+                                                                    class="btn btn-primary text-light ms-auto">
+                                                                Leave
+                                                                review
+                                                            </button>
+                                                        </div>
+                                                        <textarea class="form-control" id="formControlTextarea1"
+                                                                  rows="3"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        {% endif %}
+
+                                        <div>
+                                            {% for i in range(5) %}
+                                                <div class="my-3 px-2">
+                                                    <div class="d-flex mb-2">
+                                                        <img class="bg-light rounded-circle text-white p-1" width="40"
+                                                             height="40"
+                                                             alt="avatar"
+                                                             src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                                                        <span class="text-dark my-auto ms-3">User</span>
+                                                    </div>
+                                                    <p>
+                                                        {% for n in range(100) %}a{% endfor %}
+                                                    </p>
+                                                </div>
+
+
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-info" role="tabpanel"
+                                 aria-labelledby="v-pills-info-tab">
+                                <h1 class="display-5">
+                                    Info
+                                </h1>
+                                <div>
+                                    <p class="text-wrap">
+                                        {% for n in range(1000) %}
+                                            a
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
