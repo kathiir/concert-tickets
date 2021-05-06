@@ -1,4 +1,13 @@
-from back import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+Performance = db.Table(
+    'performance',
+    db.Column('performance_id', db.Integer, primary_key=True),
+    db.Column('artist_id', db.Integer, db.ForeignKey('artist.artist_id')),
+    db.Column('concert_id', db.Integer, db.ForeignKey('concert.concert_id'))
+)
 
 
 class Artist(db.Model):
@@ -6,8 +15,8 @@ class Artist(db.Model):
     artist_id = db.Column(db.Integer, primary_key=True, index=True)
     artist_genius_id = db.Column(db.String(100), unique=False, nullable=False)
     artist_spotify_id = db.Column(db.String(1000), unique=False, nullable=False)
-    artist_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
-    performances = db.relationship('Performance', backref='artist', lazy=True)
+    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    performances = db.relationship('Concert', secondary=Performance, backref='artist')
     areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
 
@@ -23,12 +32,12 @@ class Concert(db.Model):
     __tablename__ = 'concert'
     concert_id = db.Column(db.Integer, primary_key=True, index=True)
     concert_name = db.Column(db.String(100), unique=False, nullable=False)
-    concert_info = db.Column(db.String(1000), unique=False, nullable=False)
-    concert_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
+    concert_info = db.Column(db.String(1000), unique=False, nullable=True)
+    concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
     concert_address = db.Column(db.String(1000), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
-    performances = db.relationship('Performance', backref='concert', lazy=True)
+    performances = db.relationship('Artist', secondary=Performance, backref='concert')
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
     ticket = db.relationship('Ticket', backref='concert', lazy=True)
@@ -40,7 +49,7 @@ class User(db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     user_password = db.Column(db.String(100), unique=False, nullable=False)
     user_role = db.Column(db.Integer, unique=False, nullable=False)
-    user_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
+    user_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
     user_spotify_token = db.Column(db.String(100), unique=False, nullable=True)
     user_gcalendar_token = db.Column(db.String(100), unique=False, nullable=True)
     creviews = db.relationship('ConcertReview', backref='user', lazy=True)
@@ -67,11 +76,12 @@ class Ticket(db.Model):
     hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
 
 
-class Performance(db.Model):
-    __tablename__ = 'performance'
-    performance_id = db.Column(db.Integer, primary_key=True, index=True)
-    artist_id = db.Column(db.Integer, db.ForeignKey('artist.artist_id'), nullable=False)
-    concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
+#
+# class Performance(db.Model):
+#     __tablename__ = 'performance'
+#     performance_id = db.Column(db.Integer, primary_key=True, index=True)
+#     artist_id = db.Column(db.Integer, db.ForeignKey('artist.artist_id'), nullable=False)
+#     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
 
 
 class ConcertReview(db.Model):

@@ -5,7 +5,7 @@ from genius_key import headers
 baseUrl = 'https://api.genius.com'
 
 
-class Genius():
+class Genius:
     def get_artist_info_by_id(self, id):
         path = 'artists/'
         request_uri = '/'.join([baseUrl, path])
@@ -21,3 +21,15 @@ class Genius():
         response = requests.get(searchUrl, params=data, headers=headers)
         jason = response.json()
         return jason["response"]["hits"][0]["result"]["primary_artist"]["id"]
+
+    def get_artist_id_by_name(self, name: str):
+        searchUrl = baseUrl + "/search"
+        songTitle = name
+        data = {'q': name}
+        response = requests.get(searchUrl, params=data, headers=headers)
+        jason = response.json()
+
+        for hit in jason["response"]["hits"]:
+            if hit["result"]["primary_artist"]['name'] == name:
+                return hit["result"]["primary_artist"]['id']
+        return 0

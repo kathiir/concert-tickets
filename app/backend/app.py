@@ -54,18 +54,17 @@ def get_concert_by_id(concert_id):
         abort(404)
     # return jsonify({'task': task[0]})
 
-
-@app.route('/', methods=['GET'])
-def get_concerts():
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    all_concert = Concert.query.all()
-
-    print(all_concert)
-    print('a')
-
-    # if len(all_concert) == 0:
-    #     abort(404)
-    return jsonify({'task': all_concert})
+#
+# @app.route('/', methods=['GET'])
+# def get_concerts():
+#     # task = filter(lambda t: t['id'] == task_id, tasks)
+#     all_concert = Concert.query.all()
+#
+#     print(all_concert)
+#
+#     # if len(all_concert) == 0:
+#     #     abort(404)
+#     return jsonify({'task': all_concert})
 
 
 
