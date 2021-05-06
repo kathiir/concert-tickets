@@ -40,6 +40,17 @@ class Spotify():
 
         return artists_list
 
+    def get_songname_by_artist_id(sp: spotipy.client.Spotify, id: str):
+        jason = sp.artist_top_tracks(artist_id=id)
+        songname = jason["tracks"][0]["name"]
+
+        return songname
+
+    def get_artist_id_by_name(sp: spotipy.client.Spotify, name: str):
+        jason = sp.search(q=name, type="artist")
+        artist_id = jason["artists"]["items"][0]["id"]
+
+        return artist_id
 
 
 
