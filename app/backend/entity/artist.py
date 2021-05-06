@@ -8,24 +8,24 @@ from models import Artist
 
 @app.route('/artist', methods=['GET'])
 def agents_find():
-    artist_name_to_find = request.args.get("artist_name")
-    artist_info_to_find = request.args.get("artist_info")
+    artist_genius_id_to_find = request.args.get("artist_genius_id")
+    artist_spotify_id_to_find = request.args.get("artist_spotify_id")
     artist_photo_to_find = request.args.get("artist_photo")
 
-    if artist_name_to_find is None:
-        artist_name_to_find = ""
-    if artist_info_to_find is None:
-        artist_info_to_find = ""
+    if artist_genius_id_to_find is None:
+        artist_genius_id_to_find = ""
+    if artist_spotify_id_to_find is None:
+        artist_spotify_id_to_find = ""
     if artist_photo_to_find is None:
         artist_photo_to_find = ""
 
-    artist_name_search = "%{}%".format(artist_name_to_find)
-    artist_info_search = "%{}%".format(artist_info_to_find)
+    artist_genius_id_search = "%{}%".format(artist_genius_id_to_find)
+    artist_spotify_id_search = "%{}%".format(artist_spotify_id_to_find)
     artist_photo_search = "%{}%".format(artist_photo_to_find)
 
     all_rows = Artist.query \
-        .filter(Artist.artist_name.ilike(artist_name_search)) \
-        .filter(Artist.artist_info.ilike(artist_info_search)) \
+        .filter(Artist.artist_genius_id.ilike(artist_genius_id_search)) \
+        .filter(Artist.artist_spotify_id.ilike(artist_spotify_id_search)) \
         .filter(Artist.artist_photo.ilike(artist_photo_search))
     return render_template("agents.html", agents=all_rows.all())  # ?
 
@@ -39,12 +39,12 @@ def artist():
 @app.route('/artist', methods=['POST'])
 def add_artist():
     try:
-        artist_name = request.form.get('newArtistName')
-        artist_info = request.form.get('newArtistInfo')
+        artist_genius_id = request.form.get('newArtistGeniusId')
+        artist_spotify_id = request.form.get('newArtistSpotifyId')
         artist_photo = request.form.get('newArtistPhoto')
         new_artist = Artist(
-            artist_name=artist_name,
-            artist_info=artist_info,
+            artist_genius_id=artist_genius_id,
+            artist_spotify_id=artist_spotify_id,
             artist_photo=artist_photo
         )
         db.session.add(new_artist)
@@ -74,8 +74,8 @@ def edit_artist():
         curr_id = request.form.get('artist_id')
         Artist.query.filter(Artist.artist_id == curr_id).update(
             {
-                'artist_name': request.form.get('artist_name'),
-                'artist_info': request.form.get('artist_info'),
+                'artist_genius_id': request.form.get('artist_genius_id'),
+                'artist_spotify_id': request.form.get('artist_spotify_id'),
                 'artist_photo': request.form.get('artist_photo'),
             })
         db.session.commit()

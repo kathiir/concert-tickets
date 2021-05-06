@@ -4,8 +4,8 @@ from back import db
 class Artist(db.Model):
     __tablename__ = 'artist'
     artist_id = db.Column(db.Integer, primary_key=True, index=True)
-    artist_name = db.Column(db.String(100), unique=False, nullable=False)
-    artist_info = db.Column(db.String(1000), unique=False, nullable=False)
+    artist_genius_id = db.Column(db.String(100), unique=False, nullable=False)
+    artist_spotify_id = db.Column(db.String(1000), unique=False, nullable=False)
     artist_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
     performances = db.relationship('Performance', backref='artist', lazy=True)
     areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
@@ -19,6 +19,7 @@ class Concert(db.Model):
     concert_info = db.Column(db.String(1000), unique=False, nullable=False)
     concert_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
+    concert_address = db.Column(db.String(1000), unique=False, nullable=False)
     performances = db.relationship('Performance', backref='concert', lazy=True)
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
