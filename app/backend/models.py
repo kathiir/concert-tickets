@@ -12,6 +12,13 @@ class Artist(db.Model):
     favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
 
 
+class City(db.Model):
+    __tablename__ = 'city'
+    city_id = db.Column(db.Integer, primary_key=True, index=True)
+    city_name = db.Column(db.String(100), unique=False, nullable=False)
+    concert = db.relationship('Concert', backref='city', lazy=True)
+
+
 class Concert(db.Model):
     __tablename__ = 'concert'
     concert_id = db.Column(db.Integer, primary_key=True, index=True)
@@ -20,6 +27,7 @@ class Concert(db.Model):
     concert_photo = db.Column(db.String(100), unique=False, nullable=False)  # base64 string
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
     concert_address = db.Column(db.String(1000), unique=False, nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
     performances = db.relationship('Performance', backref='concert', lazy=True)
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
@@ -49,6 +57,7 @@ class Hall(db.Model):
     hall_address = db.Column(db.String(100), unique=True, nullable=False)
     ticket = db.relationship('Ticket', backref='hall', lazy=True)
 
+
 class Ticket(db.Model):
     __tablename__ = 'ticket'
     ticket_id = db.Column(db.Integer, primary_key=True, index=True)
@@ -56,6 +65,7 @@ class Ticket(db.Model):
     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
+
 
 class Performance(db.Model):
     __tablename__ = 'performance'
