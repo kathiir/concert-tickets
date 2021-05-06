@@ -1,4 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
+from dataclasses import dataclass
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
+from marshmallow_sqlalchemy.fields import Nested
+
+# from config import app
 
 db = SQLAlchemy()
 
@@ -15,8 +20,9 @@ class Artist(db.Model):
     artist_id = db.Column(db.Integer, primary_key=True, index=True)
     artist_genius_id = db.Column(db.String(100), unique=False, nullable=False)
     artist_spotify_id = db.Column(db.String(1000), unique=False, nullable=False)
+    artist_name = db.Column(db.String(200), unique=False, nullable=False)
     # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
-    performances = db.relationship('Concert', secondary=Performance, backref='artist')
+    performances = db.relationship('Concert', secondary=Performance, viewonly=True, backref='artist')
     areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
 
@@ -37,7 +43,7 @@ class Concert(db.Model):
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
     concert_address = db.Column(db.String(1000), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
-    performances = db.relationship('Artist', secondary=Performance, backref='concert')
+    performances = db.relationship('Artist', secondary=Performance, viewonly=True, backref='concert')
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
     ticket = db.relationship('Ticket', backref='concert', lazy=True)
@@ -122,3 +128,72 @@ class FavoriteConcerts(db.Model):
     __table_args__ = (
         db.UniqueConstraint('user_id', 'concert_id'),
     )
+
+
+class ConcertSimplifiedSchema(SQLAlchemySchema):
+    class Meta:
+        model = Concert
+        # include_relationships = True
+
+    concert_id = auto_field()
+    concert_name = auto_field()
+    # concert_info = auto_field()
+    # concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    concert_date = auto_field()
+    concert_address = auto_field()
+    city_id = auto_field()
+    # creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
+    # favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
+    # ticket = db.relationship('Ticket', backref='concert', lazy=True)
+
+
+class ArtistSchema(SQLAlchemySchema):
+    class Meta:
+        model = Artist
+
+    artist_id = auto_field()
+    artist_genius_id = auto_field()
+    artist_spotify_id = auto_field()
+    artist_name = auto_field()
+    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    performances = Nested(ConcertSimplifiedSchema, many=True)
+    # areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
+    # favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
+
+
+class ArtistSimplifiedSchema(SQLAlchemySchema):
+    class Meta:
+        model = Artist
+
+    artist_id = auto_field()
+    # artist_genius_id = auto_field()
+    # artist_spotify_id = auto_field()
+    artist_name = auto_field()
+    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    # performances = auto_field()
+    # areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
+    # favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
+
+
+class ConcertSchema(SQLAlchemySchema):
+    class Meta:
+        model = Concert
+        # include_relationships = True
+
+    concert_id = auto_field()
+    concert_name = auto_field()
+    # concert_info = auto_field()
+    # concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    concert_date = auto_field()
+    concert_address = auto_field()
+    city_id = auto_field()
+    performances = Nested(ArtistSimplifiedSchema, many=True)
+    # creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
+    # favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
+    # ticket = db.relationship('Ticket', backref='concert', lazy=True)
+
+
+concert_schema = ConcertSchema()
+artist_schema = ArtistSchema()
+
+

@@ -1,13 +1,17 @@
 from flask import Flask, request, make_response, jsonify, abort
 import os
 from config import app
-from models import Concert
+from models import Concert, Artist, concert_schema, artist_schema
+from genius_api import Genius
+from spotify_api import Spotify
 
+genius = Genius()
+spotify = Spotify()
 
 
 @app.errorhandler(400)
 def not_found(error):
-    return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+    return make_response(jsonify({'error': 'Bad request'}), 400)
 
 
 @app.errorhandler(404)
@@ -15,57 +19,49 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-@app.route('/api/artist/s/<string:artist_name>', methods=['GET'])
+@app.route('/artist/s/<string:artist_name>', methods=['GET'])
 def get_artist_search(artist_name):
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    # if len(task) == 0:
-        abort(404)
-    # return jsonify({'task': task[0]})
+    result = Artist.query.filter(Artist.artist_name.ilike(f'%{artist_name}%'))
+    if result is None:
+        return jsonify(concerts=[])
+    return jsonify(artists=[artist_schema.dump(i) for i in result])
 
 
-@app.route('/api/artist/<int:artist_id>', methods=['GET'])
+@app.route('/artist/<int:artist_id>', methods=['GET'])
 def get_artist_by_id(artist_id):
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    # if len(task) == 0:
+    result = Artist.query.get(artist_id)
+    if result is None:
         abort(404)
-    # return jsonify({'task': task[0]})
+    if result.artist_genius_id != 0:
+        info = genius.get_artist_info_by_id(result.artist_genius_id)
+    else:
+        info = None
+    return jsonify(artist=artist_schema.dump(result), info=info)
 
 
-@app.route('/api/concerts', methods=['GET'])
-def get_concert_list(concert_name):
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    # if len(task) == 0:
-        abort(404)
-    # return jsonify({'task': task[0]})
+@app.route('/concerts', methods=['GET'])
+def get_concert_list():
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=20, type=int)
+
+    result = Concert.query.paginate(page=page, per_page=per_page).items
+    return jsonify(concerts=[concert_schema.dump(i) for i in result])
 
 
-@app.route('/api/concert/s/<string:concert_name>', methods=['GET'])
+@app.route('/concert/s/<string:concert_name>', methods=['GET'])
 def get_concert_search(concert_name):
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    # if len(task) == 0:
-        abort(404)
-    # return jsonify({'task': task[0]})
+    result = Concert.query.filter(Concert.concert_name.ilike(f'%{concert_name}%'))
+    if result is None:
+        return jsonify(concerts=[])
+    return jsonify(concerts=[concert_schema.dump(i) for i in result])
 
 
-@app.route('/api/concert/<int:concert_id>', methods=['GET'])
+@app.route('/concert/<int:concert_id>', methods=['GET'])
 def get_concert_by_id(concert_id):
-    # task = filter(lambda t: t['id'] == task_id, tasks)
-    # if len(task) == 0:
+    result = Concert.query.get(concert_id)
+    if result is None:
         abort(404)
-    # return jsonify({'task': task[0]})
-
-#
-# @app.route('/', methods=['GET'])
-# def get_concerts():
-#     # task = filter(lambda t: t['id'] == task_id, tasks)
-#     all_concert = Concert.query.all()
-#
-#     print(all_concert)
-#
-#     # if len(all_concert) == 0:
-#     #     abort(404)
-#     return jsonify({'task': all_concert})
-
+    return concert_schema.dump(result)
 
 
 if __name__ == '__main__':
