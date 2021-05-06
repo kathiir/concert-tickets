@@ -30,6 +30,24 @@ class Spotify():
 
         return sp
 
+    #То же самое, что и первое, но без зависимости от авторизованности пользователя
+    def authenticate_unauthorized(cliend_id: str, client_secret: str, scope: str, rur: str) -> spotipy.client.Spotify:
+        sp = spotipy.Spotify(
+            auth_manager=SpotifyOAuth(
+                client_id=cliend_id,
+                client_secret=client_secret,
+                scope=scope,
+                redirect_uri=rur
+            )
+        )
+        #### Эта штука нужна будет для продления, если что. Потом запихнуть куда надо ####
+        util.prompt_for_user_token(scope=scope,
+                                   client_id=cid,
+                                   client_secret=secret,
+                                   redirect_uri=rur)
+
+        return sp
+
     ###   Непосредственно получение списка артистов, на которых подписан данный пользователь
     def get_user_followed_artists_list(sp: spotipy.client.Spotify):
         jason = sp.current_user_followed_artists(limit=20)
