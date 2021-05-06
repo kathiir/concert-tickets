@@ -67,7 +67,7 @@ class Performance(db.Model):
 class ConcertReview(db.Model):
     __tablename__ = 'concert_review'
     creview_id = db.Column(db.Integer, primary_key=True, index=True)
-    сreview_info = db.Column(db.String(1000), unique=False, nullable=False)
+    creview_info = db.Column(db.String(1000), unique=False, nullable=False)
     creview_rating = db.Column(db.Integer, unique=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)

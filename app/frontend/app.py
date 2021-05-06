@@ -3,6 +3,7 @@ import os
 from flask_babel import Babel
 from flask_bootstrap import Bootstrap
 
+
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
     'en': 'English',
