@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+
+        <div class="d-flex align-items-start">
+            <div class="mt-5 nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                 aria-orientation="vertical">
+                <button class="nav-link active btn-lg" id="v-pills-concerts-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-concerts" type="button" role="tab" aria-controls="v-pills-concerts"
+                        aria-selected="true">Concerts
+                </button>
+                <button class="nav-link btn-lg" id="v-pills-artists-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-artists" type="button" role="tab" aria-controls="v-pills-artists"
+                        aria-selected="false">Artists
+                </button>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 ms-5">
+                <div class="mb-3">
+                    <h1 class="display-5">Search for "{{ request.args.get('search') }}"</h1>
+                </div>
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-concerts" role="tabpanel"
+                         aria-labelledby="v-pills-concerts-tab">
+                        {% for n in range(5) %}
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-3">
+                                        <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
+                                             xmlns="http://www.w3.org/2000/svg" role="img"
+                                             aria-label="Placeholder: Thumbnail"
+                                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                            Placeholder</title>
+                                            <rect width="100%" height="100%" fill="#55595c"/>
+                                        </svg>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card-body row">
+                                            <h5 class="card-title display-5">Concert name {{ n }}</h5>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Place</h5>
+                                                    <p class="card-text text-truncate">Place</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Date</h5>
+                                                    <p class="card-text">date</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="{{ url_for('concert_page', id=n) }}" class="stretched-link text-decoration-none"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-artists" role="tabpanel"
+                         aria-labelledby="v-pills-artists-tab">
+                        {% for n in range(5) %}
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-3">
+                                        <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
+                                             xmlns="http://www.w3.org/2000/svg" role="img"
+                                             aria-label="Placeholder: Thumbnail"
+                                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                            Placeholder</title>
+                                            <rect width="100%" height="100%" fill="#55595c"/>
+                                        </svg>
+                                    </div>
+                                    <div class="col align-self-center">
+                                        <div class="card-body ">
+                                            <h5 class="card-title display-5 text-truncate">Artist name  {{ n }}</h5>
+                                        </div>
+                                        <a href="{{ url_for('artists_page', id=n) }}" class="stretched-link text-decoration-none"></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

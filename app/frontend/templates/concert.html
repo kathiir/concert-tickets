@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Concert Name {{ concert_id }}{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="container col-xxl-8 px-2 py-2 bg-white">
+            <div class="row flex-lg-row align-items-center g-0 py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
+                    <svg class="bd-placeholder-img d-block img-fluid text-center" width="300" height="300"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="700%" height="100%" fill="#777"/>
+                    </svg>
+                </div>
+                <div class="col-lg-8">
+                    <h1 class="display-5 lh-1 mb-3 ms-3">Concert Name {{ concert_id }}</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row g-0 mt-2">
+                    <div class="col-md-2 mt-2 px-2 d-flex flex-column">
+                        <div class="py-4 bg-white">
+                            <h5 class="">Place</h5>
+                            <p class="">Place</p>
+                            <h5 class="">Date</h5>
+                            <p class="">date</p>
+                            <p><a class="btn btn-lg btn-primary text-light" href="#">Buy
+                                tickets</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 order-md-2 mt-2 px-2 d-flex flex-column">
+                        <div class="py-4 bg-white">
+                            <h1 class="display-5">
+                                Artists
+                            </h1>
+                            {% for n in range(2) %}
+                                <div class="d-flex my-2">
+                                    <img class="bg-light rounded-circle text-white p-1" width="50" height="50"
+                                         alt="avatar"
+                                         src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                                    <a class="text-dark my-auto ms-3" href="{{ url_for('artists_page', id=n) }}">Artist</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md mt-2 px-2 d-flex flex-column">
+                        <div class="py-4 mb-2 bg-white">
+
+                            <h1 class="display-5">
+                                Info
+                            </h1>
+                            <div>
+                                <p class="text-wrap">
+                                    {% for n in range(1000) %}
+                                        a
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="py-4 bg-white text-break">
+                            <h1 class="display-5">
+                                Reviews
+                            </h1>
+                            <div>
+                                {% if true %}
+                                    <div>
+                                        <form class="d-flex flex-column g-0 mb-3">
+                                            <div class="d-flex flex-column">
+                                                <div class="d-flex mb-2">
+                                                    {#                                        <label for="formControlTextarea1" class="form-label">Leave review</label>#}
+                                                    <button type="submit" class="btn btn-primary text-light ms-auto">
+                                                        Leave
+                                                        review
+                                                    </button>
+                                                </div>
+                                                <textarea class="form-control" id="formControlTextarea1"
+                                                          rows="3"></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                {% endif %}
+
+                                <div>
+                                    {% for i in range(5) %}
+                                        <div class="my-3 px-2">
+                                            <div class="d-flex mb-2">
+                                                <img class="bg-light rounded-circle text-white p-1" width="40"
+                                                     height="40"
+                                                     alt="avatar"
+                                                     src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                                                <span class="text-dark my-auto ms-3">User</span>
+                                            </div>
+                                            <p>
+                                                {% for n in range(100) %}a{% endfor %}
+                                            </p>
+                                        </div>
+
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
