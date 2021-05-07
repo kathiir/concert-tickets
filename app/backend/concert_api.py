@@ -11,8 +11,6 @@ from genius_api import Genius
 from spotify_api import Spotify
 
 
-
-
 def get_date():
     start_date = datetime.datetime(2021, 5, 6)
     end_date = datetime.datetime(2021, 12, 1)
@@ -172,23 +170,32 @@ a = []
 def get_concerts():
     # task = filter(lambda t: t['id'] == task_id, tasks)
 
-    # for n in range(555):
-    #     Artist.query.get(n + 1).artist_name = artists[n]
-    #     if n % 10 == 0:
-    #         db.session.commit()
-    #
-    # db.session.commit()
-    # n + 1
+    ar = []
 
-    ar = Concert.query.all()
+    all = Concert.query.all()
+
+    for i, c in enumerate(all):
+        c.concert_photo = c.performances[0].artist_photo
+        if i % 10 == 0:
+            db.session.commit()
+
+    # for n in range(555):
+    #     art = Artist.query.get(n + 1)
+    #     if art.artist_spotify_id != '0':
+    #         gen = s.get_artist_image_by_id(art.artist_spotify_id)
+    #         art.artist_photo = gen
+    #         ar.append(gen)
+    #         print(gen)
+    #         if n % 10 == 0:
+    #             db.session.commit()
+
+    db.session.commit()
 
     # ar = concert_schema.dump(ar)
     # if len(all_concert) == 0:
     # abort(404)
-    return jsonify(json_list=[concert_schema.dump(i) for i in ar])
+    return jsonify(ar)
 
-
-print(len(artists))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

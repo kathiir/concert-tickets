@@ -16,14 +16,16 @@
             <div class="carousel-item active">
                 <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                      aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#777"/>
+                    <rect width="100%" height="100%" fill="#aaa"/>
                 </svg>
 
                 <div class="container">
                     <div class="carousel-caption text-start">
-                        <h1 class="display-2">Concert Name</h1>
-                        <p>Place <i class="bi bi-dot"></i> Date</p>
-                        <p><a class="btn btn-lg btn-primary text-light" href="{{ url_for('concert_page', id=0) }}">Buy
+                        <h1 class="display-2">{{ concerts[0]["concert_name"] }}</h1>
+                        <p>{{ concerts[0]["concert_address"] }} <i
+                                class="bi bi-dot"></i> {{ concerts[0]["concert_date"]|dt }}</p>
+                        <p><a class="btn btn-lg btn-primary text-light"
+                              href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">Buy
                             tickets</a></p>
                     </div>
                 </div>
@@ -32,16 +34,23 @@
                 <div class="carousel-item">
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                          aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#777"/>
+                        <rect width="100%" height="100%" fill="#aaa"/>
                     </svg>
 
                     <div class="container">
-                        <div class="carousel-caption text-start">
-                            <h1 class="display-2">Concert Name {{ n }}</h1>
-                            <p>Place <i class="bi bi-dot"></i> Date</p>
-                            <p><a class="btn btn-lg btn-primary text-light" href="{{ url_for('concert_page', id=n) }}">Buy
-                                tickets</a></p>
+                        <div class="carousel-caption">
+                            <div class="text-start">
+                                <h1 class="display-2">{{ concerts[n+1]["concert_name"] }}</h1>
+                                <p>{{ concerts[n+1]["concert_address"] }} <i
+                                        class="bi bi-dot"></i> {{ concerts[n+1]["concert_date"]|dt }}</p>
+                                <p><a class="btn btn-lg btn-primary text-light"
+                                      href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">Buy
+                                    tickets</a></p>
+                            </div>
+
+
                         </div>
+
                     </div>
                 </div>
             {% endfor %}
@@ -68,27 +77,27 @@
             </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-                {% for n in range(5) %}
+                {% for n in range(15, 18) %}
                     <div class="col">
                         <div class="card shadow-sm">
 
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                            </svg>
+                            <div class="ratio ratio-16x9">
+                                <img class=" card-img-top img-fluid img-cover" role="img"
+                                     src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                            </div>
 
-                            <div class="card-img-overlay d-flex flex-column justify-content-start mt-5 pt-5">
-                                <h4 class="card-title text-light d-inline-block text-truncate">Card title</h4>
+
+                            <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
+                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
                             </div>
 
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">Place</p>
-                                    <p class="card-text">Date</p>
+                                    <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
+                                    <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
                                 </div>
-                                <a href="{{ url_for('concert_page', id=n) }}"
+                                <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
                                    class="stretched-link text-decoration-none"></a>
 
                             </div>
@@ -105,27 +114,33 @@
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-            {% for n in range(5) %}
+            {% for n in range(20) %}
                 <div class="col">
                     <div class="card shadow-sm">
 
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
-                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                        </svg>
+                        {#                        <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"#}
+                        {#                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"#}
+                        {#                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>#}
+                        {#                            <rect width="100%" height="100%" fill="#55595c"/>#}
+                        {#                        </svg>#}
 
-                        <div class="card-img-overlay d-flex flex-column justify-content-start mt-5 pt-5">
-                            <h4 class="card-title text-light d-inline-block text-truncate">Card title</h4>
+                        <div class="ratio ratio-16x9">
+                            <img class=" card-img-top img-fluid img-cover" role="img"
+                                 src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                        </div>
+
+
+                        <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
+                            <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
                         </div>
 
 
                         <div class="card-body fs-5">
                             <div class="d-flex ">
-                                <p class="card-text me-auto">Place</p>
-                                <p class="card-text">Date</p>
+                                <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
+                                <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
                             </div>
-                            <a href="{{ url_for('concert_page', id=n) }}"
+                            <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
                                class="stretched-link text-decoration-none"></a>
 
                         </div>

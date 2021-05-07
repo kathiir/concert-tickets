@@ -4,16 +4,17 @@
 {% block content %}
     <div>
         <div class="container col-xxl-8 px-2 py-2 bg-white">
-            <div class="row flex-lg-row align-items-center g-0 py-5">
+            <div class="row flex-lg-row align-items-center g-0 pt-5 pb-1">
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
-                    <svg class="bd-placeholder-img d-block img-fluid text-center" width="300" height="300"
-                         xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="700%" height="100%" fill="#777"/>
-                    </svg>
+
+                    <div class="ratio ratio-1x1">
+                                <img class="card-img-top img-fluid img-cover" width="300" height="300"
+                                     src="{{ concert["concert_photo"] }}" alt="img">
+                            </div>
+
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">Concert Name {{ concert_id }}</h1>
+                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ concert["concert_name"] }}</h1>
                 </div>
             </div>
 
@@ -22,9 +23,9 @@
                     <div class="col-md-2 mt-2 px-2 d-flex flex-column">
                         <div class="py-4 bg-white">
                             <h5 class="">Place</h5>
-                            <p class="">Place</p>
+                            <p class="">{{ concert["concert_address"] }}</p>
                             <h5 class="">Date</h5>
-                            <p class="">date</p>
+                            <p class="">{{ concert["concert_date"]|dt }}</p>
                             <p><a class="btn btn-lg btn-primary text-light" href="#">Buy
                                 tickets</a></p>
                         </div>
@@ -34,12 +35,12 @@
                             <h1 class="display-5">
                                 Artists
                             </h1>
-                            {% for n in range(2) %}
+                            {% for ar in concert["performances"] %}
                                 <div class="d-flex my-2">
-                                    <img class="bg-light rounded-circle text-white p-1" width="50" height="50"
+                                    <img class="bg-light rounded-circle img-cover text-white p-1" width="50" height="50"
                                          alt="avatar"
-                                         src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
-                                    <a class="text-dark my-auto ms-3" href="{{ url_for('artists_page', id=n) }}">Artist</a>
+                                         src="{{ ar["artist_photo"] }}">
+                                    <a class="text-dark my-auto ms-3" href="{{ url_for('artists_page', id=ar["artist_id"]) }}">{{ ar["artist_name"] }}</a>
                                 </div>
                             {% endfor %}
                         </div>
@@ -51,11 +52,11 @@
                                 Info
                             </h1>
                             <div>
-                                <p class="text-wrap">
-                                    {% for n in range(1000) %}
-                                        a
-                                    {% endfor %}
-                                </p>
+{#                                <p class="text-wrap">#}
+{#                                    {% for n in range(1000) %}#}
+{#                                        a#}
+{#                                    {% endfor %}#}
+{#                                </p>#}
                             </div>
                         </div>
 

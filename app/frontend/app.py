@@ -1,8 +1,13 @@
-from flask import Flask, request, render_template
+import datetime
+
+import requests
+from flask import Flask, request, render_template, abort
 import os
 from flask_babel import Babel
-from flask_bootstrap import Bootstrap
+# from flask_bootstrap import Bootstrap
 
+
+back_uri = 'http://127.0.0.1:1337'
 
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
@@ -10,8 +15,16 @@ app.config['LANGUAGES'] = {
     'ru': 'Russian'
 }
 
-bootstrap = Bootstrap(app)
+# bootstrap = Bootstrap(app)
 babel = Babel(app)
+
+
+@app.template_filter('dt')
+def _jinja2_filter_datetime(date):
+    ret = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').strftime('%d %B %Y %H:%M')
+    # native = date.replace(tzinfo=None)
+    # format='%b %d, %Y'
+    return ret
 
 
 @app.errorhandler(404)
@@ -27,8 +40,13 @@ def get_locale():
 
 @app.route('/')
 def index_page():
+    request_uri = back_uri + '/concerts'
+    response = requests.get(request_uri)
+    jason = response.json()['concerts']
+
     return render_template(
-        'index.html'
+        'index.html',
+        concerts=jason
     )
 
 
@@ -83,24 +101,47 @@ def contacts_page():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_page():
+    request_uri = back_uri + '/concert/s/' + request.args.get('search')
+    response = requests.get(request_uri)
+    concerts = response.json()['concerts']
+
+    request_uri = back_uri + '/artist/s/' + request.args.get('search')
+    response = requests.get(request_uri)
+    artists = response.json()['artists']
+
     return render_template(
-        'search.html'
+        'search.html',
+        concerts=concerts,
+        artists=artists
     )
 
 
 @app.route('/concert/<int:id>')
 def concert_page(id):
+    request_uri = back_uri + '/concert/' + str(id)
+    response = requests.get(request_uri)
+    if response.status_code != 200:
+        abort(404)
+    concert = response.json()
+
     return render_template(
         'concert.html',
-        concert_id=id
+        concert=concert
     )
 
 
 @app.route('/artists/<int:id>')
 def artists_page(id):
+    request_uri = back_uri + '/artist/' + str(id)
+    response = requests.get(request_uri)
+    if response.status_code != 200:
+        abort(404)
+    artist = response.json()
+    # html = json2html.convert(json=input)
+
     return render_template(
         'artist.html',
-        concert_id=id
+        artist=artist
     )
 
 

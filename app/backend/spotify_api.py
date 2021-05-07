@@ -64,9 +64,13 @@ class Spotify:
         songname = jason["tracks"][0]["name"]
         return songname
 
-    def get_artist_by_id(self, id: str):
+    def get_artist_name_by_id(self, id: str):
         jason = self.sp.artist(artist_id=id)
         return jason["name"]
+
+    def get_artist_image_by_id(self, id: str):
+        jason = self.sp.artist(artist_id=id)
+        return jason["images"][0]['url']
 
     def get_artist_id_by_name(self, name: str):
         jason = self.sp.search(q=name, type="artist")

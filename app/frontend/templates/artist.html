@@ -4,17 +4,21 @@
 {% block content %}
     <div>
         <div class="container col-xxl-8 px-2 py-2 bg-white">
-            <div class="row flex-lg-row align-items-center g-0 py-5">
+            <div class="row flex-lg-row align-items-center g-0 pt-5 pb-1">
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
-                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
-                         height="300"
-                         xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="700%" height="100%" fill="#777"/>
-                    </svg>
+                    {#                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"#}
+                    {#                         height="300"#}
+                    {#                         xmlns="http://www.w3.org/2000/svg"#}
+                    {#                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">#}
+                    {#                        <rect width="700%" height="100%" fill="#777"/>#}
+                    {#                    </svg>#}
+                    <div class="ratio ratio-1x1">
+                        <img class="card-img-top img-fluid img-cover" width="300" height="300"
+                             src="{{ artist["artist"]["artist_photo"] }}" alt="img">
+                    </div>
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">Artist Name {{ concert_id }}</h1>
+                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ artist["artist"]["artist_name"] }}</h1>
                 </div>
             </div>
 
@@ -45,37 +49,48 @@
                                 <div class="mb-3">
                                     <h1 class="display-5">Concerts</h1>
                                 </div>
-                                {% for n in range(5) %}
+                                {% for c in artist["artist"]["performances"] %}
                                     <div class="card mb-3">
                                         <div class="row g-0">
-                                            <div class="col-md-3">
-                                                <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
-                                                     xmlns="http://www.w3.org/2000/svg" role="img"
-                                                     aria-label="Placeholder: Thumbnail"
-                                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>
-                                                    Placeholder</title>
-                                                    <rect width="100%" height="100%" fill="#55595c"/>
-                                                </svg>
+                                            <div class="col-md-3 transp">
+
+                                                {% if c["concert_photo"] %}
+{#                                                    <div class="col-md-3 transp">#}
+                                                        <img class="card-img-top img-fluid img-cover" role="img"
+                                                             src="{{ c["concert_photo"] }}" alt="img">
+{#                                                    </div>#}
+                                                {% else %}
+                                                    <svg class="bd-placeholder-img card-img-top" width="100%"
+                                                         height="100%"
+                                                         xmlns="http://www.w3.org/2000/svg" role="img"
+                                                         aria-label="Placeholder: Thumbnail"
+                                                         preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                                        Placeholder</title>
+                                                        <rect width="100%" height="100%" fill="#55595c"/>
+                                                    </svg>
+                                                {% endif %}
+
+
                                             </div>
                                             <div class="col">
                                                 <div class="card-body row">
-                                                    <h5 class="card-title display-5">Concert name {{ n }}</h5>
+                                                    <h5 class="card-title display-5">{{ c["concert_name"] }}</h5>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md">
                                                         <div class="card-body">
                                                             <h5 class="card-title">Place</h5>
-                                                            <p class="card-text text-truncate">Place</p>
+                                                            <p class="card-text text-truncate">{{ c["concert_address"] }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="card-body">
                                                             <h5 class="card-title">Date</h5>
-                                                            <p class="card-text">date</p>
+                                                            <p class="card-text">{{ c["concert_date"]|dt }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="{{ url_for('concert_page', id=n) }}"
+                                                <a href="{{ url_for('concert_page', id=c["concert_id"]) }}"
                                                    class="stretched-link text-decoration-none"></a>
                                             </div>
 
@@ -139,9 +154,7 @@
                                 </h1>
                                 <div>
                                     <p class="text-wrap">
-                                        {% for n in range(1000) %}
-                                            a
-                                        {% endfor %}
+                                        Nice artist
                                     </p>
                                 </div>
                             </div>

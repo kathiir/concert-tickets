@@ -12,6 +12,8 @@ class Genius:
         new_req = request_uri + str(id)
         r = requests.get(new_req, headers=headers)
         arti = r.json()
+        if r.status_code != 200:
+            return []
         return arti["response"]["artist"]["description"]
 
     def get_artist_id_by_songname(self, songname: str):

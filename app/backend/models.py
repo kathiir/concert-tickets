@@ -21,7 +21,7 @@ class Artist(db.Model):
     artist_genius_id = db.Column(db.String(100), unique=False, nullable=False)
     artist_spotify_id = db.Column(db.String(1000), unique=False, nullable=False)
     artist_name = db.Column(db.String(200), unique=False, nullable=False)
-    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    artist_photo = db.Column(db.String(300), unique=False, nullable=True)
     performances = db.relationship('Concert', secondary=Performance, viewonly=True, backref='artist')
     areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
@@ -39,7 +39,7 @@ class Concert(db.Model):
     concert_id = db.Column(db.Integer, primary_key=True, index=True)
     concert_name = db.Column(db.String(100), unique=False, nullable=False)
     concert_info = db.Column(db.String(1000), unique=False, nullable=True)
-    concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    concert_photo = db.Column(db.String(300), unique=False, nullable=True)
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
     concert_address = db.Column(db.String(1000), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
@@ -138,7 +138,7 @@ class ConcertSimplifiedSchema(SQLAlchemySchema):
     concert_id = auto_field()
     concert_name = auto_field()
     # concert_info = auto_field()
-    # concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    concert_photo = auto_field()
     concert_date = auto_field()
     concert_address = auto_field()
     city_id = auto_field()
@@ -155,7 +155,7 @@ class ArtistSchema(SQLAlchemySchema):
     artist_genius_id = auto_field()
     artist_spotify_id = auto_field()
     artist_name = auto_field()
-    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    artist_photo = auto_field()
     performances = Nested(ConcertSimplifiedSchema, many=True)
     # areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
     # favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
@@ -169,7 +169,7 @@ class ArtistSimplifiedSchema(SQLAlchemySchema):
     # artist_genius_id = auto_field()
     # artist_spotify_id = auto_field()
     artist_name = auto_field()
-    # artist_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    artist_photo = auto_field()
     # performances = auto_field()
     # areviews = db.relationship('ArtistReview', backref='artist', lazy=True)
     # favart = db.relationship('FavoriteArtists', backref='artist', lazy=True)
@@ -183,7 +183,7 @@ class ConcertSchema(SQLAlchemySchema):
     concert_id = auto_field()
     concert_name = auto_field()
     # concert_info = auto_field()
-    # concert_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    concert_photo = auto_field()
     concert_date = auto_field()
     concert_address = auto_field()
     city_id = auto_field()
@@ -195,5 +195,7 @@ class ConcertSchema(SQLAlchemySchema):
 
 concert_schema = ConcertSchema()
 artist_schema = ArtistSchema()
+concert_simpl_schema = ConcertSimplifiedSchema()
+artist_simpl_schema = ArtistSimplifiedSchema()
 
 

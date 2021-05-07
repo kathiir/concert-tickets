@@ -24,6 +24,33 @@
     font-weight: 400;
 }
 
+
+.img-cover {
+    object-fit: cover !important;
+    overflow: hidden !important;
+}
+
+.img-contain {
+    object-fit: contain !important;
+    overflow: hidden !important;
+    object-position: center center;
+}
+
+.transp {
+    /*height: 30px;*/
+    /*background-color: #00B7FF;*/
+    /*opacity: 0.3; !important;*/
+    background: rgba(0, 0, 0, 0.5);
+
+}
+
+.squa {
+    object-fit: cover; !important;
+   overflow: hidden; !important;
+   height: 30vh; !important;
+   width : 30vw; !important;
+}
+
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
@@ -90,10 +117,10 @@ button:focus {
 
 
 .jumbotron {
-  padding: 2rem 1rem;
-  margin-bottom: 2rem;
-  background-color: #e9ecef;
-  border-radius: .3rem;
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
 }
 
 /* */
