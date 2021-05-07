@@ -18,4 +18,7 @@
 
 [concert-hall-back.herokuapp.com](https://concert-hall-back.herokuapp.com/concerts) - api
 
+# Демо
+
+[Видео](https://drive.google.com/file/d/1shVogPnqZXSquo5FvBLFNWAXKGXKJDi8/view?usp=sharing)
 
