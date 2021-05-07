@@ -1,10 +1,7 @@
-from os import environ
 import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
-import json
-from typing import List, Dict
 from cid_secr import cid, secret, scope, rur, user
 
 

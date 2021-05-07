@@ -1,5 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from dataclasses import dataclass
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
