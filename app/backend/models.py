@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
 from marshmallow_sqlalchemy.fields import Nested
+from flask_login import UserMixin
 
 # from config import app
 
@@ -48,20 +49,25 @@ class Concert(db.Model):
     ticket = db.relationship('Ticket', backref='concert', lazy=True)
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, index=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     user_password = db.Column(db.String(100), unique=False, nullable=False)
     user_role = db.Column(db.Integer, unique=False, nullable=False)
     user_photo = db.Column(db.String(100), unique=False, nullable=True)  # base64 string
+    user_email = db.Column(db.String(100), unique=True, nullable=False)
     user_spotify_token = db.Column(db.String(100), unique=False, nullable=True)
     user_gcalendar_token = db.Column(db.String(100), unique=False, nullable=True)
+    activity = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     creviews = db.relationship('ConcertReview', backref='user', lazy=True)
     areviews = db.relationship('ArtistReview', backref='user', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='user', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='user', lazy=True)
     ticket = db.relationship('Ticket', backref='user', lazy=True)
+
+    def is_active(self):
+        return self.activity
 
 
 class Hall(db.Model):
