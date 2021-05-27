@@ -74,7 +74,14 @@ class Hall(db.Model):
     __tablename__ = 'hall'
     hall_id = db.Column(db.Integer, primary_key=True, index=True)
     hall_name = db.Column(db.String(100), unique=True, nullable=False)
-    hall_address = db.Column(db.String(100), unique=True, nullable=False)
+    hall_zone = db.relationship('HallZone', backref='hall_zone', lazy=True)
+
+class HallZone(db.Model):
+    __tablename__ = 'hall_zone'
+    hall_zone_id = db.Column(db.Integer, primary_key=True, index=True)
+    hall_zone_name = db.Column(db.String(100), unique=True, nullable=False)
+    price = db.Column(db.Integer, primary_key=True, index=True)
+    hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
     ticket = db.relationship('Ticket', backref='hall', lazy=True)
 
 
@@ -84,7 +91,7 @@ class Ticket(db.Model):
     placement = db.Column(db.Integer, unique=False, nullable=False)
     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
+    hall_zone_id = db.Column(db.Integer, db.ForeignKey('hall_zone.hall_zone_id'), nullable=False)
 
 
 #
