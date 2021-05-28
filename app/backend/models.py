@@ -31,7 +31,7 @@ class City(db.Model):
     __tablename__ = 'city'
     city_id = db.Column(db.Integer, primary_key=True, index=True)
     city_name = db.Column(db.String(100), unique=False, nullable=False)
-    concert = db.relationship('Concert', backref='city', lazy=True)
+    hall = db.relationship('Hall', backref='city', lazy=True)
 
 
 class Concert(db.Model):
@@ -41,8 +41,7 @@ class Concert(db.Model):
     concert_info = db.Column(db.String(1000), unique=False, nullable=True)
     concert_photo = db.Column(db.String(300), unique=False, nullable=True)
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
-    concert_address = db.Column(db.String(1000), unique=False, nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
+    hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
     performances = db.relationship('Artist', secondary=Performance, viewonly=True, backref='concert')
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
@@ -74,7 +73,11 @@ class Hall(db.Model):
     __tablename__ = 'hall'
     hall_id = db.Column(db.Integer, primary_key=True, index=True)
     hall_name = db.Column(db.String(100), unique=True, nullable=False)
+    hall_address = db.Column(db.String(1000), unique=False, nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
     hall_zone = db.relationship('HallZone', backref='hall', lazy=True)
+    concert = db.relationship('Concert', backref='hall', lazy=True)
+
 
 class HallZone(db.Model):
     __tablename__ = 'hall_zone'
@@ -152,8 +155,8 @@ class ConcertSimplifiedSchema(SQLAlchemySchema):
     # concert_info = auto_field()
     concert_photo = auto_field()
     concert_date = auto_field()
-    concert_address = auto_field()
-    city_id = auto_field()
+    #concert_address = auto_field()
+    #city_id = auto_field()
     # creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     # favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
     # ticket = db.relationship('Ticket', backref='concert', lazy=True)
@@ -197,8 +200,8 @@ class ConcertSchema(SQLAlchemySchema):
     # concert_info = auto_field()
     concert_photo = auto_field()
     concert_date = auto_field()
-    concert_address = auto_field()
-    city_id = auto_field()
+    #concert_address = auto_field()
+    #city_id = auto_field()
     performances = Nested(ArtistSimplifiedSchema, many=True)
     # creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     # favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
@@ -209,5 +212,3 @@ concert_schema = ConcertSchema()
 artist_schema = ArtistSchema()
 concert_simpl_schema = ConcertSimplifiedSchema()
 artist_simpl_schema = ArtistSimplifiedSchema()
-
-
