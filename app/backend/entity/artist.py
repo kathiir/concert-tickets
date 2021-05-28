@@ -27,13 +27,13 @@ def agents_find():
         .filter(Artist.artist_genius_id.ilike(artist_genius_id_search)) \
         .filter(Artist.artist_spotify_id.ilike(artist_spotify_id_search)) \
         .filter(Artist.artist_photo.ilike(artist_photo_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/artist', methods=['GET'])
 def artist():
     all_artist = Artist.query.all()
-    return render_template("agents.html", agents=all_artist)  # ?
+    return render_template("agents.html", agents=all_artist)
 
 
 @app.route('/artist', methods=['POST'])
@@ -51,8 +51,8 @@ def add_artist():
         db.session.commit()
     except Exception:
         flash('Этот артист уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/artist/delete', methods=['POST'])
@@ -64,8 +64,8 @@ def delete_artist():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/artist/edit', methods=['POST'])
@@ -82,4 +82,4 @@ def edit_artist():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

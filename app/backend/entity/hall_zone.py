@@ -17,13 +17,13 @@ def hall_zone_find():
 
     all_rows = HallZone.query \
         .filter(HallZone.hall_zone_name.ilike(hall_zone_name_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/hall_zone', methods=['GET'])
 def hall_zone():
     all_hall_zone = HallZone.query.all()
-    return render_template("agents.html", agents=all_hall_zone)  # ?
+    return render_template("agents.html", agents=all_hall_zone)
 
 
 @app.route('/hall_zone', methods=['POST'])
@@ -37,8 +37,8 @@ def add_hall_zone():
         db.session.commit()
     except Exception:
         flash('Этот зал уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/hall_zone/delete', methods=['POST'])
@@ -50,8 +50,8 @@ def delete_hall_zone():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/hall_zone/edit', methods=['POST'])
@@ -66,4 +66,4 @@ def edit_hall_zone():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

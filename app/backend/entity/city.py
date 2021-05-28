@@ -17,13 +17,13 @@ def city_find():
 
     all_rows = City.query \
         .filter(City.city_name.ilike(city_name_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/city', methods=['GET'])
 def city():
     all_city = City.query.all()
-    return render_template("agents.html", agents=all_city)  # ?
+    return render_template("agents.html", agents=all_city)
 
 
 @app.route('/city', methods=['POST'])
@@ -37,8 +37,8 @@ def add_city():
         db.session.commit()
     except Exception:
         flash('Этот зал уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/city/delete', methods=['POST'])
@@ -50,8 +50,8 @@ def delete_city():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/city/edit', methods=['POST'])
@@ -66,4 +66,4 @@ def edit_city():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

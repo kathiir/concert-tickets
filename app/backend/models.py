@@ -42,11 +42,18 @@ class Concert(db.Model):
     concert_photo = db.Column(db.String(300), unique=False, nullable=True)
     concert_date = db.Column(db.TIMESTAMP, unique=False, nullable=False)
     hall_id = db.Column(db.Integer, db.ForeignKey('hall.hall_id'), nullable=False)
+    concert_status_id = db.Column(db.Integer, db.ForeignKey('concert_status.concert_status_id'), nullable=False)
     performances = db.relationship('Artist', secondary=Performance, viewonly=True, backref='concert')
     creviews = db.relationship('ConcertReview', backref='concert', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='concert', lazy=True)
     ticket = db.relationship('Ticket', backref='concert', lazy=True)
 
+
+class ConcertStatus(db.Model):
+    __tablename__ = 'concert_status'
+    concert_status_id = db.Column(db.Integer, primary_key=True, index=True)
+    concert_status_name = db.Column(db.String(100), unique=False, nullable=False)
+    concert = db.relationship('Concert', backref='concert_status', lazy=True)
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'

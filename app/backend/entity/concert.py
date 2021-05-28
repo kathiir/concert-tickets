@@ -32,13 +32,13 @@ def concert_find():
         .filter(Concert.concert_info.ilike(concert_info_search)) \
         .filter(Concert.concert_photo.ilike(concert_photo_search)) \
         .filter(Concert.concert_date.ilike(concert_date_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/concert', methods=['GET'])
 def concert():
     all_concert = Concert.query.all()
-    return render_template("agents.html", agents=all_concert)  # ?
+    return render_template("agents.html", agents=all_concert)
 
 
 @app.route('/concert', methods=['POST'])
@@ -58,8 +58,8 @@ def add_concert():
         db.session.commit()
     except Exception:
         flash('Этот концерт уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/concert/delete', methods=['POST'])
@@ -71,8 +71,8 @@ def delete_concert():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/concert/edit', methods=['POST'])
@@ -90,4 +90,4 @@ def edit_concert():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

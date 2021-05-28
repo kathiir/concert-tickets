@@ -22,13 +22,13 @@ def creview_find():
     all_rows = ConcertReview.query \
         .filter(ConcertReview.сreview_info.ilike(creview_info_search)) \
         .filter(ConcertReview.creview_rating.ilike(creview_rating_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/creview', methods=['GET'])
 def creview():
     all_creview = ConcertReview.query.all()
-    return render_template("agents.html", agents=all_creview)  # ?
+    return render_template("agents.html", agents=all_creview)
 
 
 @app.route('/creview', methods=['POST'])
@@ -44,8 +44,8 @@ def add_creview():
         db.session.commit()
     except Exception:
         flash('Это ревью уже добавлено!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/creview/delete', methods=['POST'])
@@ -57,8 +57,8 @@ def delete_creview():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/creview/edit', methods=['POST'])
@@ -74,4 +74,4 @@ def edit_creview():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

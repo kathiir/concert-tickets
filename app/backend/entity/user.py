@@ -42,13 +42,13 @@ def user_find():
         .filter(User.user_photo.ilike(user_photo_search)) \
         .filter(User.user_spotify_token.ilike(user_spotify_token_search)) \
         .filter(User.user_gcalendar_token.ilike(user_gcalendar_token_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/user', methods=['GET'])
 def user():
     all_user = User.query.all()
-    return render_template("agents.html", agents=all_user)  # ?
+    return render_template("agents.html", agents=all_user)
 
 
 @app.route('/user', methods=['POST'])
@@ -72,8 +72,8 @@ def add_user():
         db.session.commit()
     except Exception:
         flash('Этот пользователь уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/user/delete', methods=['POST'])
@@ -85,8 +85,8 @@ def delete_user():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/user/edit', methods=['POST'])
@@ -106,4 +106,4 @@ def edit_user():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))
