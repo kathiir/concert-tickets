@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import ConcertReview
+from config import app
+from models import ConcertReview, db
 
 
 @app.route('/creview', methods=['GET'])

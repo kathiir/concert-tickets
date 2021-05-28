@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import Hall
+from config import app
+from models import Hall, db
 
 
 @app.route('/hall', methods=['GET'])

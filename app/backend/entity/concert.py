@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import Concert
+from config import app
+from models import Concert, db
 
 
 @app.route('/concert', methods=['GET'])
@@ -12,7 +12,6 @@ def concert_find():
     concert_info_to_find = request.args.get("concert_info")
     concert_photo_to_find = request.args.get("concert_photo")
     concert_date_to_find = request.args.get("concert_date")
-    concert_address_to_find = request.args.get("concert_address")
 
     if concert_name_to_find is None:
         concert_name_to_find = ""
@@ -22,21 +21,17 @@ def concert_find():
         concert_photo_to_find = ""
     if concert_date_to_find is None:
         concert_photo_to_find = ""
-    if concert_address_to_find is None:
-        concert_address_to_find = ""
 
     concert_name_search = "%{}%".format(concert_name_to_find)
     concert_info_search = "%{}%".format(concert_info_to_find)
     concert_photo_search = "%{}%".format(concert_photo_to_find)
     concert_date_search = "%{}%".format(concert_date_to_find)
-    concert_address_search= "%{}%".format(concert_address_to_find)
 
     all_rows = Concert.query \
         .filter(Concert.concert_name.ilike(concert_name_search)) \
         .filter(Concert.concert_info.ilike(concert_info_search)) \
         .filter(Concert.concert_photo.ilike(concert_photo_search)) \
-        .filter(Concert.concert_date.ilike(concert_date_search)) \
-        .filter(Concert.concert_address.ilike(concert_address_search))
+        .filter(Concert.concert_date.ilike(concert_date_search))
     return render_template("agents.html", agents=all_rows.all())  # ?
 
 
@@ -53,13 +48,11 @@ def add_concert():
         concert_info = request.form.get('newConcertInfo')
         concert_photo = request.form.get('newConcertPhoto')
         concert_date = request.form.get('newConcertDate')
-        concert_address = request.form.get('newConcertAddress')
         new_concert = Concert(
             concert_name=concert_name,
             concert_info=concert_info,
             concert_photo=concert_photo,
-            concert_date=concert_date,
-            concert_address=concert_address
+            concert_date=concert_date
         )
         db.session.add(new_concert)
         db.session.commit()
@@ -92,7 +85,6 @@ def edit_concert():
                 'concert_info': request.form.get('concert_info'),
                 'concert_photo': request.form.get('concert_photo'),
                 'concert_date': request.form.get('concert_date'),
-                'concert_address': request.form.get('concert_address'),
             })
         db.session.commit()
     except Exception:
