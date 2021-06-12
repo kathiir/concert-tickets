@@ -7,7 +7,8 @@ from flask_babel import Babel
 # from flask_bootstrap import Bootstrap
 
 
-back_uri = 'https://concert-hall-back.herokuapp.com'
+# back_uri = 'https://concert-hall-back.herokuapp.com'
+back_uri = 'http://127.0.0.1:5005/'
 
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
@@ -137,7 +138,6 @@ def artists_page(id):
     if response.status_code != 200:
         abort(404)
     artist = response.json()
-    # html = json2html.convert(json=input)
 
     return render_template(
         'artist.html',
@@ -147,6 +147,6 @@ def artists_page(id):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    # print(' http://127.0.0.1:5000/')
+    print(' http://127.0.0.1:5000/')
     app.run(host='0.0.0.0', port=port)
     # app.run()

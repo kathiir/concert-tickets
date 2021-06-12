@@ -9,7 +9,7 @@ class Genius:
     def get_artist_info_by_id(self, id):
         path = 'artists/'
         request_uri = '/'.join([baseUrl, path])
-        new_req = request_uri + str(id)
+        new_req = request_uri + str(id) + '?text_format=html'
         r = requests.get(new_req, headers=headers)
         arti = r.json()
         if r.status_code != 200:

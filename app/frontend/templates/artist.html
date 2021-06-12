@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Artist Name {{ concert_id }}{% endblock %}
+{% block title %}{{ artist["artist"]["artist_name"] }}{% endblock %}
 
 {% block content %}
     <div>
@@ -55,10 +55,10 @@
                                             <div class="col-md-3 transp">
 
                                                 {% if c["concert_photo"] %}
-{#                                                    <div class="col-md-3 transp">#}
-                                                        <img class="card-img-top img-fluid img-cover" role="img"
-                                                             src="{{ c["concert_photo"] }}" alt="img">
-{#                                                    </div>#}
+                                                    {#                                                    <div class="col-md-3 transp">#}
+                                                    <img class="card-img-top img-fluid img-cover" role="img"
+                                                         src="{{ c["concert_photo"] }}" alt="img">
+                                                    {#                                                    </div>#}
                                                 {% else %}
                                                     <svg class="bd-placeholder-img card-img-top" width="100%"
                                                          height="100%"
@@ -136,7 +136,16 @@
                                                         <span class="text-dark my-auto ms-3">User</span>
                                                     </div>
                                                     <p>
-                                                        {% for n in range(100) %}a{% endfor %}
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                                                        varius
+                                                        sagittis massa non vulputate. In luctus arcu non tempor
+                                                        tincidunt. Cras
+                                                        ex urna, porttitor ut pulvinar vitae, commodo in nulla. Praesent
+                                                        commodo
+                                                        ipsum eu urna dictum, vitae varius turpis ultricies. Etiam a
+                                                        sagittis
+                                                        urna, nec fringilla quam. Aliquam iaculis massa sed placerat
+                                                        varius.
                                                     </p>
                                                 </div>
 
@@ -152,10 +161,8 @@
                                 <h1 class="display-5">
                                     Info
                                 </h1>
-                                <div>
-                                    <p class="text-wrap">
-                                        Nice artist
-                                    </p>
+                                <div class="text-wrap">
+                                    {{ artist["info"]["html"]|safe }}
                                 </div>
                             </div>
                         </div>
