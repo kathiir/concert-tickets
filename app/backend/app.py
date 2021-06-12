@@ -1,13 +1,17 @@
+import traceback
+
 from flask import Flask, request, make_response, jsonify, abort
 import os
+import re
 
-from flask_login import login_manager
+from werkzeug.security import generate_password_hash
 
 from config import app
 from models import db
-from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema
+from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema, User, user_simpl_schema
 from genius_api import Genius
 from spotify_api import Spotify
+from urllib.parse import unquote
 
 genius = Genius()
 spotify = Spotify()
@@ -43,6 +47,39 @@ def get_artist_by_id(artist_id):
     return jsonify(artist=artist_schema.dump(result), info=info)
 
 
+@app.route('/users', methods=['POST'])
+def post_new_user():
+    data = list(filter(None, re.split('email=|&password=|&password_check=', unquote(request.get_data()))))
+    email = data[0]
+    try:
+        password1 = data[1]
+        password2 = data[2]
+        user = User.query.filter(User.user_email == email).first()
+
+        if user is not None:
+            return jsonify({'result': 'email'})
+
+        if password1 != password2:
+            return jsonify({'result': 'password'})
+
+        hash_password = generate_password_hash(password1)
+        new_user = User(
+            username = email,
+            user_email=email,
+            user_password=hash_password,
+            user_role = 0,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+    except Exception:
+        user = User.query.filter(User.user_email == email).first()
+        db.session.delete(user)
+        db.session.commit()
+        traceback.print_exc()
+
+    return jsonify({'result': 'success'})
+
 @app.route('/concerts', methods=['GET'])
 def get_concert_list():
     page = request.args.get('page', default=1, type=int)
@@ -68,9 +105,7 @@ def get_concert_by_id(concert_id):
     return concert_schema.dump(result)
 
 ### Точно пока не знаю, надо ли это ###
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+
 
 @app.route('/', methods=['GET'])
 def get_start():
@@ -83,8 +118,8 @@ if True:
         db.create_all()
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5005))
-    # print(' http://127.0.0.1:5000/')
+    port = int(os.environ.get('PORT', 1337))
+    print(' http://127.0.0.1:1337/')
     app.run(host='0.0.0.0', port=port)
     # app.run(host='0.0.0.0', port=1337)
 

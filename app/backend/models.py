@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
 from marshmallow_sqlalchemy.fields import Nested
-from flask_login import UserMixin
 
 # from config import app
 
@@ -55,7 +54,7 @@ class ConcertStatus(db.Model):
     concert_status_name = db.Column(db.String(100), unique=False, nullable=False)
     concert = db.relationship('Concert', backref='concert_status', lazy=True)
 
-class User(db.Model, UserMixin):
+class User(db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, index=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
@@ -65,15 +64,13 @@ class User(db.Model, UserMixin):
     user_email = db.Column(db.String(100), unique=True, nullable=False)
     user_spotify_token = db.Column(db.String(100), unique=False, nullable=True)
     user_gcalendar_token = db.Column(db.String(100), unique=False, nullable=True)
-    activity = db.Column(db.Boolean, unique=False, nullable=False, default=False)
+    user_token = db.Column(db.String(100), unique=False, nullable=True) # для авторизации
+    user_exp_date = db.Column(db.TIMESTAMP, unique=False, nullable=True) # для авторизации
     creviews = db.relationship('ConcertReview', backref='user', lazy=True)
     areviews = db.relationship('ArtistReview', backref='user', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='user', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='user', lazy=True)
     ticket = db.relationship('Ticket', backref='user', lazy=True)
-
-    def is_active(self):
-        return self.activity
 
 
 class Hall(db.Model):
@@ -160,7 +157,7 @@ class ConcertSimplifiedSchema(SQLAlchemySchema):
 
     concert_id = auto_field()
     concert_name = auto_field()
-    # concert_info = auto_field()
+    concert_info = auto_field()
     concert_photo = auto_field()
     concert_date = auto_field()
     #concert_address = auto_field()
@@ -205,7 +202,7 @@ class ConcertSchema(SQLAlchemySchema):
 
     concert_id = auto_field()
     concert_name = auto_field()
-    # concert_info = auto_field()
+    concert_info = auto_field()
     concert_photo = auto_field()
     concert_date = auto_field()
     #concert_address = auto_field()
@@ -216,7 +213,23 @@ class ConcertSchema(SQLAlchemySchema):
     # ticket = db.relationship('Ticket', backref='concert', lazy=True)
 
 
+class UserSimplifiedSchema(SQLAlchemySchema):
+    class Meta:
+        model = User
+
+    user_id = auto_field()
+    username = auto_field()
+    user_password = auto_field()
+    user_role = auto_field()
+    user_email = auto_field()
+    user_token = auto_field()
+    user_exp_date = auto_field()
+
+
+
 concert_schema = ConcertSchema()
 artist_schema = ArtistSchema()
 concert_simpl_schema = ConcertSimplifiedSchema()
 artist_simpl_schema = ArtistSimplifiedSchema()
+user_simpl_schema = UserSimplifiedSchema()
+
