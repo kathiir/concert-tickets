@@ -1,14 +1,12 @@
 import datetime
-
 import requests
-from flask import Flask, request, render_template, abort
 import os
+from flask import Flask, request, render_template, abort
 from flask_babel import Babel
-# from flask_bootstrap import Bootstrap
 
 
-# back_uri = 'https://concert-hall-back.herokuapp.com'
-back_uri = 'http://127.0.0.1:5005/'
+back_uri = 'https://concert-hall-back.herokuapp.com'
+# back_uri = 'http://127.0.0.1:5005/'
 
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
@@ -16,27 +14,30 @@ app.config['LANGUAGES'] = {
     'ru': 'Russian'
 }
 
-# bootstrap = Bootstrap(app)
 babel = Babel(app)
 
 
 @app.template_filter('dt')
 def _jinja2_filter_datetime(date):
     ret = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').strftime('%d %B %Y %H:%M')
-    # native = date.replace(tzinfo=None)
-    # format='%b %d, %Y'
     return ret
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
 
 @babel.localeselector
 def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+
+
+@app.route('/city/<int:id>')
+def change_city(id):
+    # if city is valid
+    # session['city'] = 123
+    return render_template(request.referrer)
 
 
 @app.route('/')
@@ -149,4 +150,3 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(' http://127.0.0.1:5000/')
     app.run(host='0.0.0.0', port=port)
-    # app.run()

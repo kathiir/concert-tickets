@@ -108,19 +108,23 @@
                                     <div>
                                         {% if true %}
                                             <div>
-                                                <form class="d-flex flex-column g-0 mb-3">
-                                                    <div class="d-flex flex-column">
-                                                        <div class="d-flex mb-2">
-                                                            {#                                        <label for="formControlTextarea1" class="form-label">Leave review</label>#}
-                                                            <button type="submit"
-                                                                    class="btn btn-primary text-light ms-auto">
-                                                                Leave
-                                                                review
+                                                <form class="g-0 mb-2">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <input id="input-id" value="4" type="text" class="rating"
+                                                                   data-theme="krajee-fas" data-min=0 data-max=5
+                                                                   data-size="sm"
+                                                                   required title="">
+                                                        </div>
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary text-light">
+                                                                Leave review
                                                             </button>
                                                         </div>
-                                                        <textarea class="form-control" id="formControlTextarea1"
-                                                                  rows="3"></textarea>
+
                                                     </div>
+                                                    <textarea class="form-control" id="formControlTextarea1"
+                                                              rows="3"></textarea>
                                                 </form>
                                             </div>
                                         {% endif %}
@@ -176,5 +180,13 @@
     </div>
 
 
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        $("#input-id").rating();
+    </script>
 
 {% endblock %}
