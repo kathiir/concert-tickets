@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Concert Name {{ concert_id }}{% endblock %}
+{% block title %}{{ concert["concert_name"] }}{% endblock %}
 
 {% block content %}
     <div>
@@ -8,9 +8,9 @@
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
 
                     <div class="ratio ratio-1x1">
-                                <img class="card-img-top img-fluid img-cover" width="300" height="300"
-                                     src="{{ concert["concert_photo"] }}" alt="img">
-                            </div>
+                        <img class="card-img-top img-fluid img-cover" width="300" height="300"
+                             src="{{ concert["concert_photo"] }}" alt="img">
+                    </div>
 
                 </div>
                 <div class="col-lg-8">
@@ -26,7 +26,9 @@
                             <p class="">{{ concert["concert_address"] }}</p>
                             <h5 class="">Date</h5>
                             <p class="">{{ concert["concert_date"]|dt }}</p>
-                            <p><a class="btn btn-lg btn-primary text-light" href="#">Buy
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
+                                  data-bs-content="You bought ticket!">Buy
                                 tickets</a></p>
                         </div>
                     </div>
@@ -40,7 +42,8 @@
                                     <img class="bg-light rounded-circle img-cover text-white p-1" width="50" height="50"
                                          alt="avatar"
                                          src="{{ ar["artist_photo"] }}">
-                                    <a class="text-dark my-auto ms-3" href="{{ url_for('artists_page', id=ar["artist_id"]) }}">{{ ar["artist_name"] }}</a>
+                                    <a class="text-dark my-auto ms-3"
+                                       href="{{ url_for('artists_page', id=ar["artist_id"]) }}">{{ ar["artist_name"] }}</a>
                                 </div>
                             {% endfor %}
                         </div>
@@ -52,11 +55,11 @@
                                 Info
                             </h1>
                             <div>
-{#                                <p class="text-wrap">#}
-{#                                    {% for n in range(1000) %}#}
-{#                                        a#}
-{#                                    {% endfor %}#}
-{#                                </p>#}
+                                {#                                <p class="text-wrap">#}
+                                {#                                    {% for n in range(1000) %}#}
+                                {#                                        a#}
+                                {#                                    {% endfor %}#}
+                                {#                                </p>#}
                             </div>
                         </div>
 
@@ -67,18 +70,22 @@
                             <div>
                                 {% if true %}
                                     <div>
-                                        <form class="d-flex flex-column g-0 mb-3">
-                                            <div class="d-flex flex-column">
-                                                <div class="d-flex mb-2">
-                                                    {#                                        <label for="formControlTextarea1" class="form-label">Leave review</label>#}
-                                                    <button type="submit" class="btn btn-primary text-light ms-auto">
-                                                        Leave
-                                                        review
+                                        <form class="g-0 mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <input id="input-id" value="4" type="text" class="rating"
+                                                           data-theme="krajee-fas" data-min=0 data-max=5 data-size="sm"
+                                                           required title="">
+                                                </div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary text-light">
+                                                        Leave review
                                                     </button>
                                                 </div>
-                                                <textarea class="form-control" id="formControlTextarea1"
-                                                          rows="3"></textarea>
+
                                             </div>
+                                            <textarea class="form-control" id="formControlTextarea1"
+                                                      rows="3"></textarea>
                                         </form>
                                     </div>
                                 {% endif %}
@@ -94,10 +101,13 @@
                                                 <span class="text-dark my-auto ms-3">User</span>
                                             </div>
                                             <p>
-                                                {% for n in range(100) %}a{% endfor %}
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius
+                                                sagittis massa non vulputate. In luctus arcu non tempor tincidunt. Cras
+                                                ex urna, porttitor ut pulvinar vitae, commodo in nulla. Praesent commodo
+                                                ipsum eu urna dictum, vitae varius turpis ultricies. Etiam a sagittis
+                                                urna, nec fringilla quam. Aliquam iaculis massa sed placerat varius.
                                             </p>
                                         </div>
-
 
                                     {% endfor %}
                                 </div>
@@ -108,11 +118,26 @@
                 </div>
             </div>
 
-
         </div>
     </div>
 
 
 
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+        var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
+            trigger: 'focus'
+        })
+
+        $("#input-id").rating();
+    </script>
 
 {% endblock %}
