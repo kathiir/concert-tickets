@@ -4,7 +4,6 @@ from genius_key import headers
 
 baseUrl = 'https://api.genius.com'
 
-
 class Genius:
     def get_artist_info_by_id(self, id):
         path = 'artists/'
