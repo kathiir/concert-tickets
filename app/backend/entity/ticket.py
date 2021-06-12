@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import Ticket
+from config import app
+from models import Ticket, db
 
 
 @app.route('/ticket', methods=['GET'])
@@ -17,13 +17,13 @@ def ticket_find():
 
     all_rows = Ticket.query \
         .filter(Ticket.placement.ilike(placement_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/ticket', methods=['GET'])
 def ticket():
     all_ticket = Ticket.query.all()
-    return render_template("agents.html", agents=all_ticket)  # ?
+    return render_template("agents.html", agents=all_ticket)
 
 
 @app.route('/ticket', methods=['POST'])
@@ -37,8 +37,8 @@ def add_ticket():
         db.session.commit()
     except Exception:
         flash('Этот зал уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/ticket/delete', methods=['POST'])
@@ -50,8 +50,8 @@ def delete_ticket():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/ticket/edit', methods=['POST'])
@@ -66,4 +66,4 @@ def edit_ticket():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

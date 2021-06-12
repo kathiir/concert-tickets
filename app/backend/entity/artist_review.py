@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import ArtistReview
+from config import app
+from models import ArtistReview, db
 
 
 @app.route('/areview', methods=['GET'])
@@ -22,13 +22,13 @@ def areview_find():
     all_rows = ArtistReview.query \
         .filter(ArtistReview.areview_info.ilike(areview_info_search)) \
         .filter(ArtistReview.areview_rating.ilike(areview_rating_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/areview', methods=['GET'])
 def areview():
     all_areview = ArtistReview.query.all()
-    return render_template("agents.html", agents=all_areview)  # ?
+    return render_template("agents.html", agents=all_areview)
 
 
 @app.route('/areview', methods=['POST'])
@@ -44,8 +44,8 @@ def add_areview():
         db.session.commit()
     except Exception:
         flash('Это ревью уже добавлено!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/areview/delete', methods=['POST'])
@@ -57,8 +57,8 @@ def delete_areview():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/areview/edit', methods=['POST'])
@@ -74,4 +74,4 @@ def edit_areview():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))

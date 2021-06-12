@@ -2,8 +2,8 @@ import traceback
 
 from flask import render_template, request, redirect, url_for, flash
 
-from back import db, app
-from models import Hall
+from config import app
+from models import Hall, db
 
 
 @app.route('/hall', methods=['GET'])
@@ -22,13 +22,13 @@ def hall_find():
     all_rows = Hall.query \
         .filter(Hall.hall_name.ilike(hall_name_search)) \
         .filter(Hall.hall_info.ilike(hall_address_search))
-    return render_template("agents.html", agents=all_rows.all())  # ?
+    return render_template("agents.html", agents=all_rows.all())
 
 
 @app.route('/hall', methods=['GET'])
 def hall():
     all_hall = Hall.query.all()
-    return render_template("agents.html", agents=all_hall)  # ?
+    return render_template("agents.html", agents=all_hall)
 
 
 @app.route('/hall', methods=['POST'])
@@ -44,8 +44,8 @@ def add_hall():
         db.session.commit()
     except Exception:
         flash('Этот зал уже добавлен!')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/hall/delete', methods=['POST'])
@@ -57,8 +57,8 @@ def delete_hall():
         db.session.commit()
     except Exception:
         flash('Невозможно удалить')
-        return redirect(url_for('agents'))  # ?
-    return redirect(url_for('agents'))  # ?
+        return redirect(url_for('agents'))
+    return redirect(url_for('agents'))
 
 
 @app.route('/hall/edit', methods=['POST'])
@@ -74,4 +74,4 @@ def edit_hall():
     except Exception:
         traceback.print_exc()
         flash('Невозможно внести изменение')
-    return redirect(url_for('agents'))  # ?
+    return redirect(url_for('agents'))
