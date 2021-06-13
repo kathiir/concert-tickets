@@ -2,7 +2,8 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
-from cid_secr import cid, secret, scope, rur, user
+
+from cid_secr import cid, secret
 
 
 # TODO client

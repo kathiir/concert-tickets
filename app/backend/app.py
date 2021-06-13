@@ -1,9 +1,8 @@
-from flask import Flask, request, make_response, jsonify, abort
 import os
 
+from flask import request, make_response, jsonify, abort
+
 from config import app
-from models import db
-from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema
 from genius_api import Genius
 from spotify_api import Spotify
 

@@ -1,7 +1,6 @@
 import hashlib
 import random
 import secrets
-
 from datetime import datetime, timedelta
 
 from sqlalchemy import or_

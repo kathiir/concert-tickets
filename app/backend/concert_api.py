@@ -1,11 +1,12 @@
-from flask import jsonify
-import os
-from config import app, db
-from models import Concert, Artist, concert_schema
-
 import datetime
+import os
 import random
+
+from flask import jsonify
+
+from config import app, db
 from genius_api import Genius
+from models import Concert
 from spotify_api import Spotify
 
 

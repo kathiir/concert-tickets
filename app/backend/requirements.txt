@@ -3,3 +3,5 @@ requests~=2.25.1
 spotipy~=2.18.0
 marshmallow_sqlalchemy~=0.25.0
 Flask-SQLAlchemy~=2.5.1
+SQLAlchemy~=1.4.13
+validate_email
