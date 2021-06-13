@@ -1,8 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
 from marshmallow_sqlalchemy.fields import Nested
-from flask_login import UserMixin
-
 # from config import app
 
 db = SQLAlchemy()
@@ -55,7 +53,7 @@ class ConcertStatus(db.Model):
     concert_status_name = db.Column(db.String(100), unique=False, nullable=False)
     concert = db.relationship('Concert', backref='concert_status', lazy=True)
 
-class User(db.Model, UserMixin):
+class User(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True, index=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
@@ -105,14 +103,6 @@ class Ticket(db.Model):
     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     hall_zone_id = db.Column(db.Integer, db.ForeignKey('hall_zone.hall_zone_id'), nullable=False)
-
-
-#
-# class Performance(db.Model):
-#     __tablename__ = 'performance'
-#     performance_id = db.Column(db.Integer, primary_key=True, index=True)
-#     artist_id = db.Column(db.Integer, db.ForeignKey('artist.artist_id'), nullable=False)
-#     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
 
 
 class ConcertReview(db.Model):

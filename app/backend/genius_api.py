@@ -1,5 +1,4 @@
 import requests
-# import json
 from genius_key import headers
 
 baseUrl = 'https://api.genius.com'

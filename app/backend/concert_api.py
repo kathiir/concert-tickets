@@ -1,6 +1,4 @@
-import time
-
-from flask import Flask, request, make_response, jsonify, abort
+from flask import jsonify
 import os
 from config import app, db
 from models import Concert, Artist, concert_schema

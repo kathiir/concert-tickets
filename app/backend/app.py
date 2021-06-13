@@ -1,20 +1,14 @@
-import json
-
 from flask import Flask, request, make_response, jsonify, abort
 import os
 
-from config import app, login_manager
+from config import app
 from models import db
-from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema, User
+from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema
 from genius_api import Genius
 from spotify_api import Spotify
 
-from auth_utils import register_user_with_responce, login_user_by_login_and_pass
-from utils import simplify_json_result
-
 genius = Genius()
 spotify = Spotify()
-
 
 
 @app.errorhandler(400)
@@ -25,29 +19,6 @@ def bad_request(error):
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
-
-
-#nickname, email, password, password_check
-@app.route('/registration', methods=['POST'])
-def register_user():
-    data = simplify_json_result(request.get_json())
-    responce = register_user_with_responce(data)
-    return json.dumps(responce), 200, {'ContentType':'application/json'}
-
-
-#login(email or login), password
-@app.route('/login', methods=['POST'])
-def login_user():
-    data = simplify_json_result(request.get_json()) # костыль, так как надо сделать так, чтобы фронт не кидал списки вида: {'login': ['login']}
-    responce = login_user_by_login_and_pass(data['login'], data['password'])
-    return json.dumps(responce), 200, {'ContentType':'application/json'}
-
-
-#token
-@app.route('/user_info', methods=['POST'])
-def token_gen():
-    data = simplify_json_result(request.get_json())
-    #token (если обновляем), user
 
 
 @app.route('/artist/s/<string:artist_name>', methods=['GET'])
@@ -94,14 +65,11 @@ def get_concert_by_id(concert_id):
         abort(404)
     return concert_schema.dump(result)
 
-### Точно пока не знаю, надо ли это ###
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
 
 @app.route('/', methods=['GET'])
 def get_start():
     return "Hello"
+
 
 if True:
     from models import *
