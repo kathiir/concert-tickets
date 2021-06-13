@@ -4,19 +4,24 @@
 {% block content %}
 
     <div class="form-signin text-center mt-4">
-        <form>
+        <form method="post">
             <img class="mb-4" src="../static/logo.png" alt="" width="300" height="150">
             <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+
             <div class="form-floating">
-                <input type="email" class="form-control remove-glow" id="floatingInput" placeholder="name@example.com">
+                <input type="text" class="form-control remove-glow" name="nickname" id="floatingInput" placeholder="Nickname">
+                <label for="floatingInput">Nickname</label>
+            </div>
+            <div class="form-floating">
+                <input type="email" class="form-control remove-glow" name="email" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control remove-glow" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control remove-glow" name="password" id="floatingPassword" placeholder="Password">
                 <label for="floatingPassword">Password</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control remove-glow" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control remove-glow" name="password_check" id="floatingPassword" placeholder="Password">
                 <label for="floatingPassword">Repeat password</label>
             </div>
 

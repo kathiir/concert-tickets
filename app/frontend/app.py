@@ -1,12 +1,14 @@
 import datetime
+import json
+
 import requests
 import os
-from flask import Flask, request, render_template, abort
+from flask import Flask, request, render_template, abort, redirect, url_for
 from flask_babel import Babel
 
 
-back_uri = 'https://concert-hall-back.herokuapp.com'
-# back_uri = 'http://127.0.0.1:5005/'
+# back_uri = 'https://concert-hall-back.herokuapp.com'
+back_uri = 'http://localhost:5005/'
 
 app = Flask(__name__)
 app.config['LANGUAGES'] = {
@@ -52,15 +54,36 @@ def index_page():
     )
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login_page():
+
+    if request.method == 'POST':
+        data = request.form.to_dict(flat=False)
+        request_uri = back_uri + 'login'
+        response = requests.post(request_uri, json=data).json()
+
+        if response['success']:
+            return redirect(url_for('index_page'))
+
     return render_template(
         'login.html'
     )
 
-
-@app.route('/registration')
+#errors (dict):
+# email : description
+# password : description
+# password_check : description
+# nickname: description
+@app.route('/registration', methods=["GET", "POST"])
 def registration_page():
+    if request.method == 'POST':
+        data = request.form.to_dict(flat=False)
+        request_uri = back_uri + 'login'
+        response = requests.post(request_uri, json=data).json()
+
+        if response['success']:
+            return redirect(url_for('index_page'))
+
     return render_template(
         'registration.html'
     )
