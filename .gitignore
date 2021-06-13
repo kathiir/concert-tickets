@@ -137,3 +137,4 @@ cid_secr.*
 /app/backend/.cache-n4k48jxrs6lu7wbmfb1dshbgm
 /app/backend/genius_key.py
 /app/backend/config.py
+/app/frontend/config.py

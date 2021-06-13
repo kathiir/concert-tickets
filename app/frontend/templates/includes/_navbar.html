@@ -12,11 +12,19 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" style="color: black !important;" data-bs-toggle="dropdown"
                        aria-expanded="false" aria-current="page" href="#"><i
-                            class="bi bi-geo-alt"></i><u>Voronezh</u></a>
+                            class="bi bi-geo-alt"></i>
+                        {% if session['city'] == 2 %}
+                            <u>Moscow</u>
+                        {% elif session['city'] == 3 %}
+                            <u>Saint Petersburg</u>
+                        {% else %}
+                            <u>Voronezh</u>
+                        {% endif %}
+                    </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{ url_for('change_city', id=1) }}">Voronezh</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('change_city', id=2) }}">Moscow</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('change_city', id=3) }}">Saint-Petersburg</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('change_city', id=3) }}">Saint Petersburg</a></li>
                     </ul>
                 </li>
             </ul>
@@ -28,15 +36,12 @@
                         type="submit"><i class="bi bi-search"></i></button>
             </form>
 
-            {% if true %}
+            {% if session['logged_in'] %}
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 justify-content-end">
-                    <ul class="navbar-nav me-2 mb-2 mb-lg-0 justify-content-start">
-                        <li class="nav-item">
-                            <a class="nav-link" style="color: black !important;" aria-current="page"
-                               href="{{ url_for('tickets_page') }}"><u>My
-                                tickets</u></a>
-                        </li>
-                    </ul>
+                    <li class="nav-item me-2 mb-2 mb-lg-0 justify-content-start">
+                        <a class="nav-link" style="color: black !important;" aria-current="page"
+                           href="{{ url_for('tickets_page') }}"><u>My tickets</u></a>
+                    </li>
                     <li class="nav-item me-2 mb-2 mb-lg-0 dropdown">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +52,6 @@
                                 <img class="bg-light rounded-circle text-white p-1" width="40" height="40" alt="avatar"
                                      src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
                             {% endif %}
-
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('favorites_page') }}">Favorites</a></li>
