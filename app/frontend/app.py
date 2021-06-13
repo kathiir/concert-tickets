@@ -1,7 +1,7 @@
 import datetime
 import requests
 import os
-from flask import Flask, request, render_template, abort
+from flask import Flask, request, render_template, abort, redirect, session
 from flask_babel import Babel
 
 
@@ -33,11 +33,12 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
 
 
+@app.route('/city')
 @app.route('/city/<int:id>')
-def change_city(id):
+def change_city(id=0):
     # if city is valid
     # session['city'] = 123
-    return render_template(request.referrer)
+    return redirect(request.referrer)
 
 
 @app.route('/')
@@ -101,7 +102,7 @@ def contacts_page():
     )
 
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['GET'])
 def search_page():
     request_uri = back_uri + '/concert/s/' + request.args.get('search')
     response = requests.get(request_uri)
