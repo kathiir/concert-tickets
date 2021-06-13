@@ -4,12 +4,7 @@ import requests
 import os
 from flask import request, render_template, abort, redirect, url_for, session
 
-from config import app, babel
-
-back_uri = 'https://concert-hall-back.herokuapp.com'
-
-
-# back_uri = 'http://localhost:5005/'
+from config import app, babel, back_uri
 
 
 @app.template_filter('dt')
@@ -52,7 +47,7 @@ def index_page():
 
 @app.route('/login', methods=["GET", "POST"])
 def login_page():
-    if session['logged_in']:
+    if 'logged_in' in session and session['logged_in']:
         redirect(request.referrer)
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
@@ -82,7 +77,7 @@ def logout():
 # nickname: description
 @app.route('/registration', methods=["GET", "POST"])
 def registration_page():
-    if session['logged_in']:
+    if 'logged_in' in session and session['logged_in']:
         redirect(request.referrer)
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
@@ -101,7 +96,7 @@ def registration_page():
 
 @app.route('/tickets')
 def tickets_page():
-    if not session['logged_in']:
+    if 'logged_in' not in session or not session['logged_in']:
         redirect(request.referrer)
     return render_template(
         'tickets.html'
@@ -110,7 +105,7 @@ def tickets_page():
 
 @app.route('/favorites')
 def favorites_page():
-    if not session['logged_in']:
+    if 'logged_in' not in session or not session['logged_in']:
         redirect(request.referrer)
     return render_template(
         'favorites.html'
@@ -119,7 +114,7 @@ def favorites_page():
 
 @app.route('/settings')
 def settings_page():
-    if not session['logged_in']:
+    if 'logged_in' not in session or not session['logged_in']:
         redirect(request.referrer)
     return render_template(
         'settings.html'
