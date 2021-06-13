@@ -1,22 +1,15 @@
 import datetime
-import json
 
 import requests
 import os
-from flask import Flask, request, render_template, abort, redirect, url_for
-from flask_babel import Babel
+from flask import request, render_template, abort, redirect, url_for, session
+
+from config import app, babel
+
+back_uri = 'https://concert-hall-back.herokuapp.com'
 
 
-# back_uri = 'https://concert-hall-back.herokuapp.com'
-back_uri = 'http://localhost:5005/'
-
-app = Flask(__name__)
-app.config['LANGUAGES'] = {
-    'en': 'English',
-    'ru': 'Russian'
-}
-
-babel = Babel(app)
+# back_uri = 'http://localhost:5005/'
 
 
 @app.template_filter('dt')
@@ -35,11 +28,14 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
 
 
+@app.route('/city')
 @app.route('/city/<int:id>')
-def change_city(id):
-    # if city is valid
-    # session['city'] = 123
-    return render_template(request.referrer)
+def change_city(id=1):
+    if id > 3 or id < 1:
+        session['city'] = 1
+    else:
+        session['city'] = id
+    return redirect(request.referrer)
 
 
 @app.route('/')
@@ -56,13 +52,16 @@ def index_page():
 
 @app.route('/login', methods=["GET", "POST"])
 def login_page():
-
+    if session['logged_in']:
+        redirect(request.referrer)
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
         request_uri = back_uri + 'login'
         response = requests.post(request_uri, json=data).json()
 
         if response['success']:
+            session['logged_in'] = True
+            # TODO set session token
             return redirect(url_for('index_page'))
 
     return render_template(
@@ -70,19 +69,29 @@ def login_page():
     )
 
 
-#errors (dict):
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index_page'))
+
+
+# errors (dict):
 # email : description
 # password : description
 # password_check : description
 # nickname: description
 @app.route('/registration', methods=["GET", "POST"])
 def registration_page():
+    if session['logged_in']:
+        redirect(request.referrer)
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
         request_uri = back_uri + 'login'
         response = requests.post(request_uri, json=data).json()
 
         if response['success']:
+            session['logged_in'] = True
+            # TODO set session token
             return redirect(url_for('index_page'))
 
     return render_template(
@@ -92,6 +101,8 @@ def registration_page():
 
 @app.route('/tickets')
 def tickets_page():
+    if not session['logged_in']:
+        redirect(request.referrer)
     return render_template(
         'tickets.html'
     )
@@ -99,6 +110,8 @@ def tickets_page():
 
 @app.route('/favorites')
 def favorites_page():
+    if not session['logged_in']:
+        redirect(request.referrer)
     return render_template(
         'favorites.html'
     )
@@ -106,6 +119,8 @@ def favorites_page():
 
 @app.route('/settings')
 def settings_page():
+    if not session['logged_in']:
+        redirect(request.referrer)
     return render_template(
         'settings.html'
     )

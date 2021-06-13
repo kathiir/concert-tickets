@@ -72,9 +72,6 @@ class User(db.Model):
     favcon = db.relationship('FavoriteConcerts', backref='users', lazy=True)
     ticket = db.relationship('Ticket', backref='users', lazy=True)
 
-    def is_active(self):
-        return self.activity
-
 
 class Hall(db.Model):
     __tablename__ = 'hall'
@@ -197,7 +194,7 @@ class ConcertSchema(SQLAlchemySchema):
 
     concert_id = auto_field()
     concert_name = auto_field()
-    # concert_info = auto_field()
+    concert_info = auto_field()
     concert_photo = auto_field()
     concert_date = auto_field()
     #concert_address = auto_field()
