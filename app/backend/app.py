@@ -1,8 +1,6 @@
 from flask import Flask, request, make_response, jsonify, abort
 import os
 
-from flask_login import login_manager
-
 from config import app
 from models import db
 from models import Concert, Artist, concert_schema, artist_schema, concert_simpl_schema, artist_simpl_schema
@@ -67,14 +65,11 @@ def get_concert_by_id(concert_id):
         abort(404)
     return concert_schema.dump(result)
 
-### Точно пока не знаю, надо ли это ###
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
 
 @app.route('/', methods=['GET'])
 def get_start():
     return "Hello"
+
 
 if True:
     from models import *

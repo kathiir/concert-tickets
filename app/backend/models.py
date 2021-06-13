@@ -55,6 +55,7 @@ class ConcertStatus(db.Model):
     concert_status_name = db.Column(db.String(100), unique=False, nullable=False)
     concert = db.relationship('Concert', backref='concert_status', lazy=True)
 
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True, index=True)
@@ -65,15 +66,11 @@ class User(db.Model, UserMixin):
     user_email = db.Column(db.String(100), unique=True, nullable=False)
     user_spotify_token = db.Column(db.String(100), unique=False, nullable=True)
     user_gcalendar_token = db.Column(db.String(100), unique=False, nullable=True)
-    activity = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     creviews = db.relationship('ConcertReview', backref='user', lazy=True)
     areviews = db.relationship('ArtistReview', backref='user', lazy=True)
     favart = db.relationship('FavoriteArtists', backref='user', lazy=True)
     favcon = db.relationship('FavoriteConcerts', backref='user', lazy=True)
     ticket = db.relationship('Ticket', backref='user', lazy=True)
-
-    def is_active(self):
-        return self.activity
 
 
 class Hall(db.Model):
