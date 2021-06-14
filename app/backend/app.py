@@ -1,10 +1,17 @@
-import os
+import json
 
-from flask import request, make_response, jsonify, abort
+from flask import Flask, request, make_response, jsonify, abort
+import os
 
 from config import app
 from genius_api import Genius
 from spotify_api import Spotify
+
+from auth_utils import register_user_with_response, login_user_by_login_and_pass, recreate_user_token
+
+from very_complicated_logic import *
+
+from utils import simplify_json_result
 
 genius = Genius()
 spotify = Spotify()
@@ -19,6 +26,95 @@ def bad_request(error):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+
+# nickname, email, password, password_check
+@app.route('/registration', methods=['POST'])
+def register_user():
+    data = simplify_json_result(request.get_json())
+    response = register_user_with_response(data)
+    return json.dumps(response), 200, {'ContentType': 'application/json'}
+
+
+# login(email or login), password
+@app.route('/login', methods=['POST'])
+def login_user():
+    data = simplify_json_result(
+        request.get_json())  # костыль, так как надо сделать так, чтобы фронт не кидал списки вида: {'login': ['login']}
+    response = login_user_by_login_and_pass(data['login'], data['password'])
+    return json.dumps(response), 200, {'ContentType': 'application/json'}
+
+
+@app.route('/user_short_info', methods=['POST'])
+def user_short_info():
+    data = simplify_json_result(request.get_json())
+    response = {'success': True}
+
+    if not 'token' in data:
+        response = {'success': False}
+        return json.dumps(response), 400, {'ContentType': 'application/json'}
+
+    token = recreate_user_token(data['token'])
+    if not token:  # empty
+        response['success'] = False
+    else:
+        response['user'] = user_simpl_schema.dump(db.session \
+                                                  .query(User) \
+                                                  .filter(User.user_token == token) \
+                                                  .first())
+
+        if data['token'] != token:
+            response['token'] = token
+
+    return json.dumps(response), 200, {'ContentType': 'application/json'}
+
+
+# token
+# returns: token (if expired), user, success (false if need to login)
+@app.route('/user_profile', methods=['POST'])
+def user_profile():
+    data = simplify_json_result(request.get_json())
+    response = {'success': True}
+
+    if not 'token' in data:
+        response = {'success': False}
+        return json.dumps(response), 400, {'ContentType': 'application/json'}
+
+    token = recreate_user_token(data['token'])
+    if not token:  # empty
+        response['success'] = False
+    else:
+        response['user'] = user_schema.dump(db.session \
+                                            .query(User) \
+                                            .filter(User.user_token == token) \
+                                            .first())
+
+        if data['token'] != token:
+            response['token'] = token
+
+    return json.dumps(response), 200, {'ContentType': 'application/json'}
+
+
+# id, type (artist, concert): лучше enum, но пофиг
+# return list<review>
+@app.route('/get_reviews', methods=['POST'])
+def get_reviews():
+    data = simplify_json_result(request.get_json())
+    response = get_all_reviews(data)
+
+    if not response['success']:
+        return json.dumps(response), 400, {'ContentType': 'application/json'}
+
+    return json.dumps(response), 200, {'ContentType': 'application/json'}
+
+
+@app.route('/add_artist_review', methods=['POST'])
+def add_artist_review():
+    data = simplify_json_result(request.get_json())
+    try:
+        response = add_review_to_artist(data)
+        return json.dumps(response), 200, {'ContentType': 'application/json'}
+    except:
+        return json.dumps({'success': False}), 400, {'ContentType': 'application/json'}
 
 @app.route('/artist/s/<string:artist_name>', methods=['GET'])
 def get_artist_search(artist_name):
@@ -81,4 +177,3 @@ if __name__ == '__main__':
     # print(' http://127.0.0.1:5000/')
     app.run(host='0.0.0.0', port=port)
     # app.run(host='0.0.0.0', port=1337)
-

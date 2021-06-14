@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}My Tickets{% endblock %}
+{% block title %}Settings{% endblock %}
 
 {% block content %}
     <div>
@@ -11,7 +11,8 @@
                          xmlns="http://www.w3.org/2000/svg"
                          aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="700%" height="100%" fill="#777"/>
-                    </svg> {# TODO #}
+                    </svg>
+                    {# TODO #}
                 </div>
                 <div class="col-lg-8">
                     <h1 class="display-5 lh-1 mb-3 ms-3">Username</h1>
@@ -56,25 +57,32 @@
 
                         <div class="mb-3">
                             <h1 class="display-5">Change Avatar</h1> {# TODO #}
-                            <div>
-                                <label for="formFile" class="form-label">Upload avatar</label>
-                                <input class="form-control remove-glow" type="file" id="formFile">
-                            </div>
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input class="form-control remove-glow" type="file" name="img" id="formFile"
+                                           accept=".png, .jpg, .jpeg" required>
+                                    <button type="submit" name="image-change"
+                                            class="btn btn-primary text-light remove-glow">Submit
+                                    </button>
+                                </div>
+                            </form>
                         </div>
 
                         <div class="mb-3">
 
                             <h1 class="display-5">Security</h1> {# TODO #}
-                            <form>
+                            <form method="post">
                                 <div class="mb-3">
                                     <label for="InputOldPassword" class="form-label">Old password</label>
-                                    <input type="password" class="form-control remove-glow" id="InputOldPassword">
+                                    <input type="password" class="form-control remove-glow" id="InputOldPassword" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="InputNewPassword" class="form-label">New password</label>
-                                    <input type="password" class="form-control remove-glow" id="InputNewPassword">
+                                    <input type="password" class="form-control remove-glow" id="InputNewPassword" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary text-light remove-glow">Submit</button>
+                                <button type="submit" name="password-change"
+                                        class="btn btn-primary text-light remove-glow">Submit
+                                </button>
                             </form>
                         </div>
 

@@ -1,10 +1,13 @@
 import datetime
+import json
 
 import requests
 import os
-from flask import request, render_template, abort, redirect, url_for, session
+from flask import request, render_template, abort, redirect, url_for, session, jsonify
+from flask_cors import cross_origin
 
-from config import app, babel, back_uri
+from config import app, babel, back_uri, cloud
+import cloudinary.uploader
 
 
 @app.template_filter('dt')
@@ -97,7 +100,7 @@ def registration_page():
 @app.route('/tickets')
 def tickets_page():
     if 'logged_in' not in session or not session['logged_in']:
-        redirect(request.referrer)
+        return redirect(request.referrer)
     return render_template(
         'tickets.html'
     )
@@ -106,18 +109,52 @@ def tickets_page():
 @app.route('/favorites')
 def favorites_page():
     if 'logged_in' not in session or not session['logged_in']:
-        redirect(request.referrer)
+        return redirect(request.referrer)
     return render_template(
         'favorites.html'
     )
 
 
-@app.route('/settings')
+@app.route('/settings', methods=["GET", "POST"])
+@cross_origin()
 def settings_page():
-    if 'logged_in' not in session or not session['logged_in']:
-        redirect(request.referrer)
+    # if 'logged_in' not in session or not session['logged_in']:
+    #     return redirect(request.referrer)
+    if request.method == 'POST':
+        if 'image-change' in request.form:
+            file_to_upload = request.files['img']
+            if file_to_upload:
+                upload_result = cloud.uploader.upload(file_to_upload)
+
+                jason = upload_result
+                image_url = jason['url']
+                print(image_url)
+
+            print('aaa')
+        elif 'password-change' in request.form:
+            print('bbb')
+            # TODO change password
+
+            if True:
+                return redirect(url_for('settings_confirm_page', success='success'))
+            else:
+                return redirect(url_for('settings_confirm_page', success='failure'))
     return render_template(
         'settings.html'
+    )
+
+
+@app.route('/settings_confirm/<success>')
+def settings_confirm_page(success):
+    # if 'logged_in' not in session or not session['logged_in']:
+    #     return redirect(request.referrer)
+    if success == 'success':
+        success = True
+    else:
+        success = False
+    return render_template(
+        'settings_confirm.html',
+        success=success
     )
 
 
@@ -177,6 +214,39 @@ def artists_page(id):
     return render_template(
         'artist.html',
         artist=artist
+    )
+
+
+@app.route('/ticket/<int:id>', methods=['GET', 'POST'])
+def buy_page(id):
+    # request_uri = back_uri + '/artist/' + str(id)
+    # response = requests.get(request_uri)
+    # if response.status_code != 200:
+    #     abort(404)
+    # artist = response.json()
+    palette = ['#F58634', '#FFCC29', '#81B214', '#206A5D']
+
+    if request.method == 'POST':
+        return redirect(url_for('buying_confirm_page', success='success', id=id))
+
+    return render_template(
+        'buying.html',
+        palette=palette
+    )
+
+
+@app.route('/buying_confirm/<int:id>/<success>')
+def buying_confirm_page(success, id):
+    # if 'logged_in' not in session or not session['logged_in']:
+    #     return redirect(request.referrer)
+    if success == 'success':
+        success = True
+    else:
+        success = False
+    return render_template(
+        'buying_confirm.html',
+        success=success,
+        id=id
     )
 
 

@@ -1,9 +1,11 @@
 import hashlib
 import random
 import secrets
+
 from datetime import datetime, timedelta
 
 from sqlalchemy import or_
+from typing import Dict, Any
 from validate_email import validate_email
 
 from models import User
@@ -37,7 +39,7 @@ def registration_check(input: dict) -> dict:
         is_correct = False
         result['password_check'] = 'Passwords don\'t match'
 
-    if len(input["password"]) <= 8:
+    if len(input["password"]) < 8:
         is_correct = False
         result['password'] = 'Password length must be greater than 7'
 
@@ -49,10 +51,10 @@ def registration_check(input: dict) -> dict:
     return result
 
 
-def register_user_with_responce(input: dict) -> dict:
-    responce = registration_check(input)
-    if not responce['success']:
-        return responce
+def register_user_with_response(input: dict) -> dict:
+    response = registration_check(input)
+    if not response['success']:
+        return response
 
     user = User()
     user.user_email = input['email']
@@ -64,7 +66,8 @@ def register_user_with_responce(input: dict) -> dict:
     db.session.add(user)
     db.session.commit()
 
-    return responce
+    response['token'] = user.user_token
+    return response
 
 
 def create_user_token() -> str:
@@ -72,35 +75,51 @@ def create_user_token() -> str:
 
 
 def login_user_by_login_and_pass(user_login: str, passwd: str) -> dict:
-    responce = dict()
+    response = dict()
     user = db.session.query(User) \
         .filter(or_(user_login == User.user_email, user_login == User.username)) \
         .first()
 
-    if not user or not check_pass(passwd, user.user_password):
-        responce['success'] = False
-        responce['description'] = 'incorrect login or pass'
-        return responce
+    if not user \
+            or not check_pass(passwd, user.user_password) \
+            or user.user_role == 1:
+
+        response['success'] = False
+        response['description'] = 'incorrect login or pass'
+        return response
 
     token = create_user_token()
     user.user_token = token
     db.session.add(user)
     db.session.commit()
 
-    responce['success'] = True
-    responce['token'] = token
-    return responce
+    response['success'] = True
+    response['token'] = token
+    return response
 
 
 def recreate_user_token(last_token: str) -> str:
-    user = db.session.query(User).filter(User.user_token == last_token).first()
-    if user:
+    user = db.session.query(User)\
+        .filter(User.user_token == last_token)\
+        .first()
+
+    if user and user.user_role == 1:
+        return ""
+
+    if user and user.user_token_exp_date <= datetime.now():
         user.user_token = create_user_token()
         db.session.add(user)
         db.session.commit()
         return user.user_token
 
     return ""
+
+
+def recreate_token_for_response(response: Dict[str, Any], token: str) -> Dict[str, Any]:
+    if a := recreate_user_token(token):
+        response['token'] = a
+
+    return response
 
 
 def check_pass(passwd: str, passwd_with_hash: str) -> bool:
