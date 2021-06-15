@@ -46,13 +46,13 @@
                     <div class="col-md-2 mt-2 px-2 d-flex flex-column">
                         <div class="py-4 bg-white">
                             <h5 class="">Place</h5>
-                            <p class="">{{ concert["concert"]['hall']['hall_name'] }}</p> {# TODO #}
+                            <p class="">{{ concert["concert"]['hall']['hall_name'] }}</p>
                             <h5 class="">Date</h5>
                             <p class="">{{ concert["concert"]["concert_date"]|dt }}</p>
                             {% if not concert['concert_is_ended'] %}
                                 <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                       data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
-                                      data-bs-content="You bought ticket!">Buy tickets</a></p> {# TODO #}
+                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"][concert_id]) }}">Buy tickets</a></p>
                             {% endif %}
                         </div>
                     </div>

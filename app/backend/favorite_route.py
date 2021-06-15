@@ -155,4 +155,3 @@ def get_suggested_concerts_by_spotify(token: str) -> Dict[str, Any]:
     if not user.user_spotify_token:
         return {SUCCESS_KEY: False, DESCRIPTION_KEY: 'spotify token not found'}
 
-# TODO

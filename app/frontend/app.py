@@ -118,7 +118,7 @@ def login_page():
         if response['success']:
             session['logged_in'] = True
             session['token'] = response['token']
-            request_uri = back_uri + 'user_info/' + response['token']
+            request_uri = back_uri + 'user_profile/' + response['token']
             response = requests.get(request_uri).json()
             if response['success']:
                 session['username'] = response['user']['username']

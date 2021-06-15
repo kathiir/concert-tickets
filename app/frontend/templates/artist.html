@@ -179,9 +179,11 @@
                                 <h1 class="display-5">
                                     Info
                                 </h1>
+                                {% if artist["info"] %}
                                 <div class="text-wrap">
                                     {{ artist["info"]["html"]|safe }}
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
 
