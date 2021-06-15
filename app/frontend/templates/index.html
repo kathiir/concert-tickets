@@ -34,7 +34,7 @@
                         {% endif %}
                         <div class="col text-start py-5">
                             <h1 class="display-2">{{ concerts[0]["concert_name"] }}</h1>
-                            <p>{{ concerts[0]["concert_address"] }} <i
+                            <p>{{ concerts[0]["hall"]['hall_name'] }} <i
                                     class="bi bi-dot"></i> {{ concerts[0]["concert_date"]|dt }}</p>
                             <p><a class="btn btn-lg btn-primary text-light"
                                   href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">Buy
@@ -60,7 +60,7 @@
                                 {% endif %}
                                 <div class="col text-start py-5">
                                     <h1 class="display-2">{{ concerts[n+1]["concert_name"] }}</h1>
-                                    <p>{{ concerts[0]["concert_address"] }} <i
+                                    <p>{{ concerts[0]["hall"]['hall_name'] }} <i
                                             class="bi bi-dot"></i> {{ concerts[n+1]["concert_date"]|dt }}</p>
                                     <p><a class="btn btn-lg btn-primary text-light"
                                           href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">Buy
@@ -117,7 +117,7 @@
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concert["concert_address"] }} </p>
+                                    <p class="card-text me-auto">{{ concert["hall"]['hall_name'] }} </p>
                                     <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
                                 <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"
