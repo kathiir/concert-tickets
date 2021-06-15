@@ -5,3 +5,4 @@ marshmallow_sqlalchemy~=0.25.0
 Flask-SQLAlchemy~=2.5.1
 SQLAlchemy~=1.4.13
 validate_email
+validators

@@ -3,16 +3,18 @@ import random
 import secrets
 
 from datetime import datetime, timedelta
+from typing import Any, Dict
 
 from sqlalchemy import or_
-from typing import Dict, Any
 from validate_email import validate_email
 
+from utils import check_keys_in_dict
 from models import User
 from models import db
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
 
 
-def registration_check(input: dict) -> dict:
+def registration_check(input: Dict[str, Any]) -> Dict[str, Any]:
     result = dict()
     is_correct = "nickname" in input \
            and "email" in input \
@@ -51,7 +53,7 @@ def registration_check(input: dict) -> dict:
     return result
 
 
-def register_user_with_response(input: dict) -> dict:
+def register_user_with_response(input: Dict[str, Any]) -> Dict[str, Any]:
     response = registration_check(input)
     if not response['success']:
         return response
@@ -70,11 +72,37 @@ def register_user_with_response(input: dict) -> dict:
     return response
 
 
+def change_passwd(request: Dict[str, Any]) -> Dict[str, Any]:
+    approved_keys = ['token', 'old_password', 'new_password']
+
+    if not check_keys_in_dict(request, approved_keys):
+        raise ValueError("not approved key")
+
+    if len(request['new_password']) < 8:
+        return {SUCCESS_KEY: False, DESCRIPTION_KEY: "Password length must be greater than 7"}
+
+    user = db.session\
+        .query(User)\
+        .filter(User.user_token == request['token'])\
+        .first()
+
+    if not user:
+        return {SUCCESS_KEY: False, DESCRIPTION_KEY: TOKEN_NOT_FOUND}
+
+    if not check_pass(request['old_password'], user.user_password):
+        return {SUCCESS_KEY: False, DESCRIPTION_KEY: "wrong old password"}
+
+    user.user_password = hash_password(request['new_password'])
+    db.session.commit()
+
+    return recreate_token_for_response({SUCCESS_KEY: True}, request['token'])
+
+
 def create_user_token() -> str:
     return secrets.token_hex(32)
 
 
-def login_user_by_login_and_pass(user_login: str, passwd: str) -> dict:
+def login_user_by_login_and_pass(user_login: str, passwd: str) -> Dict[str, Any]:
     response = dict()
     user = db.session.query(User) \
         .filter(or_(user_login == User.user_email, user_login == User.username)) \
@@ -90,6 +118,7 @@ def login_user_by_login_and_pass(user_login: str, passwd: str) -> dict:
 
     token = create_user_token()
     user.user_token = token
+    user.user_token_exp_date = datetime.now() + timedelta(days=1)
     db.session.add(user)
     db.session.commit()
 
@@ -108,6 +137,7 @@ def recreate_user_token(last_token: str) -> str:
 
     if user and user.user_token_exp_date <= datetime.now():
         user.user_token = create_user_token()
+        user.user_token_exp_date = datetime.now() + timedelta(days=1)
         db.session.add(user)
         db.session.commit()
         return user.user_token

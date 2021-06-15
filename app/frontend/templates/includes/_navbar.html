@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('index_page') }}">
-            <img src="../../static/logo.png" alt="" width="80" height="40">
+            <img src="/static/logo.png" alt="" width="80" height="40">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,9 @@
                     <li class="nav-item me-2 mb-2 mb-lg-0 dropdown">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if false %}
-                                <img class="bg-light rounded-circle text-white p-1" width="40" height="40" alt="avatar"
-                                     src="https://github.com/mdo.png">
+                            {% if session['user_photo'] %}
+                                <img class="bg-light rounded-circle img-cover text-white p-1" width="40" height="40" alt="avatar"
+                                     src="{{ session['user_photo'] }}">
                             {% else %}
                                 <img class="bg-light rounded-circle text-white p-1" width="40" height="40" alt="avatar"
                                      src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
@@ -59,7 +59,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Log out</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log out</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -6,16 +6,19 @@
         <div class="container col-xxl-8 px-2 py-2 bg-white">
             <div class="row flex-lg-row align-items-center g-0 py-5">
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
-                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
-                         height="300"
-                         xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="700%" height="100%" fill="#777"/>
-                    </svg>
                     {# TODO #}
+                    {% if session['user_photo'] %}
+                    <img class="bg-light rounded-circle d-block img-cover text-white p-1" width="300" height="300"
+                         alt="avatar"
+                         src="{{ session['user_photo'] }}">
+                    {% else %}
+                    <img class="bg-light rounded-circle d-block img-fluid text-white p-1" width="300" height="300"
+                         alt="avatar"
+                         src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                    {% endif %}
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">Username</h1>
+                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ session['username'] }}</h1>
                 </div>
             </div>
 
@@ -70,15 +73,17 @@
 
                         <div class="mb-3">
 
-                            <h1 class="display-5">Security</h1> {# TODO #}
+                            <h1 class="display-5">Security</h1>
                             <form method="post">
                                 <div class="mb-3">
                                     <label for="InputOldPassword" class="form-label">Old password</label>
-                                    <input type="password" class="form-control remove-glow" id="InputOldPassword" required>
+                                    <input type="password" name="old_password" minlength="8" class="form-control remove-glow" id="InputOldPassword"
+                                           required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="InputNewPassword" class="form-label">New password</label>
-                                    <input type="password" class="form-control remove-glow" id="InputNewPassword" required>
+                                    <input type="password" name="new_password" minlength="8" class="form-control remove-glow" id="InputNewPassword"
+                                           required>
                                 </div>
                                 <button type="submit" name="password-change"
                                         class="btn btn-primary text-light remove-glow">Submit
@@ -94,9 +99,37 @@
 
 
         </div>
+
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+
+            {% for m in messages %}
+            <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="toast-header">
+                    <strong class="me-auto">Message</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ m }}
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
     </div>
 
 
 
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl)
+        })
+    </script>
 
 {% endblock %}

@@ -16,14 +16,14 @@ def _jinja2_filter_datetime(date):
     return ret
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-
 @babel.localeselector
 def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 @app.route('/city')
@@ -59,7 +59,12 @@ def login_page():
 
         if response['success']:
             session['logged_in'] = True
-            # TODO set session token
+            session['token'] = response['token']
+            request_uri = back_uri + 'user_short_info/' + response['token']
+            response = requests.get(request_uri).json()
+            if response['success']:
+                session['username'] = response['user']['username']
+                session['user_photo'] = response['user']['user_photo']
             return redirect(url_for('index_page'))
 
     return render_template(
@@ -73,43 +78,52 @@ def logout():
     return redirect(url_for('index_page'))
 
 
-# errors (dict):
-# email : description
-# password : description
-# password_check : description
-# nickname: description
 @app.route('/registration', methods=["GET", "POST"])
 def registration_page():
     if 'logged_in' in session and session['logged_in']:
         redirect(request.referrer)
+    messages = []
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
-        request_uri = back_uri + 'login'
-        response = requests.post(request_uri, json=data).json()
+        request_uri = back_uri + 'registration'
+        response = requests.post(request_uri, json=data)
+        res = response.json()
 
-        if response['success']:
+        if res['success']:
             session['logged_in'] = True
-            # TODO set session token
+            session['token'] = res['token']
+            request_uri = back_uri + 'user_short_info/' + res['token']
+            response = requests.get(request_uri).json()
+            if response['success']:
+                session['username'] = response['user']['username']
+                session['user_photo'] = response['user']['user_photo']
             return redirect(url_for('index_page'))
 
     return render_template(
-        'registration.html'
+        'registration.html', messages=messages
     )
 
 
+# TODO
 @app.route('/tickets')
 def tickets_page():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(request.referrer)
+
+    # request_uri = back_uri + 'user_short_info/' + res['token']
+    # response = requests.get(request_uri).json()
     return render_template(
         'tickets.html'
     )
 
 
+# TODO
 @app.route('/favorites')
 def favorites_page():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(request.referrer)
+
+
     return render_template(
         'favorites.html'
     )
@@ -118,8 +132,9 @@ def favorites_page():
 @app.route('/settings', methods=["GET", "POST"])
 @cross_origin()
 def settings_page():
-    # if 'logged_in' not in session or not session['logged_in']:
-    #     return redirect(request.referrer)
+    messages = []
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(request.referrer)
     if request.method == 'POST':
         if 'image-change' in request.form:
             file_to_upload = request.files['img']
@@ -128,33 +143,30 @@ def settings_page():
 
                 jason = upload_result
                 image_url = jason['url']
-                print(image_url)
-
-            print('aaa')
+                data = {'token': session['token'], 'user_photo': image_url}
+                request_uri = back_uri + 'user/photo'
+                response = requests.post(request_uri, json=data).json()
+                if response['success']:
+                    messages.append('Successfully changed user image')
+                    session['user_photo'] = image_url
+                    if 'token' in response:
+                        session['token'] = response['token']
+                else:
+                    messages.append('Failed to set user image')
         elif 'password-change' in request.form:
-            print('bbb')
-            # TODO change password
-
-            if True:
-                return redirect(url_for('settings_confirm_page', success='success'))
+            data = request.form.to_dict(flat=False)
+            data['token'] = session['token']
+            request_uri = back_uri + 'pass_change'
+            response = requests.post(request_uri, json=data).json()
+            if response['success']:
+                messages.append('Successfully changed password')
+                if 'token' in response:
+                    session['token'] = response['token']
             else:
-                return redirect(url_for('settings_confirm_page', success='failure'))
-    return render_template(
-        'settings.html'
-    )
+                messages.append('Failed to set new password')
 
-
-@app.route('/settings_confirm/<success>')
-def settings_confirm_page(success):
-    # if 'logged_in' not in session or not session['logged_in']:
-    #     return redirect(request.referrer)
-    if success == 'success':
-        success = True
-    else:
-        success = False
     return render_template(
-        'settings_confirm.html',
-        success=success
+        'settings.html', messages=messages
     )
 
 

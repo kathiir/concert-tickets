@@ -48,6 +48,7 @@ class Spotify:
 
         return sp
 
+
     def get_user_followed_artists_list(self, sp: spotipy.client.Spotify):
         jason = sp.current_user_followed_artists(limit=20)
         artists_list = []

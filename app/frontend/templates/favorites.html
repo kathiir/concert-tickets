@@ -6,15 +6,19 @@
         <div class="container col-xxl-8 px-2 py-2 bg-white">
             <div class="row flex-lg-row align-items-center g-0 py-5">
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
-                    <svg class="rounded-circle bd-placeholder-img d-block img-fluid text-center" width="300"
-                         height="300"
-                         xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="700%" height="100%" fill="#777"/>
-                    </svg> {# TODO #}
+                    {# TODO #}
+                    {% if session['user_photo'] %}
+                    <img class="bg-light rounded-circle d-block img-cover text-white p-1" width="300" height="300"
+                         alt="avatar"
+                         src="{{ session['user_photo'] }}">
+                    {% else %}
+                    <img class="bg-light rounded-circle d-block img-fluid text-white p-1" width="300" height="300"
+                         alt="avatar"
+                         src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                    {% endif %}
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">Username</h1> {# TODO #}
+                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ session['username'] }}</h1>
                 </div>
             </div>
 
