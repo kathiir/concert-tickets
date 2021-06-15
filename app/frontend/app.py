@@ -52,6 +52,7 @@ def index_page():
 def login_page():
     if 'logged_in' in session and session['logged_in']:
         redirect(request.referrer)
+    messages = []
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
         request_uri = back_uri + 'login'
@@ -60,15 +61,23 @@ def login_page():
         if response['success']:
             session['logged_in'] = True
             session['token'] = response['token']
-            request_uri = back_uri + 'user_short_info/' + response['token']
+            request_uri = back_uri + 'user_info/' + response['token']
             response = requests.get(request_uri).json()
             if response['success']:
                 session['username'] = response['user']['username']
                 session['user_photo'] = response['user']['user_photo']
+                session['g_calendar'] = response['user']['user_gcalendar_token']
+                session['spotify'] = response['user']['user_spotify_token']
+
+            if request.form.get('remember'):
+                session.permanent = True
             return redirect(url_for('index_page'))
 
+        else:
+            messages.append('Incorrect login or password')
+
     return render_template(
-        'login.html'
+        'login.html', messages=messages
     )
 
 
@@ -97,7 +106,15 @@ def registration_page():
             if response['success']:
                 session['username'] = response['user']['username']
                 session['user_photo'] = response['user']['user_photo']
+            if request.form.get('remember'):
+                session.permanent = True
             return redirect(url_for('index_page'))
+
+        else:
+            if 'email' in res:
+                messages.append('This email already exists')
+            if 'nickname' in res:
+                messages.append('This login already exists')
 
     return render_template(
         'registration.html', messages=messages
@@ -110,10 +127,17 @@ def tickets_page():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(request.referrer)
 
-    # request_uri = back_uri + 'user_short_info/' + res['token']
-    # response = requests.get(request_uri).json()
+    tickets = []
+
+    request_uri = back_uri + 'get_user_tickets?token=' + session['token']
+    response = requests.get(request_uri).json()
+    if response['success']:
+        tickets = response['tickets']
+        if 'token' in response:
+            session['token'] = response['token']
+
     return render_template(
-        'tickets.html'
+        'tickets.html', tickets=tickets
     )
 
 

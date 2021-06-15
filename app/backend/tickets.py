@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict
 
 from sqlalchemy import and_
@@ -44,6 +45,8 @@ def get_hall_with_zones(concert_id: int) -> Dict[str, Any]:
 
 def buy_tickets_mock(request: Dict[str, Any]) -> Dict[str, Any]:
     approved_keys = ['concert_id', 'hall_zone']
+
+    # TODO gcalendar
 
     if not check_keys_in_dict(request, approved_keys):
         raise ValueError("not approved key")
@@ -117,10 +120,16 @@ def get_every_possible_ticket(token: str) -> Dict[str, Any]:
 
     tickets = list()
 
-    for ticket in user.tickets:
+    for ticket in Ticket.query \
+            .filter(Ticket.user_id == user.user_id) \
+            .join(Concert).join(HallZone) \
+            .order_by(Concert.concert_date.desc()) \
+            .order_by(HallZone.price.desc()) \
+            .all():
         tickets.append(
-            {'concert_name': ticket.concert.concert_name,
-             'concert_date': ticket.concert.concert_date,
+            {'concert_id': ticket.concert.concert_id,
+             'concert_name': ticket.concert.concert_name,
+             'concert_date': ticket.concert.concert_date.isoformat(),
              'hall_name': ticket.concert.hall.hall_name,
              'price': ticket.hall_zone.price}
         )
