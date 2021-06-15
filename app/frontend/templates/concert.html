@@ -6,10 +6,10 @@
         <div class="container col-xxl-8 px-2 py-2 bg-white">
             <div class="row flex-lg-row align-items-center g-0 pt-5 pb-1">
                 <div class="col-10 col-sm-8 col-lg-4 mb-3 mx-auto px-4 py-4 d-flex justify-content-center">
-                    {% if concert["concert_photo"] %}
+                    {% if concert["concert"]["concert_photo"] %}
                         <div class="ratio ratio-1x1">
                             <img class="card-img-top img-fluid img-cover" width="300" height="300"
-                                 src="{{ concert["concert_photo"] }}" alt="img">
+                                 src="{{ concert["concert"]["concert_photo"] }}" alt="img">
                         </div>
                     {% else %}
                         <div class="bg-light rounded-circle bd-placeholder-img">
@@ -21,7 +21,23 @@
                     {% endif %}
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ concert["concert_name"] }}</h1>
+                    <h1 class="display-5 lh-1 mb-3 ms-3">
+                        {{ concert["concert"]["concert_name"] }}
+                        {% if concert['concert_average_mark'] and concert['concert_is_ended'] %}
+                            <span class="text-dark my-auto ms-3">{{ concert['concert_average_mark'] }} <i
+                                    class="bi bi-star"></i></span>
+                        {% endif %}</h1>
+                    {% if session['logged_in'] %}
+                        {% if concert["favorite"] %}
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  href="{{ url_for('add_concert_to_favorite', id=concert["concert"]["concert_id"]) }}"
+                            >Remove from favorites</a></p>
+                        {% else %}
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  href="{{ url_for('remove_concert_from_favorite', id=concert["concert"]["concert_id"]) }}"
+                            >Add to favorites</a></p>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
 
@@ -30,12 +46,14 @@
                     <div class="col-md-2 mt-2 px-2 d-flex flex-column">
                         <div class="py-4 bg-white">
                             <h5 class="">Place</h5>
-                            <p class="">{{ concert["concert_address"] }}</p> {# TODO #}
+                            <p class="">{{ concert["concert"]['hall']['hall_name'] }}</p> {# TODO #}
                             <h5 class="">Date</h5>
-                            <p class="">{{ concert["concert_date"]|dt }}</p>
-                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                  data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
-                                  data-bs-content="You bought ticket!">Buy tickets</a></p> {# TODO #}
+                            <p class="">{{ concert["concert"]["concert_date"]|dt }}</p>
+                            {% if not concert['concert_is_ended'] %}
+                                <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                      data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
+                                      data-bs-content="You bought ticket!">Buy tickets</a></p> {# TODO #}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-3 order-md-2 mt-2 px-2 d-flex flex-column">
@@ -43,7 +61,7 @@
                             <h1 class="display-5">
                                 Artists
                             </h1>
-                            {% for ar in concert["performances"] %}
+                            {% for ar in concert['concert']["performances"] %}
                                 <div class="d-flex my-2">
                                     {% if ar["artist_photo"] %}
                                         <img class="bg-light rounded-circle img-cover text-white p-1" width="50"
@@ -70,68 +88,69 @@
                                 Info
                             </h1>
                             <div>
-                                {{ concert["concert_info"] }}
+                                {{ concert["concert"]["concert_info"] }}
                             </div>
                         </div>
 
-                        <div class="py-4 bg-white text-break">
-                            <h1 class="display-5">
-                                Reviews
-                            </h1>
-                            <div>
-                                {% if session['logged_in'] %}
-                                    <div>
-                                        <form class="g-0 mb-2">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <input id="input-id" value="4" type="text" class="rating"
-                                                           data-theme="krajee-fas" data-min=0 data-max=5
-                                                           data-size="sm"
-                                                           required title="">
-                                                </div>
-                                                <div>
-                                                    <button type="submit" class="btn btn-primary text-light">
-                                                        Leave review
-                                                    </button>
-                                                </div>
-
-                                            </div>
-                                            <textarea class="form-control" id="formControlTextarea1"
-                                                      rows="3"></textarea>
-                                        </form>
-                                    </div>
-                                {% endif %}
-
+                        {% if concert['concert_is_ended'] %}
+                            <div class="py-4 bg-white text-break">
+                                <h1 class="display-5">
+                                    Reviews
+                                </h1>
                                 <div>
-                                    {% for i in range(5) %}
-                                        <div class="my-3 px-2">
-                                            <div class="d-flex mb-2">
-                                                <img class="bg-light rounded-circle text-white p-1" width="40"
-                                                     height="40"
-                                                     alt="avatar"
-                                                     src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
-                                                {# TODO #}
-                                                <span class="text-dark my-auto ms-3">User</span> {# TODO #}
-                                                <span class="text-dark my-auto ms-3">5 <i class="bi bi-star"></i></span>
-                                                {# TODO #}
-                                            </div>
-                                            <p> {# TODO #}
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                                                varius
-                                                sagittis massa non vulputate. In luctus arcu non tempor
-                                                tincidunt. Cras
-                                                ex urna, porttitor ut pulvinar vitae, commodo in nulla. Praesent
-                                                commodo
-                                                ipsum eu urna dictum, vitae varius turpis ultricies. Etiam a
-                                                sagittis
-                                                urna, nec fringilla quam. Aliquam iaculis massa sed placerat
-                                                varius.
-                                            </p>
+                                    {% if session['logged_in'] %}
+                                        <div>
+                                            <form class="g-0 mb-2">
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <input id="input-id" value="4" type="text" class="rating"
+                                                               data-theme="krajee-fas" data-min=0 data-max=5
+                                                               data-size="sm"
+                                                               required title="" name="rate">
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit" class="btn btn-primary text-light">
+                                                            Leave review
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <textarea class="form-control" id="formControlTextarea1"
+                                                          rows="3" name="info"></textarea>
+                                            </form>
                                         </div>
-                                    {% endfor %}
+                                    {% endif %}
+
+                                    <div>
+                                        {% for r in reviews %}
+                                            <div class="my-3 px-2">
+                                                <div class="d-flex mb-2">
+                                                    {% if r['user']['user_photo'] %}
+                                                        <img class="bg-light rounded-circle img-cover text-white p-1"
+                                                             width="40" height="40" alt="avatar"
+                                                             src="{{ r['user']['user_photo'] }}">
+                                                    {% else %}
+                                                        <img class="bg-light rounded-circle text-white p-1"
+                                                             width="40"
+                                                             height="40"
+                                                             alt="avatar"
+                                                             src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                                                    {% endif %}
+                                                    <span class="text-dark my-auto ms-3">{{ r['user']['username'] }}</span>
+                                                    {% if r['concert_review_rating'] %}
+                                                        <span class="text-dark my-auto ms-3">{{ r['concert_review_rating'] }} <i
+                                                                class="bi bi-star"></i></span>
+                                                    {% endif %}
+                                                </div>
+                                                <p>
+                                                    {{ r['concert_review_info'] }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>

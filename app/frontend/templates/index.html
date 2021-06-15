@@ -94,14 +94,14 @@
             </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-                {% for n in range(15, 18) %} {# TODO #}
+                {% for concert in spotify %}
                     <div class="col">
                         <div class="card shadow-sm">
 
-                            {% if concerts[n]["concert_photo"] %}
+                            {% if concert["concert_photo"] %}
                                 <div class="ratio ratio-16x9">
                                     <img class=" card-img-top img-fluid img-cover" role="img"
-                                         src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                                         src="{{ concert["concert_photo"] }}" alt="img">
                                 </div>
                             {% else %}
                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
@@ -112,15 +112,15 @@
                             {% endif %}
 
                             <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
-                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
+                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concert["concert_name"] }}</h4>
                             </div>
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
-                                    <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
+                                    <p class="card-text me-auto">{{ concert["concert_address"] }} </p>
+                                    <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
-                                <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
+                                <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"
                                    class="stretched-link text-decoration-none"></a>
 
                             </div>
@@ -137,14 +137,14 @@
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-            {% for n in range(20) %}
-                {% if concerts[n] %}
+            {% for concert in concerts %}
+                {% if concert %}
                     <div class="col">
                         <div class="card shadow-sm">
-                            {% if concerts[n]["concert_photo"] %}
-                                <div class="ratio ratio-16x9"> {# TODO #}
+                            {% if concert["concert_photo"] %}
+                                <div class="ratio ratio-16x9">
                                     <img class=" card-img-top img-fluid img-cover" role="img"
-                                         src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                                         src="{{ concert["concert_photo"] }}" alt="img">
                                 </div>
                             {% else %}
                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
@@ -155,16 +155,16 @@
                             {% endif %}
 
                             <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
-                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
+                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concert["concert_name"] }}</h4>
                             </div>
 
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
-                                    <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
+                                    <p class="card-text me-auto">{{ concert["concert_address"] }} </p>
+                                    <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
-                                <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
+                                <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"
                                    class="stretched-link text-decoration-none"></a>
 
                             </div>

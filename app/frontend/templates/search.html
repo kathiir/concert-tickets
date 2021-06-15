@@ -27,10 +27,12 @@
                         {% for c in concerts %}
                             <div class="card mb-3">
                                 <div class="row g-0">
-                                    <div class="col-md-3 transp">
-                                        <img class="card-img-top img-fluid img-cover" role="img"
-                                             src="{{ c["concert_photo"] }}" alt="img">
-                                    </div>
+                                    {% if c["concert_photo"] %}
+                                        <div class="col-md-3 transp">
+                                            <img class="card-img-top img-fluid img-cover" role="img"
+                                                 src="{{ c["concert_photo"] }}" alt="img">
+                                        </div>
+                                    {% endif %}
                                     <div class="col">
                                         <div class="card-body row">
                                             <h5 class="card-title display-5">{{ c["concert_name"] }}</h5>
@@ -39,7 +41,7 @@
                                             <div class="col-md">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Place</h5>
-                                                    <p class="card-text text-truncate">{{ c["concert_address"] }}</p>
+                                                    <p class="card-text text-truncate">{{ c["hall"]['hall_name'] }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md">
@@ -61,12 +63,12 @@
                         {% for a in artists %}
                             <div class="card mb-3">
                                 <div class="row g-0">
-                                    <div class="col-3">
-                                        <div class="">
+                                    {% if a["artist_photo"] %}
+                                        <div class="col-3">
                                             <img class="card-img-top img-fluid img-cover" role="img"
                                                  src="{{ a["artist_photo"] }}" alt="img">
                                         </div>
-                                    </div>
+                                    {% endif %}
                                     <div class="col align-self-center">
                                         <div class="card-body ">
                                             <h5 class="card-title display-5 text-truncate">{{ a["artist_name"] }}</h5>

@@ -18,10 +18,11 @@
                             <path d="M10 10 C 20 20, 40 20, 50 10" stroke="#777" stroke-width="1"
                                   fill="transparent"></path>
                         </svg>
-                        {% for i in range(4) %}
+                        {% for i, hall in enumrate(halls['hall_zone']) %}
                             <div class="p-2 bd-highlight flex-grow-1 d-flex align-items-center justify-content-center"
                                  style="background-color: {{ palette[i] }}">
-                                <p class="p-1 px-2 rounded-pill bg-light">Flex item</p>
+                                <p class="p-1 px-2 rounded-pill bg-light">{{ hall['price'] }}
+                                    rub: {{ hall['free_capacity'] }}/{{ hall['capacity'] }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -29,18 +30,18 @@
 
             </div>
             <form class="col-lg-5" id="form" method="post">
-                {% for i in range(2) %}
+                {% for hall in enumrate(halls['hall_zone']) %}
                     <div class="card mb-3 p-2 shadow">
                         <div class="row g-0">
                             <div class="col">
-                                <div class="display-5">Tickets for {{ i }}</div>
+                                <div class="display-5">Tickets for {{ hall['price'] }}</div>
                                 <hr>
                                 <div class="input-group d-flex justify-content-end">
-                                    <input type="number" id="num{{ i }}" readonly class="read form-control" min="0"
-                                           value="0"
-                                           max="{{ i }}">
+                                    <input type="number" id="num{{ hall['hall_zone_id'] }}" readonly class="read form-control" min="0"
+                                           value="0" name="{{ hall['hall_zone_id'] }}"
+                                           max="{{ hall['free_capacity'] }}">
                                     <button class="btn btn-outline-secondary minus" type="button">-</button>
-                                    <button class="btn btn-outline-secondary" id="plus{{ i }}" type="button">+
+                                    <button class="btn btn-outline-secondary" id="plus{{ hall['hall_zone_id'] }}" type="button">+
                                     </button>
                                 </div>
                             </div>
@@ -68,8 +69,8 @@
                 $input.change();
                 return false;
             });
-            {% for i in range(2) %}
-                $('#plus{{ i }}').click(function () {
+            {% for hall in enumrate(halls['hall_zone']) %}
+                $('#plus{{ hall['hall_zone_id'] }}').click(function () {
                     var $input = $(this).parent().find('input');
                     var count = parseInt($input.val()) + 1;
                     count = count > {{ i }} ? {{ i }} : count;

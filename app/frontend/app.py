@@ -36,15 +36,72 @@ def change_city(id=1):
     return redirect(request.referrer)
 
 
+@app.route('/favorite/artist/<int:id>')
+def add_artist_to_favorite(id):
+    data = {'token': session['token'],
+            'type': 'artist',
+            'id': id
+            }
+    request_uri = back_uri + 'favorite/add'
+    response = requests.post(request_uri, data=data).json()
+    if 'token' in response:
+        session['token'] = response['token']
+    return redirect(request.referrer)
+
+
+@app.route('/unfavorite/artist/<int:id>')
+def remove_artist_from_favorite(id):
+    data = {'token': session['token'],
+            'type': 'artist',
+            'id': id
+            }
+    request_uri = back_uri + 'favorite/remove'
+    response = requests.delete(request_uri, data=data).json()
+    if 'token' in response:
+        session['token'] = response['token']
+    return redirect(request.referrer)
+
+
+@app.route('/favorite/concert/<int:id>')
+def add_concert_to_favorite(id):
+    data = {'token': session['token'],
+            'type': 'concert',
+            'id': id
+            }
+    request_uri = back_uri + 'favorite/add'
+    response = requests.post(request_uri, data=data).json()
+    if 'token' in response:
+        session['token'] = response['token']
+    return redirect(request.referrer)
+
+
+@app.route('/unfavorite/concert/<int:id>')
+def remove_concert_from_favorite(id):
+    data = {'token': session['token'],
+            'type': 'concert',
+            'id': id
+            }
+    request_uri = back_uri + 'favorite/remove'
+    response = requests.delete(request_uri, data=data).json()
+    if 'token' in response:
+        session['token'] = response['token']
+    return redirect(request.referrer)
+
+
 @app.route('/')
 def index_page():
-    request_uri = back_uri + '/concerts'
+    request_uri = back_uri + '/concerts?per_page=100&' + 'city_id=' + (session['city'] if 'city' in session else str(1))
     response = requests.get(request_uri)
     jason = response.json()['concerts']
+    spot = []
+    if 'logged_in' in session and session['logged_in']:
+        if 'spotify' in session and session['spotify']:
+            spot = []
 
     return render_template(
         'index.html',
-        concerts=jason
+        concerts=jason,
+        spotify=spot
     )
 
 
@@ -121,7 +178,6 @@ def registration_page():
     )
 
 
-# TODO
 @app.route('/tickets')
 def tickets_page():
     if 'logged_in' not in session or not session['logged_in']:
@@ -141,15 +197,22 @@ def tickets_page():
     )
 
 
-# TODO
 @app.route('/favorites')
 def favorites_page():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(request.referrer)
 
+    request_uri = back_uri + 'favorites?token=' + session['token']
+    response = requests.get(request_uri).json()
+
+    if 'token' in response:
+        session['token'] = response['token']
+
+    concerts = response['concerts']
+    artists = response['artists']
 
     return render_template(
-        'favorites.html'
+        'favorites.html', concerts=concerts, artists=artists
     )
 
 
@@ -210,7 +273,8 @@ def contacts_page():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_page():
-    request_uri = back_uri + '/concert/s/' + request.args.get('search')
+    request_uri = back_uri + '/concert/s/' + request.args.get('search') + '?city_id=' + \
+                  (session['city'] if 'city' in session else str(1))
     response = requests.get(request_uri)
     concerts = response.json()['concerts']
 
@@ -225,56 +289,119 @@ def search_page():
     )
 
 
-@app.route('/concert/<int:id>')
+@app.route('/concert/<int:id>', methods=["GET", "POST"])
 def concert_page(id):
-    request_uri = back_uri + '/concert/' + str(id)
+    request_uri = back_uri + 'concert/' + str(id)
+    if 'logged_in' in session and session['logged_in']:
+        request_uri = request_uri + '?token=' + session['token']
+        if request.method == 'POST':
+            data = {
+                "token": session['token'],
+                "concert_id": id,
+                "concert_review_info": request.form.get('info'),
+                "concert_review_rating": request.form.get('rate')
+            }
+            review_uri = back_uri + 'add_concert_review'
+            response = requests.post(review_uri, data=data).json()
+            if 'token' in response:
+                session['token'] = response['token']
     response = requests.get(request_uri)
     if response.status_code != 200:
         abort(404)
+
     concert = response.json()
+
+    if 'token' in concert:
+        session['token'] = concert['token']
+
+    request_uri = back_uri + 'get_reviews/concert/' + str(id)
+    response = requests.get(request_uri).json()
+    reviews = response['list']
 
     return render_template(
         'concert.html',
-        concert=concert
+        concert=concert,
+        reviews=reviews
     )
 
 
-@app.route('/artists/<int:id>')
+@app.route('/artists/<int:id>', methods=["GET", "POST"])
 def artists_page(id):
-    request_uri = back_uri + '/artist/' + str(id)
+    request_uri = back_uri + 'artist/' + str(id)
+    if 'logged_in' in session and session['logged_in']:
+        request_uri = request_uri + '?token=' + session['token']
+        if request.method == 'POST':
+            data = {
+                "token": session['token'],
+                "artist_id": id,
+                "artist_review_info": request.form.get('info'),
+                "artist_review_rating": request.form.get('rate')
+            }
+            review_uri = back_uri + 'add_artist_review'
+            response = requests.post(review_uri, data=data).json()
+            if 'token' in response:
+                session['token'] = response['token']
     response = requests.get(request_uri)
     if response.status_code != 200:
         abort(404)
+
     artist = response.json()
 
+    if 'token' in artist:
+        session['token'] = artist['token']
+
+    request_uri = back_uri + 'get_reviews/artist/' + str(id)
+    response = requests.get(request_uri).json()
+    reviews = response['list']
     return render_template(
         'artist.html',
-        artist=artist
+        artist=artist,
+        reviews=reviews
     )
 
 
 @app.route('/ticket/<int:id>', methods=['GET', 'POST'])
 def buy_page(id):
-    # request_uri = back_uri + '/artist/' + str(id)
-    # response = requests.get(request_uri)
-    # if response.status_code != 200:
-    #     abort(404)
-    # artist = response.json()
-    palette = ['#F58634', '#FFCC29', '#81B214', '#206A5D']
+    request_uri = back_uri + 'concert_tickets/' + str(id)
+
+    response = requests.get(request_uri)
+    if response.status_code != 200:
+        abort(404)
+    halls = response.json()
 
     if request.method == 'POST':
-        return redirect(url_for('buying_confirm_page', success='success', id=id))
+        request_uri = back_uri + 'buy_tickets'
+        data = {
+            "concert_id": id,
+            "hall_zone": []
+        }
+        for h in halls['hall_zone']:
+            data['hall_zone'].append(request.form.get(h['hall_zone_id']))
+
+        if 'logged_in' in session and session['logged_in']:
+            data['token'] = session['token']
+
+        response = requests.post(request_uri, data=data).json()
+
+        if 'token' in response:
+            session['token'] = response['token']
+
+        if response['success']:
+            return redirect(url_for('buying_confirm_page', success='success', id=id))
+        else:
+            return redirect(url_for('buying_confirm_page', success='failure', id=id))
+
+    palette = ['#F58634', '#FFCC29', '#81B214', '#206A5D']
 
     return render_template(
         'buying.html',
-        palette=palette
+        palette=palette,
+        halls=halls
     )
 
 
 @app.route('/buying_confirm/<int:id>/<success>')
 def buying_confirm_page(success, id):
-    # if 'logged_in' not in session or not session['logged_in']:
-    #     return redirect(request.referrer)
     if success == 'success':
         success = True
     else:

@@ -21,7 +21,22 @@
                     {% endif %}
                 </div>
                 <div class="col-lg-8">
-                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ artist["artist"]["artist_name"] }}</h1>
+                    <h1 class="display-5 lh-1 mb-3 ms-3">{{ artist["artist"]["artist_name"] }}
+                        {% if artist['artist_average_mark'] %}
+                            <span class="text-dark my-auto ms-3">{{ artist['artist_average_mark'] }} <i
+                                    class="bi bi-star"></i></span>
+                        {% endif %}</h1>
+                    {% if session['logged_in'] %}
+                        {% if artist["favorite"] %}
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  href="{{ url_for('add_artist_to_favorite', id=artist["artist"]["artist_id"]) }}"
+                            >Remove from favorites</a></p>
+                        {% else %}
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  href="{{ url_for('remove_artist_from_favorite', id=artist["artist"]["artist_id"]) }}"
+                            >Add to favorites</a></p>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
 
@@ -113,7 +128,7 @@
                                                             <input id="input-id" value="4" type="text" class="rating"
                                                                    data-theme="krajee-fas" data-min=0 data-max=5
                                                                    data-size="sm"
-                                                                   required title="">
+                                                                   required title="" name="rate">
                                                         </div>
                                                         <div>
                                                             <button type="submit" class="btn btn-primary text-light">
@@ -123,33 +138,34 @@
 
                                                     </div>
                                                     <textarea class="form-control" id="formControlTextarea1"
-                                                              rows="3"></textarea>
+                                                              rows="3" name="info"></textarea>
                                                 </form>
                                             </div>
                                         {% endif %}
 
                                         <div>
-                                            {% for i in range(5) %}
+                                            {% for r in reviews %}
                                                 <div class="my-3 px-2">
                                                     <div class="d-flex mb-2">
-                                                        <img class="bg-light rounded-circle text-white p-1" width="40"
-                                                             height="40"
-                                                             alt="avatar"
-                                                             src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg"> {# TODO #}
-                                                        <span class="text-dark my-auto ms-3">User</span> {# TODO #}
-                                                        <span class="text-dark my-auto ms-3">5 <i class="bi bi-star"></i></span> {# TODO #}
+                                                        {% if r['user']['user_photo'] %}
+                                                            <img class="bg-light rounded-circle img-cover text-white p-1"
+                                                                 width="40" height="40" alt="avatar"
+                                                                 src="{{ r['user']['user_photo'] }}">
+                                                        {% else %}
+                                                            <img class="bg-light rounded-circle text-white p-1"
+                                                                 width="40"
+                                                                 height="40"
+                                                                 alt="avatar"
+                                                                 src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
+                                                        {% endif %}
+                                                        <span class="text-dark my-auto ms-3">{{ r['user']['username'] }}</span>
+                                                        {% if r['concert_review_rating'] %}
+                                                            <span class="text-dark my-auto ms-3">{{ r['concert_review_rating'] }} <i
+                                                                    class="bi bi-star"></i></span>
+                                                        {% endif %}
                                                     </div>
-                                                    <p> {# TODO #}
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                                                        varius
-                                                        sagittis massa non vulputate. In luctus arcu non tempor
-                                                        tincidunt. Cras
-                                                        ex urna, porttitor ut pulvinar vitae, commodo in nulla. Praesent
-                                                        commodo
-                                                        ipsum eu urna dictum, vitae varius turpis ultricies. Etiam a
-                                                        sagittis
-                                                        urna, nec fringilla quam. Aliquam iaculis massa sed placerat
-                                                        varius.
+                                                    <p>
+                                                        {{ r['concert_review_info'] }}
                                                     </p>
                                                 </div>
                                             {% endfor %}
