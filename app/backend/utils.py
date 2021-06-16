@@ -1,13 +1,13 @@
+from typing import Any, Dict, List
+
+
 # removes lists when len(list) == 1
-from typing import Dict, List
-
-
-def simplify_json_result(json_with_lists: str) -> dict:
+def simplify_json_result(json_with_lists: str) -> Dict[str, Any]:
     if not json_with_lists:
         return dict()
 
     return {
-        key: value[0] if isinstance(value, str) and len(value) == 1 else value
+        key: value[0] if (isinstance(value, str) or isinstance(value, list)) and len(value) == 1 else value
         for key, value in json_with_lists.items()
     }
 
