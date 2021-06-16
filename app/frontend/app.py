@@ -399,13 +399,19 @@ def buy_page(id):
             "concert_id": id,
             "hall_zone": []
         }
+        f = request.form
         for h in halls['hall_zone']:
-            data['hall_zone'].append(request.form.get(h['hall_zone_id']))
+            ar = f['h'+str(h['hall_zone_id'])]
+            zone = {
+                "hall_zone_id": str(h['hall_zone_id']),
+                "amount": ar
+            }
+            data['hall_zone'].append(zone)
 
         if 'logged_in' in session and session['logged_in']:
             data['token'] = session['token']
 
-        response = requests.post(request_uri, data=data).json()
+        response = requests.post(request_uri, json=data).json()
 
         if 'token' in response:
             session['token'] = response['token']

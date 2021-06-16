@@ -372,7 +372,8 @@ def get_with_zones_by_concert_id(concert_id: int):
 
 @app.route('/buy_tickets', methods=['POST'])
 def buy_tickets():
-    data = simplify_json_result(request.get_json())
+    r = request.get_json()
+    data = simplify_json_result(r)
     try:
         response = buy_tickets_mock(data)
 
