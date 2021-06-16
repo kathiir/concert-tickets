@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Settings{% endblock %}
+{% block title %}{{ _('Settings') }}{% endblock %}
 
 {% block content %}
     <div>
@@ -27,13 +27,13 @@
                     <div class="mt-2 nav ps-2 flex-column nav-pills me-3"
                          aria-orientation="vertical">
                         <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('tickets_page') }}"
-                           aria-selected="false">Tickets
+                           aria-selected="false">{{ _('Tickets') }}
                         </a>
                         <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('favorites_page') }}"
-                           aria-selected="false">Favorites
+                           aria-selected="false">{{ _('Favorites') }}
                         </a>
                         <a class="nav-link btn btn-lg active remove-glow" href="{{ url_for('settings_page') }}"
-                           aria-selected="true">Settings
+                           aria-selected="true">{{ _('Settings') }}
                         </a>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 ms-5">
@@ -42,14 +42,14 @@
                             <div>
                                 {% if not session['spotify'] %}
                                     <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('spotipy') }}">
-                                        Connect to Spotify
+                                        {{ _('Connect to') }} Spotify
                                         <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
                                              alt="spotify"
                                              height="37" width="37">
                                     </a>
                                 {% else %}
                                     <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('remove_spotipy') }}">
-                                        Disconnect Spotify
+                                        {{ _('Disconnect') }} Spotify
                                         <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
                                              alt="spotify"
                                              height="37" width="37">
@@ -62,12 +62,12 @@
                             <div>
                                 {% if not session['gcalendar'] %}
                                     <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('google') }}">
-                                        Connect to Google Calendar
+                                        {{ _('Connect to') }} Google Calendar
                                         <i class="bi bi-google"></i>
                                     </a>
                                 {% else %}
                                     <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('remove_google') }}">
-                                        Disconnect Google Calendar
+                                        {{ _('Disconnect') }} Google Calendar
                                         <i class="bi bi-google"></i>
                                     </a>
                                 {% endif %}
@@ -75,13 +75,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <h1 class="display-5">Change Avatar</h1>
+                            <h1 class="display-5">{{ _('Change Avatar') }}</h1>
                             <form method="post" enctype="multipart/form-data">
                                 <div class="input-group">
                                     <input class="form-control remove-glow" type="file" name="img" id="formFile"
                                            accept=".png, .jpg, .jpeg" required>
                                     <button type="submit" name="image-change"
-                                            class="btn btn-primary text-light remove-glow">Submit
+                                            class="btn btn-primary text-light remove-glow">{{ _('Submit') }}
                                     </button>
                                 </div>
                             </form>
@@ -89,22 +89,22 @@
 
                         <div class="mb-3">
 
-                            <h1 class="display-5">Security</h1>
+                            <h1 class="display-5">{{ _('Security') }}</h1>
                             <form method="post">
                                 <div class="mb-3">
-                                    <label for="InputOldPassword" class="form-label">Old password</label>
+                                    <label for="InputOldPassword" class="form-label">{{ _('Old password') }}</label>
                                     <input type="password" name="old_password" minlength="8"
                                            class="form-control remove-glow" id="InputOldPassword"
                                            required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="InputNewPassword" class="form-label">New password</label>
+                                    <label for="InputNewPassword" class="form-label">{{ _('New password') }}</label>
                                     <input type="password" name="new_password" minlength="8"
                                            class="form-control remove-glow" id="InputNewPassword"
                                            required>
                                 </div>
                                 <button type="submit" name="password-change"
-                                        class="btn btn-primary text-light remove-glow">Submit
+                                        class="btn btn-primary text-light remove-glow">{{ _('Submit') }}
                                 </button>
                             </form>
                         </div>
@@ -124,7 +124,7 @@
                 <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true"
                      data-bs-autohide="false">
                     <div class="toast-header">
-                        <strong class="me-auto">Message</strong>
+                        <strong class="me-auto">{{ _('Message') }}</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="toast-body">

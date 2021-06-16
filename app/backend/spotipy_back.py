@@ -15,12 +15,16 @@ grant_type = 'user-follow-read'
 
 
 def request_for_token(user: User) -> Optional[str]: # returns access token
-    if user.user_spotify_token_exp_date < datetime.now():
+    if user.user_spotify_token_exp_date and \
+            user.user_spotify_token_exp_date > datetime.now():
+
         return user.user_spotify_access_token
 
     url = 'https://accounts.spotify.com/api/token'
+
     headers = {'Content-Type': 'application/x-www-form-urlencoded',
                'Authorization': authorization_header}
+
     body = {'grant_type': 'refresh_token',
             'refresh_token': user.user_spotify_refresh_token}
 
@@ -43,6 +47,8 @@ def request_for_token(user: User) -> Optional[str]: # returns access token
     return response['access_token']
 
 
+# access token - valid for one hour, refresh token - ¯\_(ツ)_/¯
+# (no actions without refresh token), but access token must be set
 def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
     user = User.query\
         .filter(User.user_token == token)\
@@ -52,9 +58,13 @@ def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
         return {SUCCESS_KEY: False,
                 DESCRIPTION_KEY: TOKEN_NOT_FOUND}
 
+    if not user.user_spotify_refresh_token:
+        return {SUCCESS_KEY: False,
+                DESCRIPTION_KEY: 'spotify refresh token not found'}
+
     if not user.user_spotify_access_token:
         return {SUCCESS_KEY: False,
-                DESCRIPTION_KEY: 'spotify token not found'}
+                DESCRIPTION_KEY: 'spotify access token not found'}
 
     access_token = request_for_token(user)
 
@@ -70,7 +80,11 @@ def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
     spotify_response = requests\
         .get(url, headers=headers)
 
-    spotify_response = spotify_response.json()
+    try:
+        spotify_response = spotify_response.json()
+    except ValueError:
+        return {SUCCESS_KEY: False,
+                DESCRIPTION_KEY: 'invalid spotify response'}
 
     response = {SUCCESS_KEY: True}
 

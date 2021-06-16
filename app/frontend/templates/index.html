@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Concert Hall{% endblock %}
+{% block title %}{{ _('Concert Hall') }}{% endblock %}
 
 {% block content %}
 
@@ -37,8 +37,7 @@
                             <p>{{ concerts[0]["hall"]['hall_name'] }} <i
                                     class="bi bi-dot"></i> {{ concerts[0]["concert_date"]|dt }}</p>
                             <p><a class="btn btn-lg btn-primary text-light"
-                                  href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">Buy
-                                tickets</a></p>
+                                  href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">{{  _('Buy tickets') }}</a></p>
                         </div>
                     </div>
                 </div>
@@ -63,8 +62,7 @@
                                     <p>{{ concerts[0]["hall"]['hall_name'] }} <i
                                             class="bi bi-dot"></i> {{ concerts[n+1]["concert_date"]|dt }}</p>
                                     <p><a class="btn btn-lg btn-primary text-light"
-                                          href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">Buy
-                                        tickets</a></p>
+                                          href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">{{  _('Buy tickets') }}</a></p>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +85,7 @@
         {% if session['logged_in'] and session['spotify'] %}
 
             <div class="ms-5 mb-2 d-flex">
-                <span class="fs-1 fw-light underline">Recommendations</span>
+                <span class="fs-1 fw-light underline">{{ _('Recommendations') }}</span>
                 <img src="../static/spotify/Spotify_Logo_RGB_Green.png" class="img-fluid mt-3 ms-2"
                      style="height: 2.5rem;"
                      alt="Spotify">
@@ -133,7 +131,7 @@
         {% endif %}
 
         <div class="ms-5 mb-2">
-            <span class="fs-1 fw-light underline">Upcoming Events</span>
+            <span class="fs-1 fw-light underline">{{ _('Upcoming Events') }}</span>
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">

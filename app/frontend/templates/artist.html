@@ -30,11 +30,11 @@
                         {% if artist["favorite"] %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                   href="{{ url_for('add_artist_to_favorite', id=artist["artist"]["artist_id"]) }}"
-                            >Remove from favorites</a></p>
+                            >{{ _('Remove from favorites') }}</a></p>
                         {% else %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                   href="{{ url_for('remove_artist_from_favorite', id=artist["artist"]["artist_id"]) }}"
-                            >Add to favorites</a></p>
+                            >{{ _('Add to favorites') }}</a></p>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -47,17 +47,17 @@
                         <button class="nav-link active btn-lg" id="v-pills-concerts-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-concerts" type="button" role="tab"
                                 aria-controls="v-pills-concerts"
-                                aria-selected="true">Concerts
+                                aria-selected="true">{{ _('Concerts') }}
                         </button>
                         <button class="nav-link btn-lg" id="v-pills-reviews-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-reviews" type="button" role="tab"
                                 aria-controls="v-pills-reviews"
-                                aria-selected="false">Reviews
+                                aria-selected="false">{{ _('Reviews') }}
                         </button>
                         <button class="nav-link btn-lg" id="v-pills-info-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-info" type="button" role="tab"
                                 aria-controls="v-pills-info"
-                                aria-selected="false">Info
+                                aria-selected="false">{{ _('Info') }}
                         </button>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 ms-5">
@@ -65,7 +65,7 @@
                             <div class="tab-pane fade show active" id="v-pills-concerts" role="tabpanel"
                                  aria-labelledby="v-pills-concerts-tab">
                                 <div class="mb-3">
-                                    <h1 class="display-5">Concerts</h1>
+                                    <h1 class="display-5">{{ _('Concerts') }}</h1>
                                 </div>
                                 {% for c in artist["artist"]["performances"] %}
                                     <div class="card mb-3">
@@ -94,13 +94,13 @@
                                                 <div class="row">
                                                     <div class="col-md">
                                                         <div class="card-body">
-                                                            <h5 class="card-title">Place</h5>
+                                                            <h5 class="card-title">{{ _('Place') }}</h5>
                                                             <p class="card-text text-truncate">{{ c["concert_address"] }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="card-body">
-                                                            <h5 class="card-title">Date</h5>
+                                                            <h5 class="card-title">{{ _('Date') }}</h5>
                                                             <p class="card-text">{{ c["concert_date"]|dt }}</p>
                                                         </div>
                                                     </div>
@@ -117,7 +117,7 @@
 
                                 <div class="pb-4 text-break">
                                     <h1 class="display-5">
-                                        Reviews
+                                        {{ _('Reviews') }}
                                     </h1>
                                     <div>
                                         {% if session['logged_in'] %}
@@ -132,7 +132,7 @@
                                                         </div>
                                                         <div>
                                                             <button type="submit" class="btn btn-primary text-light">
-                                                                Leave review
+                                                                {{ _('Leave review') }}
                                                             </button>
                                                         </div>
 
@@ -177,7 +177,7 @@
                             <div class="tab-pane fade" id="v-pills-info" role="tabpanel"
                                  aria-labelledby="v-pills-info-tab">
                                 <h1 class="display-5">
-                                    Info
+                                    {{ _('Info') }}
                                 </h1>
                                 {% if artist["info"] %}
                                 <div class="text-wrap">

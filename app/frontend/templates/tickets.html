@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}My Tickets{% endblock %}
+{% block title %}{{ _('My Tickets') }}{% endblock %}
 
 {% block content %}
 
@@ -26,13 +26,13 @@
                 <div class="mt-2 nav ps-2 flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
                      aria-orientation="vertical">
                     <a class="nav-link btn active remove-glow btn-lg" href="{{ url_for('tickets_page') }}"
-                       aria-selected="true">Tickets
+                       aria-selected="true">{{ _('Tickets') }}
                     </a>
                     <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('favorites_page') }}"
-                       aria-selected="false">Favorites
+                       aria-selected="false">{{ _('Favorites') }}
                     </a>
                     <a class="nav-link btn btn-lg remove-glow" href="{{ url_for('settings_page') }}"
-                       aria-selected="false">Settings
+                       aria-selected="false">{{ _('Settings') }}
                     </a>
                 </div>
                 <div class="d-flex flex-column flex-grow-1 ms-5">
@@ -42,15 +42,15 @@
                             <div class="card-body">
                                 <h5 class="card-title display-5">{{ tic['concert_name'] }}</h5>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><span class="h5">Price: </span> <span>{{ tic['price'] }}</span></li>
+                                    <li class="list-group-item"><span class="h5">{{ _('Price') }}: </span> <span>{{ tic['price'] }}</span></li>
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-md">
-                                                <h5 class="card-title">Place</h5>
+                                                <h5 class="card-title">{{ _('Place') }}</h5>
                                                 <p class="card-text text-truncate">{{ tic['hall_name'] }}</p>
                                             </div>
                                             <div class="col-md">
-                                                <h5 class="card-title">Date</h5>
+                                                <h5 class="card-title">{{ _('Date') }}</h5>
                                                 <p class="card-text">{{ tic['concert_date']|dt }}</p>
                                             </div>
                                         </div>

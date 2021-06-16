@@ -1,29 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}{{ _('Login') }}{% endblock %}
 
 {% block content %}
 
     <div class="form-signin text-center mt-4">
         <form method="post">
             <img class="mb-4" src="../static/logo.png" alt="" width="300" height="150">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <h1 class="h3 mb-3 fw-normal">{{ _('Please sign in') }}</h1>
             <div class="form-floating"> {# Supported both username and email on backend #}
                 <input type="text" class="form-control remove-glow" name="login" id="floatingInput" minlength="5"
                        placeholder="name@example.com" required>
-                <label for="floatingInput">Email address or login</label>
+                <label for="floatingInput">{{ _('Email address or login') }}</label>
             </div>
             <div class="form-floating">
                 <input type="password" class="form-control remove-glow" name="password" id="floatingPassword"
                        minlength="8" placeholder="Password" required>
-                <label for="floatingPassword">Password</label>
+                <label for="floatingPassword">{{ _('Password') }}</label>
             </div>
 
             <div class="checkbox mb-3 mt-3">
                 <label>
-                    <input type="checkbox" name="remember"> Remember me
+                    <input type="checkbox" name="remember"> {{ _('Remember me') }}
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary text-light" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary text-light" type="submit">{{ _('Sign in') }}</button>
         </form>
     </div>
 
@@ -32,7 +32,7 @@
         {% for m in messages %}
             <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
                 <div class="toast-header">
-                    <strong class="me-auto">Message</strong>
+                    <strong class="me-auto">{{ _('Message') }}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">

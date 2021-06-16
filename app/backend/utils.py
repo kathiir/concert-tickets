@@ -1,4 +1,7 @@
 # removes lists when len(list) == 1
+from typing import Dict, List
+
+
 def simplify_json_result(json_with_lists: str) -> dict:
     if not json_with_lists:
         return dict()
@@ -9,7 +12,7 @@ def simplify_json_result(json_with_lists: str) -> dict:
     }
 
 
-def check_keys_in_dict(request: dict[str, str], args: list[str]) -> bool:
+def check_keys_in_dict(request: Dict[str, str], args: List[str]) -> bool:
     for argument in args:
         if argument not in request:
             return False

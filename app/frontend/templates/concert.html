@@ -31,16 +31,16 @@
                         {% if concert["favorite"] %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                   href="{{ url_for('add_concert_to_favorite', id=concert["concert"]["concert_id"]) }}"
-                            >Remove from favorites</a></p>
+                            >{{ _('Remove from favorites') }}</a></p>
                         {% else %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                   href="{{ url_for('remove_concert_from_favorite', id=concert["concert"]["concert_id"]) }}"
-                            >Add to favorites</a></p>
+                            >{{ _('Add to favorites') }}</a></p>
                         {% endif %}
                         {% if session["gcalendar"] %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                   href="{{ url_for('add_to_gcalendar', id=concert["concert"]["concert_id"]) }}"
-                            >Add to Calendar</a></p>
+                            >{{ _('Add to Calendar') }}</a></p>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -50,21 +50,21 @@
                 <div class="row g-0 mt-2">
                     <div class="col-md-2 mt-2 px-2 d-flex flex-column">
                         <div class="py-4 bg-white">
-                            <h5 class="">Place</h5>
+                            <h5 class="">{{ _('Place') }}</h5>
                             <p class="">{{ concert["concert"]['hall']['hall_name'] }}</p>
-                            <h5 class="">Date</h5>
+                            <h5 class="">{{ _('Date') }}</h5>
                             <p class="">{{ concert["concert"]["concert_date"]|dt }}</p>
                             {% if not concert['concert_is_ended'] %}
                                 <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                       data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
-                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"][concert_id]) }}">Buy tickets</a></p>
+                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"][concert_id]) }}">{{ _('Buy tickets') }}</a></p>
                             {% endif %}
                         </div>
                     </div>
                     <div class="col-md-3 order-md-2 mt-2 px-2 d-flex flex-column">
                         <div class="py-4 bg-white">
                             <h1 class="display-5">
-                                Artists
+                                {{ _('Artists') }}
                             </h1>
                             {% for ar in concert['concert']["performances"] %}
                                 <div class="d-flex my-2">
@@ -90,7 +90,7 @@
                     <div class="col-md mt-2 px-2 d-flex flex-column">
                         <div class="py-4 mb-2 bg-white">
                             <h1 class="display-5">
-                                Info
+                                {{ _('Info') }}
                             </h1>
                             <div>
                                 {{ concert["concert"]["concert_info"] }}
@@ -100,7 +100,7 @@
                         {% if concert['concert_is_ended'] %}
                             <div class="py-4 bg-white text-break">
                                 <h1 class="display-5">
-                                    Reviews
+                                    {{ _('Reviews') }}
                                 </h1>
                                 <div>
                                     {% if session['logged_in'] %}
@@ -115,7 +115,7 @@
                                                     </div>
                                                     <div>
                                                         <button type="submit" class="btn btn-primary text-light">
-                                                            Leave review
+                                                            {{ _('Leave review') }}
                                                         </button>
                                                     </div>
                                                 </div>

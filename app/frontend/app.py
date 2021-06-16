@@ -4,8 +4,10 @@ import json
 import requests
 import os
 from flask import request, render_template, abort, redirect, url_for, session, jsonify
+from flask_babel import gettext
 from flask_cors import cross_origin
 
+from google_front import get_google_auth_url_stateful, get_google_credentials_stateful
 from spotify_front import get_spotify_auth_url, pass_response
 from config import app, babel, back_uri, cloud
 import cloudinary.uploader
@@ -19,7 +21,21 @@ def _jinja2_filter_datetime(date):
 
 @babel.localeselector
 def get_locale():
+    if 'locale' in session:
+        return session['locale']
     return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+
+
+@app.route('/change_locale')
+def change_locale():
+    if 'locale' in session:
+        if session['locale'] == 'ru':
+            session['locale'] = 'en'
+        else:
+            session['locale'] = 'ru'
+    else:
+        session['locale'] = 'ru'
+    return redirect(request.referrer)
 
 
 @app.errorhandler(404)
@@ -136,7 +152,7 @@ def login_page():
             return redirect(url_for('index_page'))
 
         else:
-            messages.append('Incorrect login or password')
+            messages.append(gettext('Incorrect login or password'))
 
     return render_template(
         'login.html', messages=messages
@@ -177,9 +193,9 @@ def registration_page():
 
         else:
             if 'email' in res:
-                messages.append('This email already exists')
+                messages.append(gettext('This email already exists'))
             if 'nickname' in res:
-                messages.append('This login already exists')
+                messages.append(gettext('This login already exists'))
 
     return render_template(
         'registration.html', messages=messages
@@ -242,7 +258,7 @@ def settings_page():
                 request_uri = back_uri + 'user/photo'
                 response = requests.post(request_uri, json=data).json()
                 if response['success']:
-                    messages.append('Successfully changed user image')
+                    messages.append(gettext('Successfully changed user image'))
                     session['user_photo'] = image_url
                     if 'token' in response:
                         session['token'] = response['token']
@@ -254,11 +270,11 @@ def settings_page():
             request_uri = back_uri + 'pass_change'
             response = requests.post(request_uri, json=data).json()
             if response['success']:
-                messages.append('Successfully changed password')
+                messages.append(gettext('Successfully changed password'))
                 if 'token' in response:
                     session['token'] = response['token']
             else:
-                messages.append('Failed to set new password')
+                messages.append(gettext('Failed to set new password'))
 
     return render_template(
         'settings.html', messages=messages
@@ -434,9 +450,11 @@ def spotipy_callback():
         response = pass_response(req)
 
         if response:
-            response['token'] = "62f00732450395680874bf4b69b5bbc551a61b9e87a207a7324cecf9f4e4fd7f"  # SESSION
+            response['token'] = session['token']
             response = requests.post(back_uri + "/user/additional_token", json=response)
             response = response.json()
+            if 'token' in response:
+                session['token'] = response['token']
             session['spotify'] = True
             return redirect(url_for('settings_page'))
 
@@ -451,25 +469,29 @@ def remove_spotipy():
     return redirect(url_for('settings_page'))
 
 
-# @app.route('/google')
-# def google():
-#     redirect_uri = "http://127.0.0.1:5000/google/callback"  # your_uri_goes_here (in heroku try (URL_FOR))
-#     url, state = get_google_auth_url_stateful(redirect_uri, "state")
-#     return redirect(url)
-#
-#
-# @app.route('/google/callback')
-# def google_callback():
-#     try:
-#         response = get_google_credentials_stateful(flask.request.url, "state")
-#         if response:
-#             response['token'] = "62f00732450395680874bf4b69b5bbc551a61b9e87a207a7324cecf9f4e4fd7f"  # SESSION
-#             response = requests.post(back_uri + "/user/additional_token", json=response)
-#             response = response.json()
-#             return render_template('AAAAAAAAAAAAA.html', aa=response['success'])
-#
-#     except ValueError:
-#         return 400
+@app.route('/google')
+def google():
+    redirect_uri = url_for('google_callback')
+    url, state = get_google_auth_url_stateful(redirect_uri, "state")
+    return redirect(url)
+
+
+@app.route('/google/callback')
+def google_callback():
+    try:
+        redirect_uri = url_for('google_callback')
+        response = get_google_credentials_stateful(request.url, redirect_uri, "state")
+        if response:
+            response['token'] = session['token']
+            response = requests.post(back_uri + "user/additional_token", json=response)
+            response = response.json()
+            if 'token' in response:
+                session['token'] = response['token']
+            session['gcalendar'] = True
+            return redirect(url_for('settings_page'))
+
+    except ValueError:
+        return 400
 
 
 @app.route('/add_to_gcalendar/<int:id>')
@@ -478,31 +500,11 @@ def add_to_gcalendar(id):
     return redirect(url_for('concert_page', id=id))
 
 
-@app.route('/google')
-def google():
-    return redirect(get_spotify_auth_url())
-
-
 # TODO
 @app.route('/google/remove')
 def remove_google():
     session['gcalendar'] = False
     return redirect(url_for('settings_page'))
-
-
-@app.route('/google/callback')
-def google_callback():
-    req = request.args.to_dict()
-    response = pass_response(req)
-    if 'logged_in' in session and session['logged_in']:
-        response['token'] = session['token']
-
-        if response:
-            response = requests.post(back_uri + "/user/additional_token", json=response).json()
-            session['gcalendar'] = True
-            return redirect(url_for('settings_page'))
-
-    return 400
 
 
 if __name__ == '__main__':

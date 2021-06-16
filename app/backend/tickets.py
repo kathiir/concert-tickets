@@ -19,6 +19,9 @@ def get_hall_with_zones(concert_id: int) -> Dict[str, Any]:
     if not concert:
         return {SUCCESS_KEY: False}
 
+    response['concert_name'] = concert.concert_name
+    response['concert_date'] = concert.concert_date
+
     response['hall'] = hall_simpl_schema.dump(concert.hall)
 
     result = list()

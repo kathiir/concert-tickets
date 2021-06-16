@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}{{ _('Search') }}{% endblock %}
 
 {% block content %}
 
@@ -10,16 +10,16 @@
                  aria-orientation="vertical">
                 <button class="nav-link active btn-lg" id="v-pills-concerts-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-concerts" type="button" role="tab" aria-controls="v-pills-concerts"
-                        aria-selected="true">Concerts
+                        aria-selected="true">{{ _('Concerts') }}
                 </button>
                 <button class="nav-link btn-lg" id="v-pills-artists-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-artists" type="button" role="tab" aria-controls="v-pills-artists"
-                        aria-selected="false">Artists
+                        aria-selected="false">{{ _('Artists') }}
                 </button>
             </div>
             <div class="d-flex flex-column flex-grow-1 ms-5">
                 <div class="mb-3">
-                    <h1 class="display-5">Search for "{{ request.args.get('search') }}"</h1>
+                    <h1 class="display-5">{{ _('Search for') }} "{{ request.args.get('search') }}"</h1>
                 </div>
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-concerts" role="tabpanel"
@@ -40,13 +40,13 @@
                                         <div class="row">
                                             <div class="col-md">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Place</h5>
+                                                    <h5 class="card-title">{{ _('Place') }}</h5>
                                                     <p class="card-text text-truncate">{{ c["hall"]['hall_name'] }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Date</h5>
+                                                    <h5 class="card-title">{{ _('Date') }}</h5>
                                                     <p class="card-text">{{ c["concert_date"]|dt }}</p>
                                                 </div>
                                             </div>

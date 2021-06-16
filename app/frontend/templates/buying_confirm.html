@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Confirmation{% endblock %}
+{% block title %}{{ _('Confirmation') }}{% endblock %}
 
 {% block content %}
 
@@ -7,24 +7,24 @@
         {% if success %}
             <div class="alert alert-success" role="alert">
                 <div>
-                    Successfully bought tickets
+                    {{ _('Successfully bought tickets') }}
                 </div>
                 <div>
-                    <a href="{{ url_for('concert_page', id=id) }}">Return to Concert Page</a>
+                    <a href="{{ url_for('concert_page', id=id) }}">{{ _('Return to Concert Page') }}</a>
                 </div>
                 {% if session['logged_in'] %}
                     <div>
-                        <a href="{{ url_for('tickets_page') }}">Proceed to Tickets</a>
+                        <a href="{{ url_for('tickets_page') }}">{{ _('Proceed to Tickets') }}</a>
                     </div>
                 {% endif %}
             </div>
         {% else %}
             <div class="alert alert-danger" role="alert">
                 <div>
-                    Failed to buy tickets
+                    {{ _('Failed to buy tickets') }}
                 </div>
                 <div>
-                    <a href="{{ url_for('concert_page', id=id) }}">Return to Concert Page</a>
+                    <a href="{{ url_for('concert_page', id=id) }}">{{ _('Return to Concert Page') }}</a>
                 </div>
             </div>
         {% endif %}

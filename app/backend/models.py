@@ -108,13 +108,18 @@ class User(db.Model):
                           nullable=False)  # 0 - user, 1 - banned user, 2 - moderator, 3 - admin
     user_photo = db.Column(db.String(255), unique=False, nullable=True)  # base64 string
     user_email = db.Column(db.String(255), unique=True, nullable=False)
+
     user_token = db.Column(db.String(100), unique=True,
                            nullable=True)  # токен можно будет сделать по-жирнее
     user_token_exp_date = db.Column(db.DateTime, unique=False, nullable=True)
+
     user_spotify_refresh_token = db.Column(db.String(255), unique=False, nullable=True)
     user_spotify_access_token = db.Column(db.String(255), unique=False, nullable=True)
     user_spotify_token_exp_date = db.Column(db.DateTime, unique=False, nullable=True)
-    user_gcalendar_token = db.Column(db.String(255), unique=False, nullable=True)
+
+    user_google_refresh_token = db.Column(db.String(255), unique=False, nullable=True)
+    user_google_access_token = db.Column(db.String(255), unique=False, nullable=True)
+
     concert_reviews = db.relationship('ConcertReview', back_populates='user', lazy=True)
     artist_reviews = db.relationship('ArtistReview', back_populates='user', lazy=True)
     favorite_artists = db.relationship('Artist', secondary=FavoriteArtists,
@@ -215,7 +220,7 @@ class UserSchema(SQLAlchemySchema):
     username = auto_field()
     user_email = auto_field()
     user_photo = auto_field()
-    user_spotify_token = IsExistsBoolField(attribute="user_spotify_access_token")
+    user_spotify_token = IsExistsBoolField(attribute="user_spotify_token")
     user_gcalendar_token = IsExistsBoolField(attribute="user_gcalendar_token")
 
 

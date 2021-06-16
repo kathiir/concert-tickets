@@ -1,18 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Buy Ticket{% endblock %}
+{% block title %}{{ _('Buy Ticket') }}{% endblock %}
 
 {% block content %}
     <div class="container">
-        {#    <h1>{{ concert_name }}</h1>#}
-        <h1 class="display-1"> concert_name </h1>
-        <div class="lead">place, date</div>
+        <h1 class="display-1"> {{ halls['concert_name'] }} </h1>
+        <div class="lead">{{ halls['hall']['hall_name'] }}, {{ halls['concert_date']|dt }}</div>
 
         <div class="row flex-lg-row align-items-center g-2">
             <div class="col">
                 <div>
                     <div class="d-flex flex-column m-3 shadow"
                          style="height: 600px;">
-                        <p class="text-center m-0 lead pt-2">Scene</p>
+                        <p class="text-center m-0 lead pt-2">{{ _('Scene') }}</p>
                         <svg width="100%" height="40" viewBox="0 5 60 20" xmlns="http://www.w3.org/2000/svg"
                              preserveAspectRatio="none">
                             <path d="M10 10 C 20 20, 40 20, 50 10" stroke="#777" stroke-width="1"
@@ -22,7 +21,7 @@
                             <div class="p-2 bd-highlight flex-grow-1 d-flex align-items-center justify-content-center"
                                  style="background-color: {{ palette[i] }}">
                                 <p class="p-1 px-2 rounded-pill bg-light">{{ hall['price'] }}
-                                    rub: {{ hall['free_capacity'] }}/{{ hall['capacity'] }}</p>
+                                    {{ _('credits') }}: {{ hall['free_capacity'] }}/{{ hall['capacity'] }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -34,7 +33,7 @@
                     <div class="card mb-3 p-2 shadow">
                         <div class="row g-0">
                             <div class="col">
-                                <div class="display-5">Tickets for {{ hall['price'] }}</div>
+                                <div class="display-5">{{ _('Tickets for') }} {{ hall['price'] }}</div>
                                 <hr>
                                 <div class="input-group d-flex justify-content-end">
                                     <input type="number" id="num{{ hall['hall_zone_id'] }}" readonly class="read form-control" min="0"
@@ -49,7 +48,7 @@
                     </div>
                 {% endfor %}
                 <div class="d-grid gap-2 mb-3">
-                    <button class="btn btn-primary text-light" type="button" id="submit_btn">Buy tickets</button>
+                    <button class="btn btn-primary text-light" type="button" id="submit_btn">{{ _('Buy tickets') }}</button>
                 </div>
 
             </form>
