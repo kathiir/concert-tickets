@@ -6,6 +6,7 @@ import os
 from flask import request, render_template, abort, redirect, url_for, session, jsonify
 from flask_cors import cross_origin
 
+from spotify_front import get_spotify_auth_url, pass_response
 from config import app, babel, back_uri, cloud
 import cloudinary.uploader
 
@@ -96,7 +97,11 @@ def index_page():
     spot = []
     if 'logged_in' in session and session['logged_in']:
         if 'spotify' in session and session['spotify']:
-            spot = []
+            request_uri = back_uri + '/user_followed_concerts?token=' + session['token']
+            response = requests.get(request_uri).json()
+            spot = response['concerts']
+            if 'token' in response:
+                session['token'] = response['token']
 
     return render_template(
         'index.html',
@@ -160,9 +165,12 @@ def registration_page():
             session['token'] = res['token']
             request_uri = back_uri + 'user_short_info/' + res['token']
             response = requests.get(request_uri).json()
+            session['g_calendar'] = False
+            session['spotify'] = False
             if response['success']:
                 session['username'] = response['user']['username']
                 session['user_photo'] = response['user']['user_photo']
+
             if request.form.get('remember'):
                 session.permanent = True
             return redirect(url_for('index_page'))
@@ -338,7 +346,7 @@ def artists_page(id):
                 "artist_review_rating": request.form.get('rate')
             }
             review_uri = back_uri + 'add_artist_review'
-            response = requests.post(review_uri, data=data).json()
+            response = requests.post(review_uri, json=data).json()
             if 'token' in response:
                 session['token'] = response['token']
     response = requests.get(request_uri)
@@ -411,6 +419,90 @@ def buying_confirm_page(success, id):
         success=success,
         id=id
     )
+
+
+@app.route('/spotipy')
+def spotipy():
+    return redirect(get_spotify_auth_url())
+
+
+@app.route('/spotipy/callback')
+def spotipy_callback():
+    req = request.args.to_dict()
+
+    try:
+        response = pass_response(req)
+
+        if response:
+            response['token'] = "62f00732450395680874bf4b69b5bbc551a61b9e87a207a7324cecf9f4e4fd7f"  # SESSION
+            response = requests.post(back_uri + "/user/additional_token", json=response)
+            response = response.json()
+            session['spotify'] = True
+            return redirect(url_for('settings_page'))
+
+    except ValueError:
+        return 400
+
+
+# TODO
+@app.route('/spotipy/remove')
+def remove_spotipy():
+    session['spotify'] = False
+    return redirect(url_for('settings_page'))
+
+
+# @app.route('/google')
+# def google():
+#     redirect_uri = "http://127.0.0.1:5000/google/callback"  # your_uri_goes_here (in heroku try (URL_FOR))
+#     url, state = get_google_auth_url_stateful(redirect_uri, "state")
+#     return redirect(url)
+#
+#
+# @app.route('/google/callback')
+# def google_callback():
+#     try:
+#         response = get_google_credentials_stateful(flask.request.url, "state")
+#         if response:
+#             response['token'] = "62f00732450395680874bf4b69b5bbc551a61b9e87a207a7324cecf9f4e4fd7f"  # SESSION
+#             response = requests.post(back_uri + "/user/additional_token", json=response)
+#             response = response.json()
+#             return render_template('AAAAAAAAAAAAA.html', aa=response['success'])
+#
+#     except ValueError:
+#         return 400
+
+
+@app.route('/add_to_gcalendar/<int:id>')
+def add_to_gcalendar(id):
+    # TODO
+    return redirect(url_for('concert_page', id=id))
+
+
+@app.route('/google')
+def google():
+    return redirect(get_spotify_auth_url())
+
+
+# TODO
+@app.route('/google/remove')
+def remove_google():
+    session['gcalendar'] = False
+    return redirect(url_for('settings_page'))
+
+
+@app.route('/google/callback')
+def google_callback():
+    req = request.args.to_dict()
+    response = pass_response(req)
+    if 'logged_in' in session and session['logged_in']:
+        response['token'] = session['token']
+
+        if response:
+            response = requests.post(back_uri + "/user/additional_token", json=response).json()
+            session['gcalendar'] = True
+            return redirect(url_for('settings_page'))
+
+    return 400
 
 
 if __name__ == '__main__':

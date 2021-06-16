@@ -3,14 +3,12 @@ from pipes import quote
 from typing import Any, Dict, Optional
 
 import requests
-from flask import request
 
 from cid_secr import cid, secret, rur, scope
 
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_API_BASE_URL = "https://api.spotify.com"
-
 
 auth_query_parameters = {
     "response_type": "code",
@@ -26,11 +24,12 @@ def get_spotify_auth_url() -> str:
     return auth_url
 
 
+# returns None on error
 def pass_response(spotify_response: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     auth_code = spotify_response['code']
 
     if 'error' in spotify_response:
-        return None
+        raise ValueError('error spotify response')
 
     payload = {
         "grant_type": "authorization_code",
@@ -40,9 +39,15 @@ def pass_response(spotify_response: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         'client_secret': secret,
     }
 
-    token_info_response = requests\
-        .post(SPOTIFY_TOKEN_URL, data=payload)\
-        .json()
+    token_info_response = requests \
+        .post(SPOTIFY_TOKEN_URL, data=payload) \
+        .json() # can raise value error
+
+    response_keys = ['access_token', 'refresh_token', 'expires_in']
+
+    if not all(key in token_info_response
+               for key in response_keys):
+        raise ValueError('no spotify response')
 
     result = {'spotify_access_token': token_info_response['access_token'],
               'spotify_refresh_token': token_info_response['refresh_token'],

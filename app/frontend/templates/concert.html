@@ -37,6 +37,11 @@
                                   href="{{ url_for('remove_concert_from_favorite', id=concert["concert"]["concert_id"]) }}"
                             >Add to favorites</a></p>
                         {% endif %}
+                        {% if session["gcalendar"] %}
+                            <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
+                                  href="{{ url_for('add_to_gcalendar', id=concert["concert"]["concert_id"]) }}"
+                            >Add to Calendar</a></p>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -100,7 +105,7 @@
                                 <div>
                                     {% if session['logged_in'] %}
                                         <div>
-                                            <form class="g-0 mb-2">
+                                            <form class="g-0 mb-2" method="post">
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <input id="input-id" value="4" type="text" class="rating"

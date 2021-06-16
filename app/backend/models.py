@@ -111,8 +111,10 @@ class User(db.Model):
     user_token = db.Column(db.String(100), unique=True,
                            nullable=True)  # токен можно будет сделать по-жирнее
     user_token_exp_date = db.Column(db.DateTime, unique=False, nullable=True)
-    user_spotify_token = db.Column(db.String(100), unique=False, nullable=True)
-    user_gcalendar_token = db.Column(db.String(100), unique=False, nullable=True)
+    user_spotify_refresh_token = db.Column(db.String(255), unique=False, nullable=True)
+    user_spotify_access_token = db.Column(db.String(255), unique=False, nullable=True)
+    user_spotify_token_exp_date = db.Column(db.DateTime, unique=False, nullable=True)
+    user_gcalendar_token = db.Column(db.String(255), unique=False, nullable=True)
     concert_reviews = db.relationship('ConcertReview', back_populates='user', lazy=True)
     artist_reviews = db.relationship('ArtistReview', back_populates='user', lazy=True)
     favorite_artists = db.relationship('Artist', secondary=FavoriteArtists,
@@ -128,7 +130,7 @@ class ConcertReview(db.Model):
     __tablename__ = 'concert_review'
     concert_review_id = db.Column(db.Integer, primary_key=True, index=True)
     concert_review_info = db.Column(db.String(1000), unique=False, nullable=False)
-    concert_review_rating = db.Column(db.Float, unique=False, nullable=False)
+    concert_review_rating = db.Column(db.Float, unique=False, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     user = db.relationship("User", back_populates="concert_reviews", lazy=True)
     concert_id = db.Column(db.Integer, db.ForeignKey('concert.concert_id'), nullable=False)
@@ -139,7 +141,7 @@ class ArtistReview(db.Model):
     __tablename__ = 'artist_review'
     artist_review_id = db.Column(db.Integer, primary_key=True, index=True)
     artist_review_info = db.Column(db.String(1000), unique=False, nullable=False)
-    artist_review_rating = db.Column(db.Float, unique=False, nullable=False)
+    artist_review_rating = db.Column(db.Float, unique=False, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     user = db.relationship("User", back_populates="artist_reviews", lazy=True)
     artist_id = db.Column(db.Integer, db.ForeignKey('artist.artist_id'), nullable=False)
@@ -213,7 +215,7 @@ class UserSchema(SQLAlchemySchema):
     username = auto_field()
     user_email = auto_field()
     user_photo = auto_field()
-    user_spotify_token = IsExistsBoolField(attribute="user_spotify_token")
+    user_spotify_token = IsExistsBoolField(attribute="user_spotify_access_token")
     user_gcalendar_token = IsExistsBoolField(attribute="user_gcalendar_token")
 
 

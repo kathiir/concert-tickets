@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import request, make_response, jsonify, abort
 import os
 
+from spotipy_back import get_concert_for_users_followed_artists
 from user_route import change_image, change_additional_user_token
 from tickets import get_hall_with_zones, buy_tickets_mock, get_every_possible_ticket
 from favorite_route import add_sth_to_favorite, remove_sth_to_favorite, is_sth_favorite, get_every_possible_favorites
@@ -124,6 +125,22 @@ def get_all_favorites():
     response = get_every_possible_favorites(token)
 
     return json.dumps(response), 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/user_followed_concerts')
+def user_followed_concerts():
+    token = request.args.get('token')
+    response = get_concert_for_users_followed_artists(token)
+
+    if response[SUCCESS_KEY]:
+        return json.dumps(response), \
+               200, \
+               {'Content-Type': 'application/json'}
+
+    return json.dumps({SUCCESS_KEY: False}), \
+           400, \
+           {'Content-Type': 'application/json'}
+
 
 
 # id, type (artist, concert), token
@@ -348,6 +365,20 @@ def get_tickets_by_user():
 # def spec():
 #     return jsonify(swagger(app))
 
+@app.route('/concerts_by_spotify_following', methods=['GET'])
+def concerts_by_spotify_following():
+    token = request.args.get('token')
+    response = get_concert_for_users_followed_artists(token)
+
+    if response[SUCCESS_KEY]:
+        return json.dumps(response), \
+           200, \
+           {'Content-Type': 'application/json'}
+
+    return json.dumps({SUCCESS_KEY: False}), \
+           400, \
+           {'Content-Type': 'application/json'}
+
 
 @app.route('/', methods=['GET'])
 def get_start():
@@ -379,5 +410,6 @@ if True:
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5005))
     # print(' http://127.0.0.1:5000/')
-    app.run(host='0.0.0.0', port=port)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(host='127.0.0.1', port=port)
     # app.run(host='0.0.0.0', port=1337)

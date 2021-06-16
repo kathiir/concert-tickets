@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from typing import Any, Dict
 
 from auth_utils import recreate_token_for_response
@@ -30,10 +31,12 @@ def change_image(request: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def change_additional_user_token(request: Dict[str, Any]) -> Dict[str, Any]:
-
     if not 'token' in request and \
         not ('gcalendar_token' in request or
-         'spotify_token' in request):
+         'spotify_access_token' in request
+             and 'spotify_refresh_token' in request
+             and 'spotify_exp_date' in request):
+
         raise ValueError("incorrect keys")
 
     user = User.query\
@@ -49,11 +52,13 @@ def change_additional_user_token(request: Dict[str, Any]) -> Dict[str, Any]:
 
         user.user_gcalendar_token = request['gcalendar_token']
 
-    if 'spotify_token' in request:
-        if not request['spotify_token']:
+    if 'spotify_access_token' in request:
+        if not request['spotify_access_token']:
             return {SUCCESS_KEY: False, DESCRIPTION_KEY: 'incorrect additional token'}
 
-        user.user_spotify_token = request['spotify_token']
+        user.user_spotify_access_token = request['spotify_access_token']
+        user.user_spotify_refresh_token = request['spotify_refresh_token']
+        user.user_spotify_token_exp_date = request['spotify_exp_date']
 
     db.session.commit()
     return recreate_token_for_response({SUCCESS_KEY: True},

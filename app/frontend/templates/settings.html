@@ -38,23 +38,39 @@
                     </div>
                     <div class="d-flex flex-column flex-grow-1 ms-5">
                         <div class="mb-3">
-                            <h1 class="display-5">Spotify</h1> {# TODO #}
+                            <h1 class="display-5">Spotify</h1>
                             <div>
-                                <a class="btn btn-lg btn-primary text-light rounded-pill">
-                                    Connect to Spotify
-                                    <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
-                                         alt="spotify"
-                                         height="37" width="37">
-                                </a>
+                                {% if not session['spotify'] %}
+                                    <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('spotipy') }}">
+                                        Connect to Spotify
+                                        <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
+                                             alt="spotify"
+                                             height="37" width="37">
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('remove_spotipy') }}">
+                                        Disconnect Spotify
+                                        <img class="img-fluid " src="../static/spotify/Spotify_Icon_RGB_White.png"
+                                             alt="spotify"
+                                             height="37" width="37">
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="mb-3">
                             <h1 class="display-5">Google Calendar</h1> {# TODO #}
                             <div>
-                                <a class="btn btn-lg btn-primary text-light rounded-pill">
-                                    Connect to Google Calendar
-                                    <i class="bi bi-google"></i>
-                                </a>
+                                {% if not session['gcalendar'] %}
+                                    <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('google') }}">
+                                        Connect to Google Calendar
+                                        <i class="bi bi-google"></i>
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-lg btn-primary text-light rounded-pill" href="{{ url_for('remove_google') }}">
+                                        Disconnect Google Calendar
+                                        <i class="bi bi-google"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
 

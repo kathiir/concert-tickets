@@ -126,6 +126,7 @@ def get_every_possible_ticket(token: str) -> Dict[str, Any]:
             .order_by(Concert.concert_date.desc()) \
             .order_by(HallZone.price.desc()) \
             .all():
+
         tickets.append(
             {'concert_id': ticket.concert.concert_id,
              'concert_name': ticket.concert.concert_name,
