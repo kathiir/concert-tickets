@@ -159,13 +159,13 @@
                                                                  src="https://raw.githubusercontent.com/twbs/icons/main/icons/person.svg">
                                                         {% endif %}
                                                         <span class="text-dark my-auto ms-3">{{ r['user']['username'] }}</span>
-                                                        {% if r['concert_review_rating'] %}
-                                                            <span class="text-dark my-auto ms-3">{{ r['concert_review_rating'] }} <i
+                                                        {% if r['artist_review_rating'] %}
+                                                            <span class="text-dark my-auto ms-3">{{ r['artist_review_rating'] }} <i
                                                                     class="bi bi-star"></i></span>
                                                         {% endif %}
                                                     </div>
                                                     <p>
-                                                        {{ r['concert_review_info'] }}
+                                                        {{ r['artist_review_info'] }}
                                                     </p>
                                                 </div>
                                             {% endfor %}
