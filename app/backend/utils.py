@@ -7,7 +7,7 @@ def simplify_json_result(json_with_lists: str) -> Dict[str, Any]:
         return dict()
 
     return {
-        key: value[0] if (isinstance(value, str) or isinstance(value, list)) and len(value) == 1 else value
+        key: value[0] if (isinstance(value, str) or isinstance(value, list)) and len(value) == 1 and not isinstance(value, dict) else value
         for key, value in json_with_lists.items()
     }
 

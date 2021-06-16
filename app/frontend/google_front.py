@@ -45,8 +45,6 @@ def get_google_credentials_stateless(flask_request_url: str, redirect_uri: str):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         'credentials.json.json',
         scopes=scopes)
-    authorization_response = flask_request_url
-    flow.fetch_token(authorization_response=authorization_response)
 
     flow.redirect_uri = redirect_uri
     authorization_response = flask_request_url
@@ -63,7 +61,8 @@ def get_google_credentials_stateless(flask_request_url: str, redirect_uri: str):
 def get_google_credentials_stateful(flask_request_url: str, redirect_uri: str, state: str) -> Dict[str, Any]:
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         'credentials.json',
-        scopes=scopes, state=state)
+        scopes=scopes,
+        state=state)
 
     flow.redirect_uri = redirect_uri
     authorization_response = flask_request_url

@@ -27,10 +27,12 @@ def get_hall_with_zones(concert_id: int) -> Dict[str, Any]:
     result = list()
 
     for hall_zone in concert.hall.hall_zone:
-        temp_result = {'price': hall_zone.price,
-                       'hall_zone_id': hall_zone.hall_zone_id,
-                       'hall_zone_name': hall_zone.hall_zone_name,
-                       'capacity': hall_zone.capacity}
+        temp_result = {
+            'price': hall_zone.price,
+            'hall_zone_id': hall_zone.hall_zone_id,
+            'hall_zone_name': hall_zone.hall_zone_name,
+            'capacity': hall_zone.capacity
+        }
 
         total_bought = db.session.query(Ticket) \
             .filter(and_(Ticket.concert_id == concert_id,
@@ -48,8 +50,6 @@ def get_hall_with_zones(concert_id: int) -> Dict[str, Any]:
 
 def buy_tickets_mock(request: Dict[str, Any]) -> Dict[str, Any]:
     approved_keys = ['concert_id', 'hall_zone']
-
-    # TODO gcalendar
 
     if not check_keys_in_dict(request, approved_keys):
         raise ValueError("not approved key")
@@ -129,7 +129,6 @@ def get_every_possible_ticket(token: str) -> Dict[str, Any]:
             .order_by(Concert.concert_date.desc()) \
             .order_by(HallZone.price.desc()) \
             .all():
-
         tickets.append(
             {'concert_id': ticket.concert.concert_id,
              'concert_name': ticket.concert.concert_name,

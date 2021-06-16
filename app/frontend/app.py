@@ -60,7 +60,7 @@ def add_artist_to_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/add'
-    response = requests.post(request_uri, data=data).json()
+    response = requests.post(request_uri, json=data).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -73,7 +73,7 @@ def remove_artist_from_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/remove'
-    response = requests.delete(request_uri, data=data).json()
+    response = requests.delete(request_uri, json=data).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -86,7 +86,7 @@ def add_concert_to_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/add'
-    response = requests.post(request_uri, data=data).json()
+    response = requests.post(request_uri, json=data).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -99,7 +99,7 @@ def remove_concert_from_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/remove'
-    response = requests.delete(request_uri, data=data).json()
+    response = requests.delete(request_uri, json=data).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -246,6 +246,7 @@ def settings_page():
     messages = []
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(request.referrer)
+    # TODO make request for info
     if request.method == 'POST':
         if 'image-change' in request.form:
             file_to_upload = request.files['img']
@@ -326,7 +327,7 @@ def concert_page(id):
                 "concert_review_rating": request.form.get('rate')
             }
             review_uri = back_uri + 'add_concert_review'
-            response = requests.post(review_uri, data=data).json()
+            response = requests.post(review_uri, json=data).json()
             if 'token' in response:
                 session['token'] = response['token']
     response = requests.get(request_uri)
@@ -411,7 +412,7 @@ def buy_page(id):
         if 'logged_in' in session and session['logged_in']:
             data['token'] = session['token']
 
-        response = requests.post(request_uri, json=data).json()
+        response = requests.post(request_uri, json=data, headers={'Content-Type': 'application/json'}).json()
 
         if 'token' in response:
             session['token'] = response['token']
@@ -445,7 +446,10 @@ def buying_confirm_page(success, id):
 
 @app.route('/spotipy')
 def spotipy():
-    return redirect(get_spotify_auth_url())
+    if 'token' in session:
+        return redirect(get_spotify_auth_url(session['token']))
+
+    return 400
 
 
 @app.route('/spotipy/callback')
@@ -456,9 +460,12 @@ def spotipy_callback():
         response = pass_response(req)
 
         if response:
-            response['token'] = session['token']
             response = requests.post(back_uri + "/user/additional_token", json=response)
             response = response.json()
+
+            if 'token' in session:
+                print("aaaaa")
+
             if 'token' in response:
                 session['token'] = response['token']
             session['spotify'] = True
@@ -477,7 +484,9 @@ def remove_spotipy():
 
 @app.route('/google')
 def google():
-    redirect_uri = url_for('google_callback')
+    'https://127.0.0.1:5005/google/callback'
+
+    redirect_uri = url_for('google_callback', _external=True)
     url, state = get_google_auth_url_stateful(redirect_uri, "state")
     return redirect(url)
 
@@ -485,16 +494,19 @@ def google():
 @app.route('/google/callback')
 def google_callback():
     try:
-        redirect_uri = url_for('google_callback')
-        response = get_google_credentials_stateful(request.url, redirect_uri, "state")
-        if response:
-            response['token'] = session['token']
-            response = requests.post(back_uri + "user/additional_token", json=response)
-            response = response.json()
-            if 'token' in response:
-                session['token'] = response['token']
-            session['gcalendar'] = True
-            return redirect(url_for('settings_page'))
+        if 'token' in session:
+            redirect_uri = url_for('google_callback', _external=True)
+            response = get_google_credentials_stateful(request.url, redirect_uri, 'state')
+            if response:
+                response['token'] = session['token']
+                response = requests.post(back_uri + "user/additional_token", json=response)
+                response = response.json()
+
+                if 'token' in response:
+                    session['token'] = response['token']
+
+                session['gcalendar'] = True
+                return redirect(url_for('settings_page'))
 
     except ValueError:
         return 400
@@ -516,4 +528,5 @@ def remove_google():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(' http://127.0.0.1:5000/')
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='localhost', port=port,
+            ssl_context=('cert.pem', 'key.pem'))

@@ -5,6 +5,8 @@ from datetime import datetime
 from flask import request, make_response, jsonify, abort
 import os
 
+from flask_accept import accept
+
 from google_calendar_back import add_concert_to_events
 from spotipy_back import get_concert_for_users_followed_artists
 from user_route import change_image, change_additional_user_token, remove_additional_tokens
@@ -39,7 +41,8 @@ def not_found(error):
 # nickname, email, password, password_check
 @app.route('/registration', methods=['POST'])
 def register_user():
-    data = simplify_json_result(request.get_json())
+    aaaa = request.get_json()
+    data = simplify_json_result(aaaa)
     response = register_user_with_response(data)
     return json.dumps(response), 200, {'Content-Type': 'application/json'}
 
@@ -78,8 +81,7 @@ def change_photo():
 
 @app.route('/user/additional_token', methods=['POST'])
 def change_google_or_spotify_token():
-    data = simplify_json_result(
-        request.get_json())
+    data = request.get_json()
     try:
         response = change_additional_user_token(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -90,8 +92,7 @@ def change_google_or_spotify_token():
 
 @app.route('/user/additional_token', methods=['DELETE'])
 def delete_one_token():
-    data = simplify_json_result(
-        request.get_json())
+    data = request.get_json()
 
     try:
         response = remove_additional_tokens(data)
@@ -148,8 +149,7 @@ def get_all_favorites():
 
 @app.route('/add_to_calendar', methods=['POST'])
 def add_all_to_calendar():
-    data = simplify_json_result(
-        request.get_json())
+    data = request.get_json()
     try:
         response = add_concert_to_events(data)
         return json.dumps(response), \
@@ -182,7 +182,7 @@ def user_followed_concerts():
 # return success, token (if expires), description (if fail)
 @app.route('/favorite/add', methods=['POST'])
 def add_to_favorite():
-    data = simplify_json_result(request.get_json())
+    data = request.get_json(force=True)
     try:
         response = add_sth_to_favorite(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -195,7 +195,7 @@ def add_to_favorite():
 # return success, token (if expires), description (if fail)
 @app.route('/favorite/remove', methods=['DELETE'])
 def remove_from_favorite():
-    data = simplify_json_result(request.get_json())
+    data = request.get_json()
     try:
         response = remove_sth_to_favorite(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -234,7 +234,7 @@ def get_reviews(query_type, id):
 # returns: success, description
 @app.route('/add_artist_review', methods=['POST'])
 def add_artist_review():
-    data = simplify_json_result(request.get_json())
+    data = request.get_json()
     try:
         response = add_review_to_artist(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -332,7 +332,7 @@ def get_concert_by_id(concert_id):
 # returns: success, description
 @app.route('/add_concert_review', methods=['POST'])
 def add_concert_review():
-    data = simplify_json_result(request.get_json())
+    data = request.get_json()
     try:
         response = add_review_to_concert(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -372,8 +372,7 @@ def get_with_zones_by_concert_id(concert_id: int):
 
 @app.route('/buy_tickets', methods=['POST'])
 def buy_tickets():
-    r = request.get_json()
-    data = simplify_json_result(r)
+    data = request.get_json()
     try:
         response = buy_tickets_mock(data)
 
@@ -400,7 +399,6 @@ def get_tickets_by_user():
 # @app.route("/swagger")
 # def spec():
 #     return jsonify(swagger(app))
-
 @app.route('/concerts_by_spotify_following', methods=['GET'])
 def concerts_by_spotify_following():
     token = request.args.get('token')

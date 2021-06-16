@@ -18,9 +18,10 @@ auth_query_parameters = {
 }
 
 
-def get_spotify_auth_url() -> str:
+def get_spotify_auth_url(token: str) -> str:
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
+    auth_url += f"&state={token}"
     return auth_url
 
 
@@ -41,7 +42,7 @@ def pass_response(spotify_response: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     token_info_response = requests \
         .post(SPOTIFY_TOKEN_URL, data=payload) \
-        .json() # can raise value error
+        .json()  # can raise value error
 
     response_keys = ['access_token', 'refresh_token', 'expires_in']
 
@@ -49,8 +50,10 @@ def pass_response(spotify_response: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                for key in response_keys):
         raise ValueError('no spotify response')
 
-    result = {'spotify_access_token': token_info_response['access_token'],
-              'spotify_refresh_token': token_info_response['refresh_token'],
-              'spotify_exp_date': (datetime.now() + timedelta(seconds=token_info_response['expires_in'])).isoformat()}
+    result = {
+        'spotify_access_token': token_info_response['access_token'],
+        'spotify_refresh_token': token_info_response['refresh_token'],
+        'spotify_exp_date': (datetime.now() + timedelta(seconds=token_info_response['expires_in'])).isoformat()
+    }
 
     return result
