@@ -29,11 +29,11 @@
                     {% if session['logged_in'] %}
                         {% if artist["favorite"] %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                  href="{{ url_for('add_artist_to_favorite', id=artist["artist"]["artist_id"]) }}"
+                                  href="{{ url_for('remove_artist_from_favorite', id=artist["artist"]["artist_id"]) }}"
                             >{{ _('Remove from favorites') }}</a></p>
                         {% else %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                  href="{{ url_for('remove_artist_from_favorite', id=artist["artist"]["artist_id"]) }}"
+                                  href="{{ url_for('add_artist_to_favorite', id=artist["artist"]["artist_id"]) }}"
                             >{{ _('Add to favorites') }}</a></p>
                         {% endif %}
                     {% endif %}

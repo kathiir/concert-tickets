@@ -30,11 +30,11 @@
                     {% if session['logged_in'] %}
                         {% if concert["favorite"] %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                  href="{{ url_for('add_concert_to_favorite', id=concert["concert"]["concert_id"]) }}"
+                                  href="{{ url_for('remove_concert_from_favorite', id=concert["concert"]["concert_id"]) }}"
                             >{{ _('Remove from favorites') }}</a></p>
                         {% else %}
                             <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                  href="{{ url_for('remove_concert_from_favorite', id=concert["concert"]["concert_id"]) }}"
+                                  href="{{ url_for('add_concert_to_favorite', id=concert["concert"]["concert_id"]) }}"
                             >{{ _('Add to favorites') }}</a></p>
                         {% endif %}
                         {% if session["gcalendar"] %}
