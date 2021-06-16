@@ -57,7 +57,7 @@
                             {% if not concert['concert_is_ended'] %}
                                 <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
                                       data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
-                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"][concert_id]) }}">{{ _('Buy tickets') }}</a></p>
+                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"]['concert_id']) }}">{{ _('Buy tickets') }}</a></p>
                             {% endif %}
                         </div>
                     </div>
