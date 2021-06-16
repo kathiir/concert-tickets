@@ -1,14 +1,16 @@
 import json
+import sys
 from datetime import datetime
 
 from flask import request, make_response, jsonify, abort
 import os
 
+from google_calendar_back import add_concert_to_events
 from spotipy_back import get_concert_for_users_followed_artists
-from user_route import change_image, change_additional_user_token
+from user_route import change_image, change_additional_user_token, remove_additional_tokens
 from tickets import get_hall_with_zones, buy_tickets_mock, get_every_possible_ticket
 from favorite_route import add_sth_to_favorite, remove_sth_to_favorite, is_sth_favorite, get_every_possible_favorites
-from const_keys import SUCCESS_KEY
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY
 from very_complicated_logic import get_all_reviews, add_review_to_artist, get_all_info_about_concert, \
     add_review_to_concert, get_all_info_about_artist
 from config import app
@@ -86,6 +88,23 @@ def change_google_or_spotify_token():
         return json.dumps({SUCCESS_KEY: False}), 400, {'Content-Type': 'application/json'}
 
 
+@app.route('/user/additional_token', methods=['DELETE'])
+def delete_one_token():
+    data = simplify_json_result(
+        request.get_json())
+
+    try:
+        response = remove_additional_tokens(data)
+        return json.dumps(response), \
+               200,\
+               {'Content-Type': 'application/json'}
+
+    except ValueError as e:
+        return json.dumps({SUCCESS_KEY: False, DESCRIPTION_KEY: str(e)}), \
+               400, \
+               {'Content-Type': 'application/json'}
+
+
 @app.route('/user_short_info/<string:token>', methods=['get'])
 def user_short_info(token: str):
     response = {SUCCESS_KEY: True}
@@ -125,6 +144,22 @@ def get_all_favorites():
     response = get_every_possible_favorites(token)
 
     return json.dumps(response), 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/add_to_calendar', methods=['POST'])
+def add_all_to_calendar():
+    data = simplify_json_result(
+        request.get_json())
+    try:
+        response = add_concert_to_events(data)
+        return json.dumps(response), \
+               200, \
+               {'Content-Type': 'application/json'}
+
+    except ValueError as e:
+        return json.dumps({SUCCESS_KEY: False, DESCRIPTION_KEY: str(e)}), \
+        400, \
+        {'Content-Type': 'application/json'}
 
 
 @app.route('/user_followed_concerts')

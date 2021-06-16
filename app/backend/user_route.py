@@ -73,3 +73,34 @@ def change_additional_user_token(request: Dict[str, Any]) -> Dict[str, Any]:
 
     return recreate_token_for_response({SUCCESS_KEY: True},
                                        request['token'])
+
+
+def remove_additional_tokens(request: Dict[str, Any]) -> Dict[str, Any]:
+    approved_args = ['type', 'token']
+
+    if not check_keys_in_dict(request, approved_args):
+        raise ValueError("incorrect keys")
+
+    user = User.query\
+        .filter(User.user_token == request['token'])\
+        .first()
+
+    if not user:
+        raise ValueError(TOKEN_NOT_FOUND)
+
+    if request['type'] == 'google':
+        user.user_google_access_token = None
+        user.user_google_refresh_token = None
+        db.session.commit()
+        return recreate_token_for_response({SUCCESS_KEY: True},
+                                           request['token'])
+
+    if request['type'] == 'spotify':
+        user.user_spotify_access_token = None
+        user.user_spotify_refresh_token = None
+        user.user_spotify_token_exp_date = None
+        db.session.commit()
+        return recreate_token_for_response({SUCCESS_KEY: True},
+                                           request['token'])
+
+    raise ValueError("incorrect type")

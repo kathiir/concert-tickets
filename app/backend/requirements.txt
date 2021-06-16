@@ -6,3 +6,6 @@ Flask-SQLAlchemy~=2.5.1
 SQLAlchemy~=1.4.13
 validate_email
 validators
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
