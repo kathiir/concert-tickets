@@ -1,6 +1,8 @@
 from typing import Any, Dict
 
 import google_auth_oauthlib.flow
+import oauthlib
+from oauthlib.oauth2 import AccessDeniedError
 
 GOOGLE_OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'
 GOOGLE_OAUTH2_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
@@ -20,6 +22,7 @@ def get_google_auth_url_stateless(redirect_uri: str) -> str:
 
     authorization_url, state = flow.authorization_url(
         access_type='offline',
+        prompt='consent',
         include_granted_scopes='true')
 
     return authorization_url
@@ -34,6 +37,7 @@ def get_google_auth_url_stateful(redirect_uri: str, state: str) -> (str, str):
 
     authorization_url, state = flow.authorization_url(
         access_type='offline',
+        prompt='consent',
         state=state,
         include_granted_scopes='true')
 
@@ -66,10 +70,12 @@ def get_google_credentials_stateful(flask_request_url: str, redirect_uri: str, s
 
     flow.redirect_uri = redirect_uri
     authorization_response = flask_request_url
+
     flow.fetch_token(authorization_response=authorization_response)
 
     credentials = flow.credentials
     result = {'google_access_token': credentials.token,
-              'google_refresh_token': credentials.refresh_token}
+              'google_refresh_token': credentials.refresh_token,
+              'google_token_exp_date': credentials.expiry.isoformat()}
 
     return result

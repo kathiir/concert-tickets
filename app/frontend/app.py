@@ -515,6 +515,7 @@ def google_callback():
         if 'token' in session:
             redirect_uri = url_for('google_callback', _external=True)
             response = get_google_credentials_stateful(request.url, redirect_uri, 'state')
+
             if response:
                 response['token'] = session['token']
                 response = requests.post(back_uri + "user/additional_token", json=response)
@@ -526,11 +527,10 @@ def google_callback():
                 session['gcalendar'] = True
                 return redirect(url_for('settings_page'))
 
-    except ValueError:
-        return 400
+    except:
+        return redirect(url_for('settings_page'))
 
 
-# TODO
 @app.route('/add_to_gcalendar/<int:id>')
 def add_to_gcalendar(id):
     request_uri = back_uri + 'add_to_calendar'

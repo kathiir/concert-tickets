@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-16 18:14+0300\n"
-"PO-Revision-Date: 2021-06-16 18:20+0300\n"
+"POT-Creation-Date: 2021-06-17 17:34+0300\n"
+"PO-Revision-Date: 2021-06-17 17:35+0300\n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
@@ -20,27 +20,27 @@ msgstr ""
 "Last-Translator: \n"
 "X-Generator: Poedit 3.0\n"
 
-#: app.py:155
+#: app.py:158
 msgid "Incorrect login or password"
 msgstr "Неверный логин или пароль"
 
-#: app.py:196
+#: app.py:199
 msgid "This email already exists"
 msgstr "Данный e-mail занят"
 
-#: app.py:198
+#: app.py:201
 msgid "This login already exists"
 msgstr "Данный логин занят"
 
-#: app.py:261
+#: app.py:265
 msgid "Successfully changed user image"
 msgstr "Аватар успешно изменен"
 
-#: app.py:273
+#: app.py:277
 msgid "Successfully changed password"
 msgstr "Пароль успешно изменен"
 
-#: app.py:277
+#: app.py:281
 msgid "Failed to set new password"
 msgstr "Не удалось установить новый пароль"
 
@@ -75,11 +75,11 @@ msgid "Concerts"
 msgstr "Концерты"
 
 #: templates/artist.html:55 templates/artist.html:120
-#: templates/concert.html:103
+#: templates/concert.html:102
 msgid "Reviews"
 msgstr "Рецензии"
 
-#: templates/artist.html:60 templates/artist.html:180 templates/concert.html:93
+#: templates/artist.html:60 templates/artist.html:180 templates/concert.html:92
 msgid "Info"
 msgstr "Информация"
 
@@ -95,7 +95,7 @@ msgstr "Место"
 msgid "Date"
 msgstr "Дата проведения"
 
-#: templates/artist.html:135 templates/concert.html:118
+#: templates/artist.html:135 templates/concert.html:117
 msgid "Leave review"
 msgstr "Оставить рецензию"
 
@@ -115,12 +115,12 @@ msgstr "кред"
 msgid "Tickets for"
 msgstr "Билеты за"
 
-#: templates/buying.html:51 templates/concert.html:60 templates/index.html:40
+#: templates/buying.html:51 templates/concert.html:59 templates/index.html:40
 #: templates/index.html:65
 msgid "Buy tickets"
 msgstr "Купить билеты"
 
-#: templates/buying_confirm.html:2
+#: templates/buying_confirm.html:2 templates/calendar_confirm.html:2
 msgid "Confirmation"
 msgstr "Подтверждение"
 
@@ -129,6 +129,7 @@ msgid "Successfully bought tickets"
 msgstr "Билеты успешно приобретены"
 
 #: templates/buying_confirm.html:13 templates/buying_confirm.html:27
+#: templates/calendar_confirm.html:13 templates/calendar_confirm.html:22
 msgid "Return to Concert Page"
 msgstr "Вернуться к концертам"
 
@@ -140,11 +141,19 @@ msgstr "Перейти к билетам"
 msgid "Failed to buy tickets"
 msgstr "Не удалось приобрести билеты"
 
+#: templates/calendar_confirm.html:10
+msgid "Successfully added to calendar"
+msgstr "Успешно добавлено в календарь"
+
+#: templates/calendar_confirm.html:19
+msgid "Failed to add event to calendar"
+msgstr "Не удалось добавить событие в календарь"
+
 #: templates/concert.html:43
 msgid "Add to Calendar"
 msgstr "Добавить в календарь"
 
-#: templates/concert.html:67 templates/favorites.html:78
+#: templates/concert.html:66 templates/favorites.html:78
 #: templates/search.html:17
 msgid "Artists"
 msgstr "Артисты"

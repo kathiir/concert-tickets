@@ -119,6 +119,7 @@ class User(db.Model):
 
     user_google_refresh_token = db.Column(db.String(255), unique=False, nullable=True)
     user_google_access_token = db.Column(db.String(255), unique=False, nullable=True)
+    user_google_token_exp_date = db.Column(db.DateTime, unique=False, nullable=True)
 
     concert_reviews = db.relationship('ConcertReview', back_populates='user', lazy=True)
     artist_reviews = db.relationship('ArtistReview', back_populates='user', lazy=True)

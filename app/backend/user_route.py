@@ -1,11 +1,11 @@
+from datetime import datetime, timedelta
 from typing import Any, Dict
 
-from validators import url
-
 from auth_utils import recreate_token_for_response
-from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
 from models import User, db
 from utils import check_keys_in_dict
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
+from validators import url
 
 
 def change_image(request: Dict[str, Any]) -> Dict[str, Any]:
@@ -32,7 +32,8 @@ def change_image(request: Dict[str, Any]) -> Dict[str, Any]:
 
 def change_additional_user_token(request: Dict[str, Any]) -> Dict[str, Any]:
     google_request_keys = ['google_access_token',
-                           'google_refresh_token']
+                           'google_refresh_token',
+                           'google_token_exp_date']
 
     spotify_request_keys = ['spotify_access_token',
                             'spotify_refresh_token',
@@ -59,6 +60,7 @@ def change_additional_user_token(request: Dict[str, Any]) -> Dict[str, Any]:
 
         user.user_google_access_token = request['google_access_token']
         user.user_google_refresh_token = request['google_refresh_token']
+        user.user_google_token_exp_date = request['google_token_exp_date']
 
     if 'spotify_access_token' in request:
         if not request['spotify_access_token']:
@@ -91,6 +93,7 @@ def remove_additional_tokens(request: Dict[str, Any]) -> Dict[str, Any]:
     if request['type'] == 'google':
         user.user_google_access_token = None
         user.user_google_refresh_token = None
+        user.user_google_token_exp_date = None
         db.session.commit()
         return recreate_token_for_response({SUCCESS_KEY: True},
                                            request['token'])

@@ -149,8 +149,8 @@ def add_all_to_calendar():
                200, \
                {'Content-Type': 'application/json'}
 
-    except ValueError as e:
-        return json.dumps({SUCCESS_KEY: False, DESCRIPTION_KEY: str(e)}), \
+    except:
+        return json.dumps({SUCCESS_KEY: False}), \
         400, \
         {'Content-Type': 'application/json'}
 

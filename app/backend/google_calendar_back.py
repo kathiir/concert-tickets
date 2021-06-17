@@ -1,13 +1,15 @@
 import json
 from datetime import timedelta
-from typing import Any, Dict
 
-from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
+from typing import Any, Dict
+
 from auth_utils import recreate_token_for_response
-from const_keys import TOKEN_NOT_FOUND, SUCCESS_KEY
+from const_keys import TOKEN_NOT_FOUND, SUCCESS_KEY, DESCRIPTION_KEY
 from models import User, db, Concert
 from utils import check_keys_in_dict
 
@@ -37,18 +39,27 @@ def add_concert_to_events(request: Dict[str, Any]) -> Dict[str, Any]:
     if not user.user_google_access_token:
         raise ValueError("google token not found")
 
-    json1_file = open('credentials.json')
-    json1_str = json1_file.read()
-    cred_data = json.loads(json1_str)['web']
+    with open('credentials.json', 'r') as json1_file:
+        json1_str = json1_file.read()
+        cred_data = json.loads(json1_str)['web']
 
-    cred_data['token'] = user.user_google_access_token
-    cred_data['refresh_token'] = user.user_google_access_token
+        cred_data['token'] = user.user_google_access_token
+        cred_data['refresh_token'] = user.user_google_access_token
+        cred_data['expiry'] = user.user_google_token_exp_date.isoformat()
 
     creds = Credentials.from_authorized_user_info(cred_data, scopes=scopes)
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+    try:
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+                user.user_google_access_token = creds.token
+                user.user_google_refresh_token = creds.refresh_token
+                user.user_google_token_exp_date = creds.expiry.isoformat()
+                db.session.commit()
+    except RefreshError:
+        return recreate_token_for_response({SUCCESS_KEY: False,
+                                            DESCRIPTION_KEY: "can't refresh token"})
 
     service = build('calendar', 'v3', credentials=creds)
 
