@@ -472,16 +472,16 @@ def spotipy_callback():
     try:
         response = pass_response(req)
 
-        if 'token' in session:
-            response['token'] = session['token']
+        if 'token' in response:
+            session['logged_in'] = True
+            session['token'] = response['token']
 
         if response:
-            response = requests.post(back_uri + "/user/additional_token", json=response)
+            response = requests.post(back_uri + "user/additional_token", json=response)
             response = response.json()
 
-            if 'token' in response:
-                session['token'] = response['token']
             session['spotify'] = True
+            session.modified = True
             return redirect(url_for('settings_page'))
 
     except ValueError:
@@ -494,7 +494,7 @@ def remove_spotipy():
     data = {'token': session['token'],
             'type': 'spotify'
             }
-    request_uri = back_uri + 'additional_token'
+    request_uri = back_uri + 'user/additional_token'
     request_uri += f"?{urllib.parse.urlencode(data)}"
     response = requests.delete(request_uri).json()
     if 'token' in response:
@@ -554,7 +554,7 @@ def remove_google():
     data = {'token': session['token'],
             'type': 'google'
             }
-    request_uri = back_uri + 'additional_token'
+    request_uri = back_uri + 'user/additional_token'
     request_uri += f"?{urllib.parse.urlencode(data)}"
     response = requests.delete(request_uri).json()
     if 'token' in response:

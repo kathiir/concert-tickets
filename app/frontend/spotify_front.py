@@ -53,7 +53,8 @@ def pass_response(spotify_response: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     result = {
         'spotify_access_token': token_info_response['access_token'],
         'spotify_refresh_token': token_info_response['refresh_token'],
-        'spotify_exp_date': (datetime.now() + timedelta(seconds=token_info_response['expires_in'])).isoformat()
+        'spotify_exp_date': (datetime.now() + timedelta(seconds=token_info_response['expires_in'])).isoformat(),
+        'token': spotify_response['state']
     }
 
     return result
