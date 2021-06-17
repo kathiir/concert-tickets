@@ -1,17 +1,16 @@
 import hashlib
 import random
 import secrets
-
 from datetime import datetime, timedelta
 from typing import Any, Dict
 
 from sqlalchemy import or_
 from validate_email import validate_email
 
-from utils import check_keys_in_dict
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
 from models import User
 from models import db
-from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
+from utils import check_keys_in_dict
 
 
 def registration_check(input: Dict[str, Any]) -> Dict[str, Any]:

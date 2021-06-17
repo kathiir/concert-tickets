@@ -1,28 +1,23 @@
 import json
-import sys
+import os
 from datetime import datetime
 
 from flask import request, make_response, jsonify, abort
-import os
-
-from flask_accept import accept
-
-from google_calendar_back import add_concert_to_events
-from spotipy_back import get_concert_for_users_followed_artists
-from user_route import change_image, change_additional_user_token, remove_additional_tokens
-from tickets import get_hall_with_zones, buy_tickets_mock, get_every_possible_ticket
-from favorite_route import add_sth_to_favorite, remove_sth_to_favorite, is_sth_favorite, get_every_possible_favorites
-from const_keys import SUCCESS_KEY, DESCRIPTION_KEY
-from very_complicated_logic import get_all_reviews, add_review_to_artist, get_all_info_about_concert, \
-    add_review_to_concert, get_all_info_about_artist
-from config import app
-from genius_api import Genius
-from spotify_api import Spotify
 
 from auth_utils import register_user_with_response, login_user_by_login_and_pass, recreate_token_for_response, \
     change_passwd
-
+from config import app
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY
+from favorite_route import add_sth_to_favorite, remove_sth_to_favorite, is_sth_favorite, get_every_possible_favorites
+from genius_api import Genius
+from google_calendar_back import add_concert_to_events
+from spotify_api import Spotify
+from spotipy_back import get_concert_for_users_followed_artists
+from tickets import get_hall_with_zones, buy_tickets_mock, get_every_possible_ticket
+from user_route import change_image, change_additional_user_token, remove_additional_tokens
 from utils import simplify_json_result
+from very_complicated_logic import get_all_reviews, add_review_to_artist, get_all_info_about_concert, \
+    add_review_to_concert, get_all_info_about_artist
 
 genius = Genius()
 spotify = Spotify()
@@ -41,8 +36,7 @@ def not_found(error):
 # nickname, email, password, password_check
 @app.route('/registration', methods=['POST'])
 def register_user():
-    aaaa = request.get_json()
-    data = simplify_json_result(aaaa)
+    data = simplify_json_result(request.get_json())
     response = register_user_with_response(data)
     return json.dumps(response), 200, {'Content-Type': 'application/json'}
 
@@ -92,8 +86,7 @@ def change_google_or_spotify_token():
 
 @app.route('/user/additional_token', methods=['DELETE'])
 def delete_one_token():
-    data = request.get_json()
-
+    data = request.args.to_dict()
     try:
         response = remove_additional_tokens(data)
         return json.dumps(response), \
@@ -195,7 +188,7 @@ def add_to_favorite():
 # return success, token (if expires), description (if fail)
 @app.route('/favorite/remove', methods=['DELETE'])
 def remove_from_favorite():
-    data = request.get_json()
+    data = request.args.to_dict()
     try:
         response = remove_sth_to_favorite(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -234,7 +227,7 @@ def get_reviews(query_type, id):
 # returns: success, description
 @app.route('/add_artist_review', methods=['POST'])
 def add_artist_review():
-    data = request.get_json()
+    data = request.get_json()  #TODO possible list
     try:
         response = add_review_to_artist(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -332,7 +325,7 @@ def get_concert_by_id(concert_id):
 # returns: success, description
 @app.route('/add_concert_review', methods=['POST'])
 def add_concert_review():
-    data = request.get_json()
+    data = request.get_json()  # TODO possible list
     try:
         response = add_review_to_concert(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -416,23 +409,9 @@ def concerts_by_spotify_following():
 
 @app.route('/', methods=['GET'])
 def get_start():
-    return '''
-        ,----,
-   ___.`      `,
-   `===  D     :
-     `'.      .'
-        )    (    Hello World!   ,
-       /      \_________________/|
-      /                          |
-     |                           ;
-     |               _____       /
-     |      \       ______7    ,'
-     |       \    ______7     /
-      \       `-,____7      ,'   jgs
-^~^~^~^`\                  /~^~^~^~^
-  ~^~^~^ `----------------' ~^~^~^
- ~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~
-''', 200, {"content-type": "text/plain"}
+    with open('this_is_fine') as file:
+
+        return file.read(), 200, {"content-type": "text/plain"}
 
 
 if True:

@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
 from typing import Any, Dict
 
+from validators import url
+
 from auth_utils import recreate_token_for_response
+from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
 from models import User, db
 from utils import check_keys_in_dict
-from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
-from validators import url
 
 
 def change_image(request: Dict[str, Any]) -> Dict[str, Any]:

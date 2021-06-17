@@ -1,11 +1,10 @@
 import json
 from datetime import timedelta
-
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-from googleapiclient.discovery import build
-
 from typing import Any, Dict
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 from auth_utils import recreate_token_for_response
 from const_keys import TOKEN_NOT_FOUND, SUCCESS_KEY

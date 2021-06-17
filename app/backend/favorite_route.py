@@ -1,4 +1,3 @@
-import json
 from typing import Dict, Any
 
 from auth_utils import recreate_token_for_response

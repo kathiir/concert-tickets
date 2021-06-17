@@ -1,15 +1,15 @@
 from datetime import datetime
 from typing import Any, Dict
 
+from sqlalchemy import func, and_
+
+from auth_utils import recreate_token_for_response
+from config import db
+from const_keys import ARTIST_CONCERT_TYPES, SUCCESS_KEY, TOKEN_NOT_FOUND, DESCRIPTION_KEY, BAN_KEY
 from genius_api import Genius
 from models import ArtistReview, artist_review_schema, concert_review_schema, ConcertReview, User, Artist, Concert, \
     concert_schema, artist_schema
-from config import db
 from utils import check_keys_in_dict
-from auth_utils import recreate_token_for_response
-from const_keys import ARTIST_CONCERT_TYPES, SUCCESS_KEY, TOKEN_NOT_FOUND, DESCRIPTION_KEY, BAN_KEY
-
-from sqlalchemy import func, and_
 
 
 def get_all_reviews(id: int, query_type: str) -> Dict[str, Any]:

@@ -1,16 +1,16 @@
 import datetime
-import json
-
-import requests
 import os
-from flask import request, render_template, abort, redirect, url_for, session, jsonify
+import urllib.parse
+
+import cloudinary.uploader
+import requests
+from flask import request, render_template, abort, redirect, url_for, session
 from flask_babel import gettext
 from flask_cors import cross_origin
 
+from config import app, babel, back_uri, cloud
 from google_front import get_google_auth_url_stateful, get_google_credentials_stateful
 from spotify_front import get_spotify_auth_url, pass_response
-from config import app, babel, back_uri, cloud
-import cloudinary.uploader
 
 
 @app.template_filter('dt')
@@ -73,7 +73,8 @@ def remove_artist_from_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/remove'
-    response = requests.delete(request_uri, json=data).json()
+    request_uri += f"?{urllib.parse.urlencode(data)}"
+    response = requests.delete(request_uri).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -99,7 +100,8 @@ def remove_concert_from_favorite(id):
             'id': id
             }
     request_uri = back_uri + 'favorite/remove'
-    response = requests.delete(request_uri, json=data).json()
+    request_uri += f"?{urllib.parse.urlencode(data)}"
+    response = requests.delete(request_uri).json()
     if 'token' in response:
         session['token'] = response['token']
     return redirect(request.referrer)
@@ -107,7 +109,8 @@ def remove_concert_from_favorite(id):
 
 @app.route('/')
 def index_page():
-    request_uri = back_uri + '/concerts?per_page=100&' + 'city_id=' + (session['city'] if 'city' in session else str(1))
+    request_uri = back_uri + '/concerts?per_page=100&' + 'city_id=' + (
+        str(session['city']) if 'city' in session else str(1))
     response = requests.get(request_uri)
     jason = response.json()['concerts']
     spot = []
@@ -129,7 +132,7 @@ def index_page():
 @app.route('/login', methods=["GET", "POST"])
 def login_page():
     if 'logged_in' in session and session['logged_in']:
-        redirect(request.referrer)
+        return redirect(url_for('index_page'))
     messages = []
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
@@ -168,7 +171,7 @@ def logout():
 @app.route('/registration', methods=["GET", "POST"])
 def registration_page():
     if 'logged_in' in session and session['logged_in']:
-        redirect(request.referrer)
+        return redirect(url_for('index_page'))
     messages = []
     if request.method == 'POST':
         data = request.form.to_dict(flat=False)
@@ -205,7 +208,7 @@ def registration_page():
 @app.route('/tickets')
 def tickets_page():
     if 'logged_in' not in session or not session['logged_in']:
-        return redirect(request.referrer)
+        return redirect(url_for('login_page'))
 
     tickets = []
 
@@ -224,7 +227,7 @@ def tickets_page():
 @app.route('/favorites')
 def favorites_page():
     if 'logged_in' not in session or not session['logged_in']:
-        return redirect(request.referrer)
+        return redirect(url_for('login_page'))
 
     request_uri = back_uri + 'favorites?token=' + session['token']
     response = requests.get(request_uri).json()
@@ -245,8 +248,8 @@ def favorites_page():
 def settings_page():
     messages = []
     if 'logged_in' not in session or not session['logged_in']:
-        return redirect(request.referrer)
-    # TODO make request for info
+        return redirect(url_for('login_page'))
+
     if request.method == 'POST':
         if 'image-change' in request.form:
             file_to_upload = request.files['img']
@@ -276,6 +279,16 @@ def settings_page():
                     session['token'] = response['token']
             else:
                 messages.append(gettext('Failed to set new password'))
+
+    request_uri = back_uri + 'user_profile/' + session['token']
+    response = requests.get(request_uri).json()
+    if 'token' in response:
+        session['token'] = response['token']
+    if response['success']:
+        session['username'] = response['user']['username']
+        session['user_photo'] = response['user']['user_photo']
+        session['g_calendar'] = response['user']['user_gcalendar_token']
+        session['spotify'] = response['user']['user_spotify_token']
 
     return render_template(
         'settings.html', messages=messages
@@ -402,7 +415,7 @@ def buy_page(id):
         }
         f = request.form
         for h in halls['hall_zone']:
-            ar = f['h'+str(h['hall_zone_id'])]
+            ar = f['h' + str(h['hall_zone_id'])]
             zone = {
                 "hall_zone_id": str(h['hall_zone_id']),
                 "amount": ar
@@ -459,12 +472,12 @@ def spotipy_callback():
     try:
         response = pass_response(req)
 
+        if 'token' in session:
+            response['token'] = session['token']
+
         if response:
             response = requests.post(back_uri + "/user/additional_token", json=response)
             response = response.json()
-
-            if 'token' in session:
-                print("aaaaa")
 
             if 'token' in response:
                 session['token'] = response['token']
@@ -475,17 +488,22 @@ def spotipy_callback():
         return 400
 
 
-# TODO
 @app.route('/spotipy/remove')
 def remove_spotipy():
     session['spotify'] = False
+    data = {'token': session['token'],
+            'type': 'spotify'
+            }
+    request_uri = back_uri + 'additional_token'
+    request_uri += f"?{urllib.parse.urlencode(data)}"
+    response = requests.delete(request_uri).json()
+    if 'token' in response:
+        session['token'] = response['token']
     return redirect(url_for('settings_page'))
 
 
 @app.route('/google')
 def google():
-    'https://127.0.0.1:5005/google/callback'
-
     redirect_uri = url_for('google_callback', _external=True)
     url, state = get_google_auth_url_stateful(redirect_uri, "state")
     return redirect(url)
@@ -512,21 +530,40 @@ def google_callback():
         return 400
 
 
+# TODO
 @app.route('/add_to_gcalendar/<int:id>')
 def add_to_gcalendar(id):
-    # TODO
-    return redirect(url_for('concert_page', id=id))
+    request_uri = back_uri + 'add_to_calendar'
+    data = {
+        "concert_id": id,
+        "token": session['token']
+    }
+    response = requests.post(request_uri, json=data).json()
+    if 'token' in response:
+        session['token'] = response['token']
+
+    if response['success']:
+        return render_template('calendar_confirm.html', success='success', id=id)
+    else:
+        return render_template('calendar_confirm.html', success='failure', id=id)
 
 
-# TODO
 @app.route('/google/remove')
 def remove_google():
     session['gcalendar'] = False
+    data = {'token': session['token'],
+            'type': 'google'
+            }
+    request_uri = back_uri + 'additional_token'
+    request_uri += f"?{urllib.parse.urlencode(data)}"
+    response = requests.delete(request_uri).json()
+    if 'token' in response:
+        session['token'] = response['token']
     return redirect(url_for('settings_page'))
 
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(' http://127.0.0.1:5000/')
-    app.run(host='localhost', port=port,
-            ssl_context=('cert.pem', 'key.pem'))
+    app.run(host='0.0.0.0', port=port,
+            ssl_context=('cert.pem', 'key.pem'))  # TODO

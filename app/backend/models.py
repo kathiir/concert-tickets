@@ -220,8 +220,8 @@ class UserSchema(SQLAlchemySchema):
     username = auto_field()
     user_email = auto_field()
     user_photo = auto_field()
-    user_spotify_token = IsExistsBoolField(attribute="user_spotify_token")
-    user_gcalendar_token = IsExistsBoolField(attribute="user_gcalendar_token")
+    user_spotify_token = IsExistsBoolField(attribute="user_spotify_refresh_token")
+    user_gcalendar_token = IsExistsBoolField(attribute="user_google_refresh_token")
 
 
 class UserSimplifiedSchema(SQLAlchemySchema):

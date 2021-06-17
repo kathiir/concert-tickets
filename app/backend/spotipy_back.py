@@ -50,8 +50,8 @@ def request_for_token(user: User) -> Optional[str]: # returns access token
 # access token - valid for one hour, refresh token - ¯\_(ツ)_/¯
 # (no actions without refresh token), but access token must be set
 def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
-    user = User.query\
-        .filter(User.user_token == token)\
+    user = User.query \
+        .filter(User.user_token == token) \
         .first()
 
     if not user:
@@ -77,7 +77,7 @@ def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
                'Content-Type': 'application/json',
                'Accept': 'application/json'}
 
-    spotify_response = requests\
+    spotify_response = requests \
         .get(url, headers=headers)
 
     try:
@@ -90,13 +90,18 @@ def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
 
     concerts = list()
 
+    if len(spotify_response['artists']) == 0:
+        response['concerts'] = concerts
+        return recreate_token_for_response(response, token)
+
     for item in spotify_response['artists']['items']:
-        artist = Artist.query\
-            .filter(Artist.artist_spotify_id == item['id'])\
+        artist = Artist.query \
+            .filter(Artist.artist_spotify_id == item['id']) \
             .first()
 
-        concerts.extend([concert_simpl_schema.dump(x)
-                         for x in artist.performances])
+        if artist:
+            concerts.extend([concert_simpl_schema.dump(x)
+                             for x in artist.performances])
 
     response['concerts'] = concerts
     return recreate_token_for_response(response, token)

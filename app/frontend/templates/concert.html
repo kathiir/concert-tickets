@@ -56,8 +56,7 @@
                             <p class="">{{ concert["concert"]["concert_date"]|dt }}</p>
                             {% if not concert['concert_is_ended'] %}
                                 <p><a tabindex="0" class="btn btn-lg btn-primary text-light" role="button"
-                                      data-bs-toggle="popover" data-bs-trigger="focus" title="Ticket"
-                                      data-bs-content="You bought ticket!" href="{{ url_for('buy_page', id=concert["concert"]['concert_id']) }}">{{ _('Buy tickets') }}</a></p>
+                                       href="{{ url_for('buy_page', id=concert["concert"]['concert_id']) }}">{{ _('Buy tickets') }}</a></p>
                             {% endif %}
                         </div>
                     </div>
@@ -167,14 +166,6 @@
 {% block scripts %}
 
     <script>
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl)
-        })
-        var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
-            trigger: 'focus'
-        })
-
         $("#input-id").rating();
     </script>
 

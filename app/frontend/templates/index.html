@@ -159,7 +159,7 @@
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concert["concert_address"] }} </p>
+                                    <p class="card-text me-auto">{{ concert["hall"]['hall_name'] }} </p>
                                     <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
                                 <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"

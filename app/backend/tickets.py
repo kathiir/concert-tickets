@@ -1,14 +1,12 @@
-import json
+from datetime import datetime
 from typing import Any, Dict
 
 from sqlalchemy import and_
 
-from utils import check_keys_in_dict
 from auth_utils import recreate_token_for_response
-from models import Concert, db, hall_simpl_schema, Ticket, User, HallZone
 from const_keys import SUCCESS_KEY, DESCRIPTION_KEY, TOKEN_NOT_FOUND
-
-from datetime import datetime
+from models import Concert, db, hall_simpl_schema, Ticket, User, HallZone
+from utils import check_keys_in_dict
 
 
 def get_hall_with_zones(concert_id: int) -> Dict[str, Any]:
