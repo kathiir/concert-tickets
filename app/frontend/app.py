@@ -312,7 +312,7 @@ def contacts_page():
 @app.route('/search', methods=['GET', 'POST'])
 def search_page():
     request_uri = back_uri + '/concert/s/' + request.args.get('search') + '?city_id=' + \
-                  (session['city'] if 'city' in session else str(1))
+                  (str(session['city']) if 'city' in session else str(1))
     response = requests.get(request_uri)
     concerts = response.json()['concerts']
 
@@ -564,6 +564,6 @@ def remove_google():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    print(' http://127.0.0.1:5000/')
+    print(' https://127.0.0.1:5000/')
     app.run(host='0.0.0.0', port=port,
             ssl_context=('cert.pem', 'key.pem'))  # TODO
