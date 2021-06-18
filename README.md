@@ -14,6 +14,8 @@
 
 [Swagger](https://app.swaggerhub.com/apis-docs/kathiir/ConcertHallApi/1.0.0) - swagger документация
 
+[Скриншоты метрик](https://github.com/kathiir/concert-tickets/tree/main/Documentation/Metrics)
+
 Документы располагаются в папке Documentation.
 
 # Приложение
