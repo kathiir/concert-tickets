@@ -138,5 +138,5 @@ cid_secr.*
 /app/backend/genius_key.py
 /app/backend/config.py
 /app/frontend/config.py
-
+/app/admin_panel/config.py
 *.pem

@@ -1,15 +1,16 @@
 import traceback
 
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for
 from sqlalchemy import asc
 from config import app
 from models import db, Concert, ConcertReview, User
-import datetime
+
 
 @app.template_filter('dt')
 def _jinja2_filter_datetime(date):
     ret = date.strftime('%d %B %Y %H:%M')
     return ret
+
 
 @app.route('/сoncerts', methods=['GET'])
 def concerts_find():
@@ -24,11 +25,12 @@ def concerts_find():
         .filter(Concert.concert_name.ilike(name_search)).order_by(asc(Concert.concert_name))
     return render_template("concerts.html", concerts=all_rows.all())
 
+
 @app.route('/concerts', methods=['GET'])
 def concerts():
-
     all_concerts = Concert.query.order_by(asc(Concert.concert_name)).all()
     return render_template("concerts.html", concerts=all_concerts)
+
 
 @app.route('/concerts/edit', methods=['POST'])
 def edit_concert():
@@ -43,6 +45,7 @@ def edit_concert():
         traceback.print_exc()
 
     return redirect(url_for('concerts'))
+
 
 @app.route('/concerts/status', methods=['POST'])
 def concert_status():
@@ -64,24 +67,28 @@ def concert_status():
         traceback.print_exc()
     return redirect(url_for('concerts'))
 
+
 @app.route('/reviews/<int:id>', methods=['GET'])
 def get_reviews(id):
     concert = Concert.query.filter(Concert.concert_id == id).first()
-    all_reviews = ConcertReview.query.filter(ConcertReview.concert_id == id).order_by(asc(ConcertReview.concert_review_id)).all()
+    all_reviews = ConcertReview.query.filter(ConcertReview.concert_id == id).order_by(
+        asc(ConcertReview.concert_review_id)).all()
     users = User.query.all()
 
-    return render_template("concertreviews.html", concert_reviews = all_reviews, concert = concert, users = users)
+    return render_template("concertreviews.html", concert_reviews=all_reviews, concert=concert, users=users)
+
 
 @app.route('/reviews/<int:id>/delete', methods=['POST'])
 def review_delete(id):
     try:
-       id_review = request.form.get('concert_review')
-       review = ConcertReview.query.filter(ConcertReview.concert_review_id == id_review).first()
-       db.session.delete(review)
-       db.session.commit()
+        id_review = request.form.get('concert_review')
+        review = ConcertReview.query.filter(ConcertReview.concert_review_id == id_review).first()
+        db.session.delete(review)
+        db.session.commit()
     except Exception:
         return redirect(url_for('get_reviews'))
     return redirect(url_for('get_reviews', id=id))
+
 
 @app.route('/reviews/<int:id>/edit', methods=['POST'])
 def edit_review(id):

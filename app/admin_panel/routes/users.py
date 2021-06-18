@@ -5,6 +5,7 @@ from sqlalchemy import asc
 from config import app
 from models import db, User
 
+
 @app.route('/users', methods=['GET'])
 def users_find():
     name_to_find = request.args.get("name")
@@ -17,6 +18,7 @@ def users_find():
     all_rows = User.query \
         .filter(User.username.ilike(name_search)).order_by(asc(User.username))
     return render_template("users.html", users=all_rows.all())
+
 
 @app.route('/users', methods=['GET'])
 def users():
@@ -36,6 +38,7 @@ def ban_user():
     except Exception:
         traceback.print_exc()
     return redirect(url_for('users'))
+
 
 @app.route('/users/role', methods=['POST'])
 def role_user():

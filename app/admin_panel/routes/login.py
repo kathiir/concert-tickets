@@ -1,10 +1,6 @@
-import traceback
 import hashlib
-import random
-import secrets
 
 from flask import render_template, request, redirect, url_for, session
-from datetime import datetime, timedelta
 from sqlalchemy import or_
 from config import app
 from models import db, User
@@ -48,6 +44,7 @@ def logout():
     session.clear()
     return render_template("index.html")
 
+
 def check_pass(passwd: str, passwd_with_hash: str) -> bool:
     passwd_hash = passwd_with_hash.split('@', 2)[0]
     salt = passwd_with_hash.split('@', 2)[1]
@@ -56,6 +53,7 @@ def check_pass(passwd: str, passwd_with_hash: str) -> bool:
         return True
 
     return False
+
 
 def hash_password_using_salt(passwd: str, salt: str):
     assert len(salt) == 32
@@ -69,5 +67,3 @@ def hash_password_using_salt(passwd: str, salt: str):
                        + salt[-4:]
 
     return hashlib.sha256(passwd_with_salt.encode()).hexdigest()
-
-
