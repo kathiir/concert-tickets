@@ -30,3 +30,11 @@
 
 [Видео - 2 аттестация](https://drive.google.com/file/d/1shVogPnqZXSquo5FvBLFNWAXKGXKJDi8/view?usp=sharing)
 
+# Разрабатывали
+
+Группа 3.1
+
+- Булавина Е.П.
+- Петров Ю.В.
+- Горбушин В.А.
+
