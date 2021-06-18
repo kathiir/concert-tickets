@@ -227,7 +227,7 @@ def get_reviews(query_type, id):
 # returns: success, description
 @app.route('/add_artist_review', methods=['POST'])
 def add_artist_review():
-    data = request.get_json()  #TODO possible list
+    data = request.get_json()
     try:
         response = add_review_to_artist(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -268,7 +268,7 @@ def get_concert_list():
     if city_id := request.args.get('city_id'):
 
         result = result.join(Hall).join(City)\
-            .filter(City.city_id == int(city_id))  # фласк сильно просил джоины, хотя работал
+            .filter(City.city_id == int(city_id))
 
     result = result.filter(Concert.concert_date > datetime.now())\
         .order_by(Concert.concert_date.asc()) \
@@ -292,7 +292,7 @@ def get_concert_search(concert_name):
     if city_id := request.args.get('city_id'):
 
         result = result.join(Hall).join(City)\
-            .filter(City.city_id == int(city_id))  # получил джоины за хорошую работу ¯\_(ツ)_/¯
+            .filter(City.city_id == int(city_id))
 
     result = result \
         .order_by(Concert.concert_date.asc())\
@@ -325,7 +325,7 @@ def get_concert_by_id(concert_id):
 # returns: success, description
 @app.route('/add_concert_review', methods=['POST'])
 def add_concert_review():
-    data = request.get_json()  # TODO possible list
+    data = request.get_json()
     try:
         response = add_review_to_concert(data)
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
@@ -422,7 +422,7 @@ if True:
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5005))
-    # print(' http://127.0.0.1:5000/')
-    # app.run(host='0.0.0.0', port=port)
-    app.run(host='127.0.0.1', port=port)
+    print(' http://127.0.0.1:5005/')
+    app.run(host='0.0.0.0', port=port)
+    # app.run(host='127.0.0.1', port=port)
     # app.run(host='0.0.0.0', port=1337)
