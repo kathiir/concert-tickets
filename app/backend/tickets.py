@@ -101,8 +101,10 @@ def buy_tickets_mock(request: Dict[str, Any]) -> Dict[str, Any]:
 
     db.session.commit()
 
-    return recreate_token_for_response({SUCCESS_KEY: True},
-                                       request['token'])
+    if 'token' in request:
+        return recreate_token_for_response({SUCCESS_KEY: True},
+                                           request['token'])
+    return {SUCCESS_KEY: True}
 
 
 # CONCERT NAME, CONCERT DATE, HALL NAME, PRICE
