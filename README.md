@@ -10,6 +10,8 @@
 
 [Курсовая](https://github.com/kathiir/concert-tickets/blob/main/Documentation/%D0%9A%D1%83%D1%80%D1%81%D0%BE%D0%B2%D0%B0%D1%8F_%D0%B0%D1%82%D1%822.pdf) - pdf версия курсовой работы.
 
+[Презентация](https://github.com/kathiir/concert-tickets/blob/main/Documentation/%D0%9F%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F.pdf) - pdf версия презентации.
+
 [Отчетный документ](https://github.com/kathiir/concert-tickets/blob/main/Documentation/%D0%9E%D1%82%D1%87%D0%B5%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82.pdf)
 
 [Swagger](https://app.swaggerhub.com/apis-docs/kathiir/ConcertHallApi/1.0.0) - swagger документация
