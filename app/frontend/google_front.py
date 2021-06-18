@@ -1,8 +1,6 @@
 from typing import Any, Dict
 
 import google_auth_oauthlib.flow
-import oauthlib
-from oauthlib.oauth2 import AccessDeniedError
 
 GOOGLE_OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'
 GOOGLE_OAUTH2_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'

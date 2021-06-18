@@ -504,7 +504,8 @@ def remove_spotipy():
 
 @app.route('/google')
 def google():
-    redirect_uri = url_for('google_callback', _external=True)
+    redirect_uri = url_for('google_callback', _external=True, _scheme='https')
+    redirect_uri = 'https://concert-hall-front.herokuapp.com/google/callback'
     url, state = get_google_auth_url_stateful(redirect_uri, "state")
     return redirect(url)
 
@@ -513,8 +514,12 @@ def google():
 def google_callback():
     try:
         if 'token' in session:
-            redirect_uri = url_for('google_callback', _external=True)
-            response = get_google_credentials_stateful(request.url, redirect_uri, 'state')
+            redirect_uri = url_for('google_callback', _external=True, _scheme='https')
+            redirect_uri = 'https://concert-hall-front.herokuapp.com/google/callback'
+            url = request.url
+            if not request.url.startswith('https'):
+                url = request.url.replace('http', 'https', 1)
+            response = get_google_credentials_stateful(url, redirect_uri, 'state')
 
             if response:
                 response['token'] = session['token']
@@ -525,8 +530,7 @@ def google_callback():
                     session['token'] = response['token']
 
                 session['gcalendar'] = True
-                return redirect(url_for('settings_page'))
-
+                return redirect(url_for('settings_page', _external=True, _scheme='https'))
     except:
         return redirect(url_for('settings_page'))
 
@@ -564,6 +568,6 @@ def remove_google():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    print(' https://127.0.0.1:5000/')
-    app.run(host='0.0.0.0', port=port,
-            ssl_context=('cert.pem', 'key.pem'))  # TODO
+    # app.run(host='0.0.0.0', port=port,
+    #         ssl_context=('cert.pem', 'key.pem'))
+    app.run(host='0.0.0.0', port=port)
