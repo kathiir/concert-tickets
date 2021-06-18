@@ -1,91 +1,105 @@
 {% extends "base.html" %}
-{% block title %}Concert Hall{% endblock %}
+{% block title %}{{ _('Concert Hall') }}{% endblock %}
 
 {% block content %}
 
 
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                     aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#aaa"/>
-                </svg>
-                {# TODO #}
-
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                        <h1 class="display-2">{{ concerts[0]["concert_name"] }}</h1>
-                        <p>{{ concerts[0]["concert_address"] }} <i
-                                class="bi bi-dot"></i> {{ concerts[0]["concert_date"]|dt }}</p>
-                        <p><a class="btn btn-lg btn-primary text-light"
-                              href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">Buy
-                            tickets</a></p>
-                    </div>
-                </div>
+    {% if concerts|length > 0 %}
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                {% if concerts[1] %}
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                    {% if concerts[1] %}
+                        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2"
+                                aria-label="Slide 3"></button>
+                    {% endif %}
+                {% endif %}
             </div>
-            {% for n in range(2) %}
-                <div class="carousel-item">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                          aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#aaa"/>
+                        <rect width="100%" height="100%" fill="#aaa"></rect>
                     </svg>
 
-                    <div class="container">
-                        <div class="carousel-caption">
-                            <div class="text-start">
-                                <h1 class="display-2">{{ concerts[n+1]["concert_name"] }}</h1>
-                                <p>{{ concerts[n+1]["concert_address"] }} <i
-                                        class="bi bi-dot"></i> {{ concerts[n+1]["concert_date"]|dt }}</p>
-                                <p><a class="btn btn-lg btn-primary text-light"
-                                      href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">Buy
-                                    tickets</a></p>
+                    <div class="carousel-caption container row" style="height: 370px;">
+                        {% if concerts[0]["concert_photo"] %}
+                            <div class="col col-4 d-none d-lg-block me-3">
+                                <img class="img-cover shadow " width="300" height="300"
+                                     src="{{ concerts[0]["concert_photo"] }}" alt="img">
                             </div>
-
-
+                        {% endif %}
+                        <div class="col text-start py-5">
+                            <h1 class="display-2">{{ concerts[0]["concert_name"] }}</h1>
+                            <p>{{ concerts[0]["hall"]['hall_name'] }} <i
+                                    class="bi bi-dot"></i> {{ concerts[0]["concert_date"]|dt }}</p>
+                            <p><a class="btn btn-lg btn-primary text-light"
+                                  href="{{ url_for('concert_page', id=concerts[0]["concert_id"]) }}">{{  _('Buy tickets') }}</a></p>
                         </div>
-
                     </div>
                 </div>
-            {% endfor %}
+                {% for n in range(2) %}
+                    {% if concerts[n+1] %}
+                        <div class="carousel-item">
+                            <svg class="bd-placeholder-img" width="100%" height="100%"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <rect width="100%" height="100%" fill="#aaa"></rect>
+                            </svg>
+
+                            <div class="carousel-caption container row" style="height: 370px;">
+                                {% if concerts[n+1]["concert_photo"] %}
+                                    <div class="col col-4 d-none d-lg-block me-3">
+                                        <img class="img-cover shadow " width="300" height="300"
+                                             src="{{ concerts[n+1]["concert_photo"] }}" alt="img">
+                                    </div>
+                                {% endif %}
+                                <div class="col text-start py-5">
+                                    <h1 class="display-2">{{ concerts[n+1]["concert_name"] }}</h1>
+                                    <p>{{ concerts[0]["hall"]['hall_name'] }} <i
+                                            class="bi bi-dot"></i> {{ concerts[n+1]["concert_date"]|dt }}</p>
+                                    <p><a class="btn btn-lg btn-primary text-light"
+                                          href="{{ url_for('concert_page', id=concerts[n+1]["concert_id"]) }}">{{  _('Buy tickets') }}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+    {% endif %}
 
     <div class="container">
 
         {% if session['logged_in'] and session['spotify'] %}
 
-            <div class="ms-5 mb-2 d-flex">
-                <span class="fs-1 fw-light underline">Recommendations</span>
+            <div class="mb-2 d-flex">
+                <span class="fs-1 fw-light underline">{{ _('Recommendations') }}</span>
                 <img src="../static/spotify/Spotify_Logo_RGB_Green.png" class="img-fluid mt-3 ms-2"
                      style="height: 2.5rem;"
                      alt="Spotify">
             </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-                {% for n in range(15, 18) %} {# TODO #}
+                {% for concert in spotify %}
                     <div class="col">
                         <div class="card shadow-sm">
 
-                            {% if concerts[n]["concert_photo"] %}
+                            {% if concert["concert_photo"] %}
                                 <div class="ratio ratio-16x9">
                                     <img class=" card-img-top img-fluid img-cover" role="img"
-                                         src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                                         src="{{ concert["concert_photo"] }}" alt="img">
                                 </div>
                             {% else %}
                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
@@ -96,15 +110,15 @@
                             {% endif %}
 
                             <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
-                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
+                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concert["concert_name"] }}</h4>
                             </div>
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
-                                    <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
+                                    <p class="card-text me-auto">{{ concert["hall"]['hall_name'] }} </p>
+                                    <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
-                                <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
+                                <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"
                                    class="stretched-link text-decoration-none"></a>
 
                             </div>
@@ -116,19 +130,19 @@
 
         {% endif %}
 
-        <div class="ms-5 mb-2">
-            <span class="fs-1 fw-light underline">Upcoming Events</span>
+        <div class="mb-2">
+            <span class="fs-1 fw-light underline">{{ _('Upcoming Events') }}</span>
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-            {% for n in range(20) %}
-                {% if concerts[n] %}
+            {% for concert in concerts %}
+                {% if concert %}
                     <div class="col">
                         <div class="card shadow-sm">
-                            {% if concerts[n]["concert_photo"] %}
-                                <div class="ratio ratio-16x9"> {# TODO #}
+                            {% if concert["concert_photo"] %}
+                                <div class="ratio ratio-16x9">
                                     <img class=" card-img-top img-fluid img-cover" role="img"
-                                         src="{{ concerts[n]["concert_photo"] }}" alt="img">
+                                         src="{{ concert["concert_photo"] }}" alt="img">
                                 </div>
                             {% else %}
                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="100%"
@@ -139,16 +153,16 @@
                             {% endif %}
 
                             <div class="card-img-overlay d-flex flex-column justify-content-start mt-3">
-                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concerts[n]["concert_name"] }}</h4>
+                                <h4 class="fs-2 fw-light transp text-light p-2 text-truncate">{{ concert["concert_name"] }}</h4>
                             </div>
 
 
                             <div class="card-body fs-5">
                                 <div class="d-flex ">
-                                    <p class="card-text me-auto">{{ concerts[n]["concert_address"] }} </p>
-                                    <p class="card-text">{{ concerts[n]["concert_date"]|dt }}</p>
+                                    <p class="card-text me-auto">{{ concert["hall"]['hall_name'] }} </p>
+                                    <p class="card-text">{{ concert["concert_date"]|dt }}</p>
                                 </div>
-                                <a href="{{ url_for('concert_page', id=concerts[n]["concert_id"]) }}"
+                                <a href="{{ url_for('concert_page', id=concert["concert_id"]) }}"
                                    class="stretched-link text-decoration-none"></a>
 
                             </div>

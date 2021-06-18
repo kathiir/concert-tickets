@@ -1,37 +1,69 @@
 {% extends "base.html" %}
-{% block title %}Registration{% endblock %}
+{% block title %}{{ _('Registration') }}{% endblock %}
 
 {% block content %}
 
     <div class="form-signin text-center mt-4">
-        <form method="post">
+        <form method="post"
+              oninput='password_check.setCustomValidity(password_check.value != password.value ? "Passwords do not match." : "")'>
             <img class="mb-4" src="../static/logo.png" alt="" width="300" height="150">
-            <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+            <h1 class="h3 mb-3 fw-normal">{{ _('Sign Up') }}</h1>
 
             <div class="form-floating">
-                <input type="text" class="form-control remove-glow" name="nickname" id="floatingInput" minlength="5" placeholder="Login" required>
-                <label for="floatingInput">Login</label>
+                <input type="text" class="form-control remove-glow" name="nickname" id="floatingInput" minlength="5"
+                       placeholder="Login" required>
+                <label for="floatingInput">{{ _('Login') }}</label>
             </div>
             <div class="form-floating">
-                <input type="email" class="form-control remove-glow" name="email" id="floatingInput" placeholder="name@example.com" required>
-                <label for="floatingInput">Email address</label>
+                <input type="email" class="form-control remove-glow" name="email" id="floatingInput"
+                       placeholder="name@example.com" required>
+                <label for="floatingInput">{{ _('Email address') }}</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control remove-glow" name="password" id="floatingPassword" minlength="8" placeholder="Password" required>
-                <label for="floatingPassword">Password</label>
+                <input type="password" class="form-control remove-glow" name=password id="floatingPassword"
+                       minlength="8" placeholder="Password" required>
+                <label for="floatingPassword">{{ _('Password') }}</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control remove-glow" name="password_check" id="floatingPassword" minlength="8" placeholder="Password" required>
-                <label for="floatingPassword">Repeat password</label>
+                <input type="password" class="form-control remove-glow" name=password_check id="floatingPassword"
+                       minlength="8" placeholder="Password" required>
+                <label for="floatingPassword">{{ _('Repeat password') }}</label>
             </div>
 
             <div class="checkbox mb-3 mt-3">
                 <label>
-                    <input type="checkbox" value="remember-me"> Remember me
+                    <input type="checkbox" name="remember"> {{ _('Remember me') }}
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary text-light" type="submit">Sign in</button>
+            <button class="w-100 btn btn-lg btn-primary text-light" type="submit">{{ _('Sign up') }}</button>
         </form>
     </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+
+        {% for m in messages %}
+            <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="toast-header">
+                    <strong class="me-auto">{{ _('Message') }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ m }}
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl)
+        })
+    </script>
 
 {% endblock %}

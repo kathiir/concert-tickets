@@ -1,3 +1,8 @@
 Flask~=1.1.2
 Flask-Babel
 requests~=2.25.1
+cloudinary
+flask-cors
+google_auth_oauthlib==0.4.4
+google_api_python_client==2.9.0
+flask-talisman

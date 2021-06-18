@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Confirmation') }}{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-2">
+        {% if success %}
+            <div class="alert alert-success" role="alert">
+                <div>
+                    {{ _('Successfully bought tickets') }}
+                </div>
+                <div>
+                    <a href="{{ url_for('concert_page', id=id) }}">{{ _('Return to Concert Page') }}</a>
+                </div>
+                {% if session['logged_in'] %}
+                    <div>
+                        <a href="{{ url_for('tickets_page') }}">{{ _('Proceed to Tickets') }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                <div>
+                    {{ _('Failed to buy tickets') }}
+                </div>
+                <div>
+                    <a href="{{ url_for('concert_page', id=id) }}">{{ _('Return to Concert Page') }}</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

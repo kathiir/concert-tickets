@@ -1,0 +1,323 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-06-17 17:34+0300\n"
+"PO-Revision-Date: 2021-06-17 17:35+0300\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 3.0\n"
+
+#: app.py:158
+msgid "Incorrect login or password"
+msgstr "Неверный логин или пароль"
+
+#: app.py:199
+msgid "This email already exists"
+msgstr "Данный e-mail занят"
+
+#: app.py:201
+msgid "This login already exists"
+msgstr "Данный логин занят"
+
+#: app.py:265
+msgid "Successfully changed user image"
+msgstr "Аватар успешно изменен"
+
+#: app.py:277
+msgid "Successfully changed password"
+msgstr "Пароль успешно изменен"
+
+#: app.py:281
+msgid "Failed to set new password"
+msgstr "Не удалось установить новый пароль"
+
+#: templates/404.html:7
+msgid "404, page not found"
+msgstr "404, страница не найдена"
+
+#: templates/404.html:9
+msgid "It seems page is missing or in development"
+msgstr "Видимо, страница не существует или находится в разработке"
+
+#: templates/about.html:2 templates/about.html:6
+#: templates/includes/_footer.html:8
+msgid "About Us"
+msgstr "О нас"
+
+#: templates/about.html:10
+msgid "We are lovely team that really wants to sleep"
+msgstr "Мы милая команда, которая очень хочет спать"
+
+#: templates/artist.html:33 templates/concert.html:34
+msgid "Remove from favorites"
+msgstr "Убрать из избранного"
+
+#: templates/artist.html:37 templates/concert.html:38
+msgid "Add to favorites"
+msgstr "Добавить в избранное"
+
+#: templates/artist.html:50 templates/artist.html:68
+#: templates/favorites.html:40 templates/search.html:13
+msgid "Concerts"
+msgstr "Концерты"
+
+#: templates/artist.html:55 templates/artist.html:120
+#: templates/concert.html:102
+msgid "Reviews"
+msgstr "Рецензии"
+
+#: templates/artist.html:60 templates/artist.html:180 templates/concert.html:92
+msgid "Info"
+msgstr "Информация"
+
+#: templates/artist.html:97 templates/concert.html:53
+#: templates/favorites.html:59 templates/search.html:43
+#: templates/tickets.html:49
+msgid "Place"
+msgstr "Место"
+
+#: templates/artist.html:103 templates/concert.html:55
+#: templates/favorites.html:65 templates/search.html:49
+#: templates/tickets.html:53
+msgid "Date"
+msgstr "Дата проведения"
+
+#: templates/artist.html:135 templates/concert.html:117
+msgid "Leave review"
+msgstr "Оставить рецензию"
+
+#: templates/buying.html:2
+msgid "Buy Ticket"
+msgstr "Купить билет"
+
+#: templates/buying.html:14
+msgid "Scene"
+msgstr "Сцена"
+
+#: templates/buying.html:24
+msgid "credits"
+msgstr "кред"
+
+#: templates/buying.html:36
+msgid "Tickets for"
+msgstr "Билеты за"
+
+#: templates/buying.html:51 templates/concert.html:59 templates/index.html:40
+#: templates/index.html:65
+msgid "Buy tickets"
+msgstr "Купить билеты"
+
+#: templates/buying_confirm.html:2 templates/calendar_confirm.html:2
+msgid "Confirmation"
+msgstr "Подтверждение"
+
+#: templates/buying_confirm.html:10
+msgid "Successfully bought tickets"
+msgstr "Билеты успешно приобретены"
+
+#: templates/buying_confirm.html:13 templates/buying_confirm.html:27
+#: templates/calendar_confirm.html:13 templates/calendar_confirm.html:22
+msgid "Return to Concert Page"
+msgstr "Вернуться к концертам"
+
+#: templates/buying_confirm.html:17
+msgid "Proceed to Tickets"
+msgstr "Перейти к билетам"
+
+#: templates/buying_confirm.html:24
+msgid "Failed to buy tickets"
+msgstr "Не удалось приобрести билеты"
+
+#: templates/calendar_confirm.html:10
+msgid "Successfully added to calendar"
+msgstr "Успешно добавлено в календарь"
+
+#: templates/calendar_confirm.html:19
+msgid "Failed to add event to calendar"
+msgstr "Не удалось добавить событие в календарь"
+
+#: templates/concert.html:43
+msgid "Add to Calendar"
+msgstr "Добавить в календарь"
+
+#: templates/concert.html:66 templates/favorites.html:78
+#: templates/search.html:17
+msgid "Artists"
+msgstr "Артисты"
+
+#: templates/contacts.html:2 templates/contacts.html:6
+#: templates/includes/_footer.html:11
+msgid "Contacts"
+msgstr "Контакты"
+
+#: templates/contacts.html:10
+msgid "Bulavina Elizaveta"
+msgstr "Булавина Елизавета"
+
+#: templates/contacts.html:13
+msgid "Petrov Yuri"
+msgstr "Петров Юрий"
+
+#: templates/contacts.html:16
+msgid "Gorbushin Vladimir"
+msgstr "Горбушин Владимир"
+
+#: templates/favorites.html:2 templates/favorites.html:32
+#: templates/includes/_navbar.html:57 templates/settings.html:33
+#: templates/tickets.html:32
+msgid "Favorites"
+msgstr "Избранное"
+
+#: templates/favorites.html:29 templates/settings.html:30
+#: templates/tickets.html:29
+msgid "Tickets"
+msgstr "Билеты"
+
+#: templates/favorites.html:35 templates/includes/_navbar.html:58
+#: templates/settings.html:2 templates/settings.html:36
+#: templates/tickets.html:35
+msgid "Settings"
+msgstr "Настройки"
+
+#: templates/index.html:2
+msgid "Concert Hall"
+msgstr "Concert Hall"
+
+#: templates/index.html:88
+msgid "Recommendations"
+msgstr "Рекоммендованное"
+
+#: templates/index.html:134
+msgid "Upcoming Events"
+msgstr "Грядущие концерты"
+
+#: templates/includes/_navbar.html:70 templates/login.html:2
+#: templates/registration.html:15
+msgid "Login"
+msgstr "Войти"
+
+#: templates/login.html:9
+msgid "Please sign in"
+msgstr "Пожалуйста, войдите"
+
+#: templates/login.html:13
+msgid "Email address or login"
+msgstr "E-mail или логин"
+
+#: templates/login.html:18 templates/registration.html:25
+msgid "Password"
+msgstr "Пароль"
+
+#: templates/login.html:23 templates/registration.html:35
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: templates/login.html:26
+msgid "Sign in"
+msgstr "Войти"
+
+#: templates/login.html:35 templates/registration.html:47
+#: templates/settings.html:127
+msgid "Message"
+msgstr "Сообщение"
+
+#: templates/registration.html:2
+msgid "Registration"
+msgstr "Регистрация"
+
+#: templates/includes/_navbar.html:74 templates/registration.html:10
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: templates/registration.html:20
+msgid "Email address"
+msgstr "Email"
+
+#: templates/registration.html:30
+msgid "Repeat password"
+msgstr "Повторить пароль"
+
+#: templates/registration.html:38
+msgid "Sign up"
+msgstr "Регистрация"
+
+#: templates/includes/_navbar.html:34 templates/search.html:2
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/search.html:22
+msgid "Search for"
+msgstr "Поиск"
+
+#: templates/settings.html:45 templates/settings.html:65
+msgid "Connect to"
+msgstr "Подключить"
+
+#: templates/settings.html:52 templates/settings.html:70
+msgid "Disconnect"
+msgstr "Отключить"
+
+#: templates/settings.html:78
+msgid "Change Avatar"
+msgstr "Изменить аватар"
+
+#: templates/settings.html:84 templates/settings.html:107
+msgid "Submit"
+msgstr "Применить"
+
+#: templates/settings.html:92
+msgid "Security"
+msgstr "Безопасность"
+
+#: templates/settings.html:95
+msgid "Old password"
+msgstr "Старый пароль"
+
+#: templates/settings.html:101
+msgid "New password"
+msgstr "Новый пароль"
+
+#: templates/tickets.html:2
+msgid "My Tickets"
+msgstr "Мои билеты"
+
+#: templates/tickets.html:45
+msgid "Price"
+msgstr "Цена"
+
+#: templates/includes/_footer.html:15
+msgid "Change locale"
+msgstr "Изменить язык"
+
+#: templates/includes/_navbar.html:17 templates/includes/_navbar.html:26
+msgid "Moscow"
+msgstr "Москва"
+
+#: templates/includes/_navbar.html:19 templates/includes/_navbar.html:27
+msgid "Saint Petersburg"
+msgstr "Санкт-Петербург"
+
+#: templates/includes/_navbar.html:21 templates/includes/_navbar.html:25
+msgid "Voronezh"
+msgstr "Воронеж"
+
+#: templates/includes/_navbar.html:43
+msgid "My tickets"
+msgstr "Мои билеты"
+
+#: templates/includes/_navbar.html:62
+msgid "Log out"
+msgstr "Выйти"

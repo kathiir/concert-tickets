@@ -54,6 +54,16 @@
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
+.read {
+    background-color: transparent !important;
+    /*border: 1:;*/
+
+    box-shadow: none  !important;
+}
+.carousel .carousel-item {
+  height: 500px;
+}
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;

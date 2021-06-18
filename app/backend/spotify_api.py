@@ -6,7 +6,6 @@ from spotipy.oauth2 import SpotifyOAuth
 from cid_secr import cid, secret
 
 
-# TODO client
 class Spotify:
     client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -48,6 +47,7 @@ class Spotify:
 
         return sp
 
+
     def get_user_followed_artists_list(self, sp: spotipy.client.Spotify):
         jason = sp.current_user_followed_artists(limit=20)
         artists_list = []
@@ -67,8 +67,11 @@ class Spotify:
         return jason["name"]
 
     def get_artist_image_by_id(self, id: str):
-        jason = self.sp.artist(artist_id=id)
-        return jason["images"][0]['url']
+        try:
+            jason = self.sp.artist(artist_id=id)
+            return jason["images"][0]['url']
+        except:
+            return None
 
     def get_artist_id_by_name(self, name: str):
         jason = self.sp.search(q=name, type="artist")
