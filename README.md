@@ -22,9 +22,19 @@
 
 [concert-hall-back.herokuapp.com](https://concert-hall-back.herokuapp.com/concerts) - api
 
+[concert-hall-admin.herokuapp.com](https://concert-hall-back.herokuapp.com/) - admin-panel
+
 # Демо
 
 [Видео - 3 аттестация](https://drive.google.com/file/d/1BoyaSfbtCsl1BMAiShWO9dcbZdwTlQ0h/view?usp=sharing)
 
 [Видео - 2 аттестация](https://drive.google.com/file/d/1shVogPnqZXSquo5FvBLFNWAXKGXKJDi8/view?usp=sharing)
+
+# Разрабатывали
+
+Группа 3.1
+
+- Булавина Е.П.
+- Петров Ю.В.
+- Горбушин В.А.
 
