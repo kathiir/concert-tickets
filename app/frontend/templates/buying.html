@@ -82,8 +82,8 @@
 
             $('#submit_btn').click(function () {
                 var valid = false;
-                {% for i in range(2) %}
-                    if (parseInt($('#num{{ i }}').val()) > 0) {
+                {% for hall in halls['hall_zone'] %}
+                    if (parseInt($('#num{{ hall['hall_zone_id'] }}').val()) > 0) {
                         valid = true;
                     }
                 {% endfor %}
