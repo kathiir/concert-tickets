@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import request, make_response, jsonify, abort
 
 from auth_utils import register_user_with_response, login_user_by_login_and_pass, recreate_token_for_response, \
-    change_passwd
+    change_passwd, logout_user_by_token
 from config import app
 from const_keys import SUCCESS_KEY, DESCRIPTION_KEY
 from favorite_route import add_sth_to_favorite, remove_sth_to_favorite, is_sth_favorite, get_every_possible_favorites
@@ -49,6 +49,17 @@ def login_user():
     response = login_user_by_login_and_pass(data['login'], data['password'])
     return json.dumps(response), 200, {'Content-Type': 'application/json'}
 
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    data = request.get_json()  # костыль, так как надо сделать так, чтобы фронт не кидал списки вида: {'login': ['login']}
+    try:
+        response = logout_user_by_token(data)
+        return json.dumps(response), 200, {'Content-Type': 'application/json'}
+    except ValueError as err:
+        return json.dumps({SUCCESS_KEY: False, DESCRIPTION_KEY:  str(err)}), \
+               400,\
+               {'Content-Type': 'application/json'}
 
 @app.route('/pass_change', methods=['POST'])
 def change_password():
@@ -268,7 +279,7 @@ def get_concert_list():
     if city_id := request.args.get('city_id'):
 
         result = result.join(Hall).join(City)\
-            .filter(City.city_id == int(city_id))
+            .filter(City.city_id == int(city_id))  # фласк сильно просил джоины, хотя работал
 
     result = result.filter(Concert.concert_date > datetime.now())\
         .order_by(Concert.concert_date.asc()) \
@@ -292,7 +303,7 @@ def get_concert_search(concert_name):
     if city_id := request.args.get('city_id'):
 
         result = result.join(Hall).join(City)\
-            .filter(City.city_id == int(city_id))
+            .filter(City.city_id == int(city_id))  # получил джоины за хорошую работу ¯\_(ツ)_/¯
 
     result = result \
         .order_by(Concert.concert_date.asc())\
@@ -422,7 +433,7 @@ if True:
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5005))
-    print(' http://127.0.0.1:5005/')
-    app.run(host='0.0.0.0', port=port)
+    # print(' http://127.0.0.1:5000/')
+    # app.run(host='0.0.0.0', port=port)
     # app.run(host='127.0.0.1', port=port)
-    # app.run(host='0.0.0.0', port=1337)
+    app.run(host='0.0.0.0', port=port)

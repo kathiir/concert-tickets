@@ -72,7 +72,7 @@ def get_concert_for_users_followed_artists(token: str) -> Dict[str, Any]:
         return {SUCCESS_KEY: False,
                 DESCRIPTION_KEY: 'no spotify response'}
 
-    url = 'https://api.spotify.com/v1/me/following?type=artist&limit=10'
+    url = 'https://api.spotify.com/v1/me/following?type=artist&limit=30'
     headers = {'Authorization': 'Bearer ' + access_token,
                'Content-Type': 'application/json',
                'Accept': 'application/json'}

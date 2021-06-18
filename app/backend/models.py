@@ -37,7 +37,7 @@ class City(db.Model):
 class Hall(db.Model):
     __tablename__ = 'hall'
     hall_id = db.Column(db.Integer, primary_key=True)
-    hall_name = db.Column(db.String(255), unique=True, nullable=False)
+    hall_name = db.Column(db.String(255), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'))
     city = db.relationship('City', back_populates='halls', lazy=True)
     hall_zone = db.relationship('HallZone', back_populates='hall', order_by="desc(HallZone.price)", lazy=True)
@@ -311,7 +311,6 @@ class ConcertSchema(SQLAlchemySchema):
     concert_status = auto_field()
     hall = Nested(HallSimplifiedSchema, many=False)
     performances = Nested(ArtistSimplifiedSchema, many=True)
-    concert_reviews = Nested(ConcertReviewSchema, many =True)
     # favcon = db.relationship('FavoriteConcerts', back_populates='concert', lazy=True)
     # ticket = db.relationship('Ticket', back_populates='concert', lazy=True)
 

@@ -126,6 +126,22 @@ def login_user_by_login_and_pass(user_login: str, passwd: str) -> Dict[str, Any]
     return response
 
 
+def logout_user_by_token(request: Dict[str, Any]) -> Dict[str, Any]:
+    if 'token' not in request:
+        raise ValueError('incorrect key')
+
+    user = db.session.query(User) \
+        .filter(request['token'] == User.user_token) \
+        .first()
+
+    if not user:
+        raise ValueError(TOKEN_NOT_FOUND)
+
+    user.user_token = None
+    db.session.commit()
+    return {SUCCESS_KEY: True}
+
+
 def recreate_user_token(last_token: str) -> str:
     user = db.session.query(User)\
         .filter(User.user_token == last_token)\

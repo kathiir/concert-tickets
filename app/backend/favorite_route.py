@@ -140,17 +140,3 @@ def get_every_possible_favorites(token: str) -> Dict[str, Any]:
 
     return recreate_token_for_response(result, token)
 
-
-
-def get_suggested_concerts_by_spotify(token: str) -> Dict[str, Any]:
-
-    user = User.query\
-        .filter(User.user_token == token)\
-        .first()
-
-    if not user:
-        return {SUCCESS_KEY: False, DESCRIPTION_KEY: TOKEN_NOT_FOUND}
-
-    if not user.user_spotify_token:
-        return {SUCCESS_KEY: False, DESCRIPTION_KEY: 'spotify token not found'}
-
