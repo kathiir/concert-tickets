@@ -22,7 +22,7 @@
 
 [concert-hall-back.herokuapp.com](https://concert-hall-back.herokuapp.com/concerts) - api
 
-[concert-hall-admin.herokuapp.com](https://concert-hall-back.herokuapp.com/) - admin-panel
+[concert-hall-admin.herokuapp.com](https://concert-hall-back.herokuapp.com/) - admin-panel (login: Superadmino, pass=12345678)
 
 # Демо
 
