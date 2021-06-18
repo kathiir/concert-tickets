@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="/">ConcertHall Admin Panel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if session['logged_in'] %}
+        <form method="GET" action="{{ url_for('logout') }}">
+            <button type="button" class="btn btn-secondary btn" style="position: absolute; right: 100px; top: 10px" disabled>Username: {{ session['username'] }}</button>
+                        <button type="submit" class="btn btn-outline-primary" style="position: absolute; right: 10px;top: 10px">Log out</button>
+                    </form>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users') }}">Users</a>
+                    </li>
+    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('concerts') }}">Concerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('artists') }}">Artists</a>
+                    </li>
+                </ul>
+    </div>
+</nav>
+
+<div class="container">
+<div class="accordion" id="accordionExample">
+        <div class="card mt-3">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Find users
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+
+                    <form method="GET" action="{{ url_for('users_find') }}">
+                        <div class="form-group mt-3">
+                            <label>Username:</label>
+                            <input type="text" class="form-control" name="name">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Find</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Current Role</th>
+            {% if session['role'] > 1 %}
+                <th scope="col">Ban</th>
+            {% endif %}
+            {% if session['role'] > 2 %}
+                <th scope="col">Set Role</th>
+                <th scope="col">Selected Role</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr>
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {% if user.user_role == 0 %}
+                    <p> Normal User </p>
+                    {% endif %}
+                    {% if user.user_role == 1 %}
+                    <p> Banned </p>
+                    {% endif %}
+                    {% if user.user_role == 2 %}
+                    <p> Moderator </p>
+                    {% endif %}
+                    {% if user.user_role == 3 %}
+                    <p> Administrator </p>
+                    {% endif %}
+                    {% if user.user_role == 4 %}
+                    <p> Super Administrator </p>
+                    {% endif %}
+                </td>
+            {% if session['role'] > 1 %}
+                <form method="post" action="{{ url_for('ban_user') }}">
+                    <input type="hidden" name="user_ID" value="{{ user.user_id }}">
+                    <td><input type="submit" class="btn btn-outline-danger" value="BAN"></td>
+                </form>
+            {% endif %}
+            {% if session['role'] > 2 %}
+                <form method="post" action="{{ url_for('role_user') }}">
+                    <input type="hidden" name="user_ID" value="{{ user.user_id }}">
+                    <td><input type="submit" class="btn btn-outline-success" value="SET ROLE"></td>
+                    <td><select id="category" name="category" class="form-control">
+                        <option>Normal User</option>
+                        <option>Moderator</option>
+                        {% if session['role'] > 3 %}
+                            <option>Administrator</option>
+                            <option>Super Administrator</option>
+                        {% endif %}
+                    </select>
+                </td>
+                </form>
+            {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% else %}
+                        <a class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px" href="{{ url_for('login_page') }}">Login</a>
+
+            {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+</html>

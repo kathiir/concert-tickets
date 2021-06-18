@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artists</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="/">ConcertHall Admin Panel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if session['logged_in'] %}
+        <form method="GET" action="{{ url_for('logout') }}">
+            <button type="button" class="btn btn-secondary btn" style="position: absolute; right: 100px; top: 10px" disabled>Username: {{ session['username'] }}</button>
+                        <button type="submit" class="btn btn-outline-primary" style="position: absolute; right: 10px;top: 10px">Log out</button>
+                    </form>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users') }}">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('concerts') }}">Concerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('artists') }}">Artists</a>
+                    </li>
+                </ul>
+    </div>
+</nav>
+
+<div class="container">
+<div class="accordion" id="accordion1">
+        <div class="card mt-3">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Find artist
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion1">
+                <div class="card-body">
+
+                    <form method="GET" action="{{ url_for('artists_find') }}">
+                        <div class="form-group mt-3">
+                            <label>Artist Name:</label>
+                            <input type="text" class="form-control" name="name">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Find</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion" id="accordion2">
+        <div class="card mt-3">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Add artist
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
+                <div class="card-body">
+
+    <form method="POST" action="{{url_for('add_artist')}}" class="mt-3">
+        <div class="form-group">
+            <label for="newArtistName">Name</label>
+            <input type="text" class="form-control" id="newArtistName" name="newArtistName" aria-describedby="newArtistName" required>
+        </div>
+        <div class="form-group">
+            <label for="newArtistPhoto">Photo URL</label>
+            <input type="text" class="form-control" id="newArtistPhoto" name="newArtistPhoto" aria-describedby="newArtistPhoto" required>
+        </div>
+        <div class="form-group">
+            <label for="newArtistGenius">Genius ID</label>
+            <input type="text" class="form-control" id="newArtistGenius" name="newArtistGenius" aria-describedby="newArtistGenius" required>
+        </div>
+        <div class="form-group">
+            <label for="newArtistSpotify">Spotify ID</label>
+            <input type="text" class="form-control" id="newArtistSpotify" name="newArtistSpotify" aria-describedby="newArtistSpotify" required>
+        </div>
+
+       <center><button type="submit" class="btn btn-primary">ADD</button></center>
+    </form>
+
+                                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th scope="col">Artist Name</th>
+            <th scope="col">Artist Photo URL</th>
+            <th scope="col">Artist Genius ID</th>
+            <th scope="col">Artist Spotify ID</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Get Reviews</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for artist in artists %}
+            <tr>
+                    <form method="post" action="{{ url_for('edit_artist') }}">
+                    <td>
+                        <input class="form-control" type="text" value="{{ artist.artist_name }}" name="artist_name">
+                    </td>
+                     <td>
+                        <input class="form-control" type="text" value="{{ artist.artist_photo }}" name="artist_photo">
+                    </td>
+                     <td>
+                        <input class="form-control" type="text" value="{{ artist.artist_genius_id }}" name="artist_genius_id">
+                    </td>
+                     <td>
+                        <input class="form-control" type="text" value="{{ artist.artist_spotify_id }}" name="artist_spotify_id">
+                    </td>
+
+                    <td>
+                        <input type="hidden" value="{{ artist.artist_id }}" name="artist_ID">
+                        <button type="submit" class="btn btn-outline-warning">EDIT</button>
+                    </td>
+                </form>
+                <form method="post" action="{{ url_for('delete_artist') }}">
+                    <input type="hidden" name="artist_ID" value="{{ artist.artist_id }}">
+                    <td><input type="submit" class="btn btn-outline-danger" value="DELETE"></td>
+                </form>
+                <td>
+                <p><a class="btn btn btn-primary text-light"
+                                      href="{{ url_for('get_artist_reviews', id=artist.artist_id) }}">GET
+                                    </a></p>
+            <td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+                        <a class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px" href="{{ url_for('login_page') }}">Login</a>
+
+            {% endif %}
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+
+        {% for m in messages %}
+            <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                <div class="toast-header">
+                    <strong class="me-auto">{{ _('Message') }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ m }}
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+</html>
